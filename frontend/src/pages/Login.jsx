@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineClose } from "react-icons/ai";
-
-const API = "/api";
+import { api } from "../api";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [error, setError]     = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -20,16 +19,11 @@ const Login = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Login failed");
+      const data = await api.login(formData);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       navigate("/");
+      window.location.reload();
     } catch (err) {
       setError(err.message);
     } finally {
@@ -60,33 +54,22 @@ const Login = () => {
           <div>
             <label className="block text-xs font-medium text-gray-300 mb-1">Email Address</label>
             <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
+              type="email" name="email" value={formData.email}
+              onChange={handleChange} required placeholder="your@email.com"
               className="w-full px-3 py-2 text-sm border border-gray-600 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-gray-500"
-              placeholder="your@email.com"
             />
           </div>
-
           <div>
             <label className="block text-xs font-medium text-gray-300 mb-1">Password</label>
             <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
+              type="password" name="password" value={formData.password}
+              onChange={handleChange} required placeholder="••••••••"
               className="w-full px-3 py-2 text-sm border border-gray-600 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-gray-500"
-              placeholder="••••••••"
             />
           </div>
-
           <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-cyan-500 text-black px-6 py-2 rounded-lg font-semibold hover:bg-cyan-400 transition text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+            type="submit" disabled={loading}
+            className="w-full bg-cyan-500 text-black py-2 rounded-lg font-semibold hover:bg-cyan-400 transition text-sm disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
@@ -94,10 +77,7 @@ const Login = () => {
 
         <p className="mt-4 text-center text-sm text-gray-400">
           Don't have an account?{" "}
-          <button
-            onClick={() => navigate("/register")}
-            className="text-cyan-400 font-semibold hover:text-cyan-300"
-          >
+          <button onClick={() => navigate("/register")} className="text-cyan-400 font-semibold hover:text-cyan-300">
             Register
           </button>
         </p>

@@ -9,6 +9,7 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import InternshipProgram from "./pages/InternshipProgram";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/internship" element={<InternshipProgram />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
         <Footer />
       </div>

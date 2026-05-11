@@ -6,9 +6,9 @@ const connectDB = async () => {
       dbName: process.env.DB_NAME || "zenvora",
       serverSelectionTimeoutMS: 10000,
     });
-    console.log(`✅ MongoDB connected: ${conn.connection.host}`);
+    console.log("MongoDB connected");
   } catch (error) {
-    console.error(`❌ MongoDB connection failed: ${error.message}`);
+    console.error(`MongoDB connection failed: ${error.message}`);
     process.exit(1);
   }
 };
