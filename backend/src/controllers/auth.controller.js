@@ -1,20 +1,28 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
 
-// Generate Token
+// ================= GENERATE TOKEN =================
+
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+  return jwt.sign(
+    { id },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "7d",
+    }
+  );
 };
 
-// Register
+// ================= REGISTER =================
+
 const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password } =
+      req.body;
 
-    // Check User
-    const userExists = await User.findOne({ email });
+    // Check Existing User
+    const userExists =
+      await User.findOne({ email });
 
     if (userExists) {
       return res.status(400).json({
@@ -23,21 +31,32 @@ const register = async (req, res) => {
       });
     }
 
-    // Create User
+    // Create Normal User
     const user = await User.create({
       name,
       email,
       password,
+      role: "user",
     });
 
-    // Token
+    // Generate Token
     const token = generateToken(user._id);
 
     res.status(201).json({
       success: true,
+      message:
+        "Account created successfully",
+
       token,
-      user,
+
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -46,13 +65,19 @@ const register = async (req, res) => {
   }
 };
 
-// Login
+// ================= LOGIN =================
+
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } =
+      req.body;
 
-    const user = await User.findOne({ email }).select("+password");
+    // Find User
+    const user = await User.findOne({
+      email,
+    }).select("+password");
 
+    // Check User
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -60,22 +85,43 @@ const login = async (req, res) => {
       });
     }
 
-    const isMatch = await user.comparePassword(password);
+    // Check Password
+    const isMatch =
+      await user.comparePassword(password);
 
     if (!isMatch) {
       return res.status(400).json({
         success: false,
-        message: "Invalid Password",
+        message: "Invalid password",
       });
     }
 
+    // Check Active
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Account is deactivated",
+      });
+    }
+
+    // Generate Token
     const token = generateToken(user._id);
 
     res.json({
       success: true,
+      message: "Login successful",
+
       token,
-      user,
+
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -84,7 +130,8 @@ const login = async (req, res) => {
   }
 };
 
-// Get Current User
+// ================= GET CURRENT USER =================
+
 const getMe = async (req, res) => {
   res.json({
     success: true,
