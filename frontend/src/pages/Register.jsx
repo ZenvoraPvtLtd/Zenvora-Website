@@ -36,14 +36,9 @@ const Register = () => {
       // Register API
       const data = await api.register(formData);
 
-      // Save Token
       localStorage.setItem("token", data.token);
-
-      // Save User
       localStorage.setItem("user", JSON.stringify(data.user));
-
-      // Redirect
-      navigate("/");
+      navigate(data.user?.role === "admin" ? "/admin" : "/");
     } catch (err) {
       setError(err.response?.data?.message || "Register Failed");
     } finally {

@@ -52,34 +52,23 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Desktop auth */}
+          {/* Desktop auth — only visible to logged-in admins */}
           <div className="hidden md:flex items-center gap-3">
-            {isLoggedIn ? (
+            {isLoggedIn && user?.role === "admin" && (
               <>
                 <span className="text-sm text-gray-400">
                   Hi, <span className="text-cyan-400 font-medium">{user.name?.split(" ")[0]}</span>
                 </span>
-                {user.role === "admin" && (
-                  <Link to="/admin"
-                    className={`text-sm font-medium transition-colors px-3 py-1.5 rounded-md border ${
-                      isActive("/admin") ? "border-cyan-500 text-cyan-400" : "border-gray-600 text-gray-300 hover:border-cyan-500 hover:text-cyan-400"
-                    }`}>
-                    Dashboard
-                  </Link>
-                )}
+                <Link to="/admin"
+                  className={`text-sm font-medium transition-colors px-3 py-1.5 rounded-md border ${
+                    isActive("/admin") ? "border-cyan-500 text-cyan-400" : "border-gray-600 text-gray-300 hover:border-cyan-500 hover:text-cyan-400"
+                  }`}>
+                  Dashboard
+                </Link>
                 <button onClick={logout}
                   className="border border-gray-600 text-gray-300 px-4 py-1.5 rounded-md text-sm hover:border-red-500 hover:text-red-400 transition">
                   Logout
                 </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" className="text-gray-300 hover:text-cyan-400 text-sm font-medium transition-colors">
-                  Login
-                </Link>
-                <Link to="/register" className="bg-cyan-500 text-black px-5 py-2 rounded-md text-sm font-medium hover:bg-cyan-400 transition">
-                  Sign Up
-                </Link>
               </>
             )}
           </div>
@@ -105,34 +94,20 @@ const Navbar = () => {
               </Link>
             ))}
 
-            <div className="pt-3 mt-2 border-t border-gray-800 flex flex-col gap-2">
-              {isLoggedIn ? (
-                <>
-                  <p className="px-3 text-sm text-gray-400">Hi, <span className="text-cyan-400 font-medium">{user.name}</span></p>
-                  {user.role === "admin" && (
-                    <Link to="/admin" onClick={() => setIsOpen(false)}
-                      className="px-3 py-2.5 rounded-md text-sm font-medium text-cyan-400 hover:bg-gray-800 transition">
-                      Dashboard
-                    </Link>
-                  )}
-                  <button onClick={() => { setIsOpen(false); logout(); }}
-                    className="text-left px-3 py-2.5 rounded-md text-sm text-red-400 hover:bg-gray-800 transition">
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" onClick={() => setIsOpen(false)}
-                    className="px-3 py-2.5 rounded-md text-sm font-medium text-gray-300 hover:text-cyan-400 hover:bg-gray-800 transition">
-                    Login
-                  </Link>
-                  <Link to="/register" onClick={() => setIsOpen(false)}
-                    className="text-center bg-cyan-500 text-black px-3 py-2.5 rounded-md text-sm font-medium hover:bg-cyan-400 transition">
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </div>
+            {/* Mobile auth — only visible to logged-in admins */}
+            {isLoggedIn && user?.role === "admin" && (
+              <div className="pt-3 mt-2 border-t border-gray-800 flex flex-col gap-2">
+                <p className="px-3 text-sm text-gray-400">Hi, <span className="text-cyan-400 font-medium">{user.name}</span></p>
+                <Link to="/admin" onClick={() => setIsOpen(false)}
+                  className="px-3 py-2.5 rounded-md text-sm font-medium text-cyan-400 hover:bg-gray-800 transition">
+                  Dashboard
+                </Link>
+                <button onClick={() => { setIsOpen(false); logout(); }}
+                  className="text-left px-3 py-2.5 rounded-md text-sm text-red-400 hover:bg-gray-800 transition">
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

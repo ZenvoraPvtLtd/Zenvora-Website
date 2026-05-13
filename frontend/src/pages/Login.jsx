@@ -22,7 +22,7 @@ const Login = () => {
       const data = await api.login(formData);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/");
+      navigate(data.user?.role === "admin" ? "/admin" : "/");
       window.location.reload();
     } catch (err) {
       setError(err.message);
