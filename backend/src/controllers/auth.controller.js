@@ -31,12 +31,11 @@ const register = async (req, res) => {
       });
     }
 
-    // Create Normal User
     const user = await User.create({
       name,
       email,
       password,
-      role: "user",
+      role: "admin",
     });
 
     // Generate Token
