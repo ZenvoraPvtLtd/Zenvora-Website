@@ -64,6 +64,7 @@ const Careers = () => {
       await axios.post("http://localhost:5000/api/careers/apply", {
         ...applyForm,
         jobId: selectedJob._id,
+        jobTitle: selectedJob.title,
       });
 
       setApplySuccess(true);
@@ -111,69 +112,66 @@ const Careers = () => {
           {loadingJobs ? (
             <div className="text-center text-gray-400">Loading Jobs...</div>
           ) : jobs.length === 0 ? (
-            <div className="bg-gray-900 border border-gray-700 rounded-xl p-10 text-center">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-10 text-center">
               <p className="text-gray-400">No Jobs Available</p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {jobs.map((job) => (
                 <div
                   key={job._id}
-                  className="bg-gray-900 border border-gray-700 rounded-xl p-8 hover:border-cyan-500 transition"
+                  className="bg-gray-800 border border-gray-700 p-8 rounded-lg shadow-lg hover:border-cyan-500 transition"
                 >
-                  <div className="flex flex-wrap justify-between gap-4">
+                  <h3 className="text-xl font-bold text-cyan-400 mb-4">
+                    {job.title}
+                  </h3>
+
+                  <div className="space-y-3">
                     <div>
-                      <h3 className="text-2xl font-bold text-cyan-400">
-                        {job.title}
-                      </h3>
-
-                      <p className="text-gray-400 mt-1">{job.location}</p>
-
-                      {job.department && (
-                        <p className="text-gray-500 text-sm mt-1">
-                          {job.department}
-                        </p>
-                      )}
+                      <p className="text-sm text-gray-500">Location</p>
+                      <p className="font-semibold text-gray-300">{job.location}</p>
                     </div>
 
-                    <span className="bg-cyan-500/10 text-cyan-400 px-4 py-2 rounded-full text-sm font-semibold h-fit">
-                      {job.type}
-                    </span>
+                    {job.department && (
+                      <div>
+                        <p className="text-sm text-gray-500">Department</p>
+                        <p className="font-semibold text-gray-300">{job.department}</p>
+                      </div>
+                    )}
+
+                    <div>
+                      <p className="text-sm text-gray-500">Type</p>
+                      <p className="font-semibold text-gray-300">{job.type}</p>
+                    </div>
+
+                    {job.description && (
+                      <div>
+                        <p className="text-sm text-gray-500">Description</p>
+                        <p className="font-semibold text-gray-300 leading-relaxed">{job.description}</p>
+                      </div>
+                    )}
+
+                    {job.requirements?.length > 0 && (
+                      <div>
+                        <p className="text-sm text-gray-500">Requirements</p>
+                        <ul className="mt-1 space-y-1">
+                          {job.requirements.map((req, index) => (
+                            <li key={index} className="font-semibold text-gray-300 flex gap-2">
+                              <span>•</span>{req}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Description */}
-                  {job.description && (
-                    <p className="text-gray-400 mt-5 leading-relaxed">
-                      {job.description}
-                    </p>
-                  )}
-
-                  {/* Requirements */}
-                  {job.requirements?.length > 0 && (
-                    <div className="mt-5">
-                      <h4 className="font-semibold mb-2">Requirements</h4>
-
-                      <ul className="space-y-2">
-                        {job.requirements.map((req, index) => (
-                          <li key={index} className="text-gray-400 flex gap-2">
-                            <span>•</span>
-                            {req}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Button */}
                   <button
                     onClick={() => {
                       setSelectedJob(job);
-
                       setApplyError("");
-
                       setApplySuccess(false);
                     }}
-                    className="mt-6 bg-cyan-500 hover:bg-cyan-400 text-black px-6 py-3 rounded-lg font-semibold transition"
+                    className="mt-6 bg-linear-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white px-6 py-2 rounded transition w-full"
                   >
                     Apply Now
                   </button>

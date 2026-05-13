@@ -34,7 +34,7 @@ const StatCard = ({ label, value, icon: Icon, color }) => (
       <Icon size={22} className="text-white" />
     </div>
     <div>
-      <p className="text-2xl font-bold text-white">{value ?? "—"}</p>
+      <p className="text-2xl font-bold text-white">{value ?? <span className="text-gray-500 text-lg">Loading...</span>}</p>
       <p className="text-xs text-gray-400 mt-0.5">{label}</p>
     </div>
   </div>
@@ -79,6 +79,7 @@ const JobModal = ({ job, onClose, onSaved }) => {
       };
       if (isEdit) await api.updateJob(job._id, payload);
       else await api.createJob(payload);
+      setForm(EMPTY_JOB);
       onSaved();
     } catch (ex) {
       setErr(ex.message);
@@ -178,7 +179,6 @@ const Overview = ({ stats }) => (
       <StatCard label="Applications" value={stats?.totalApplications} icon={FileText} color="bg-purple-600" />
       <StatCard label="Contact Leads" value={stats?.totalContacts} icon={Mail} color="bg-green-600" />
     </div>
-    <p className="mt-6 text-xs text-gray-500">Use the sidebar to manage users, jobs, applications, and contact submissions.</p>
   </div>
 );
 
@@ -219,29 +219,29 @@ const UsersSection = () => {
           <thead className="bg-gray-800 border-b border-gray-700">
             <tr>
               {["Name", "Email", "Role", "Active", "Joined", "Actions"].map((h) => (
-                <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-400">{h}</th>
+                <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-400 whitespace-nowrap">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/50">
             {users.map((u) => (
               <tr key={u._id} className="bg-gray-800/50 hover:bg-gray-800 transition">
-                <td className="px-4 py-3 text-white font-medium">{u.name}</td>
-                <td className="px-4 py-3 text-gray-400">{u.email}</td>
-                <td className="px-4 py-3"><Badge status={u.role} /></td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-4 text-white font-medium whitespace-nowrap">{u.name}</td>
+                <td className="px-4 py-4 text-gray-400 whitespace-nowrap">{u.email}</td>
+                <td className="px-4 py-4 whitespace-nowrap"><Badge status={u.role} /></td>
+                <td className="px-4 py-4 whitespace-nowrap">
                   {u.isActive
                     ? <Check size={14} className="text-green-400" />
                     : <X size={14} className="text-red-400" />}
                 </td>
-                <td className="px-4 py-3 text-gray-500">{new Date(u.createdAt).toLocaleDateString()}</td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-4 text-gray-500 whitespace-nowrap">{new Date(u.createdAt).toLocaleDateString()}</td>
+                <td className="px-4 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <button onClick={() => toggleRole(u)}
-                      className="text-xs px-2 py-1 border border-gray-600 text-gray-300 hover:border-cyan-500 hover:text-cyan-400 rounded-lg transition">
+                      className="text-xs px-3 py-1.5 border border-gray-600 text-gray-300 hover:border-cyan-500 hover:text-cyan-400 rounded-lg transition whitespace-nowrap">
                       {u.role === "admin" ? "→ User" : "→ Admin"}
                     </button>
-                    <button onClick={() => setConfirm(u)} className="text-red-400 hover:text-red-300 transition"><Trash2 size={14} /></button>
+                    <button onClick={() => setConfirm(u)} className="text-red-400 hover:text-red-300 transition p-1"><Trash2 size={15} /></button>
                   </div>
                 </td>
               </tr>
@@ -283,6 +283,7 @@ const JobsSection = () => {
       {confirm && <Confirm message={`Delete "${confirm.title}"?`} onConfirm={() => remove(confirm._id)} onCancel={() => setConfirm(null)} />}
       {modal !== null && (
         <JobModal
+          key={modal === "new" ? "new" : modal._id}
           job={modal === "new" ? null : modal}
           onClose={() => setModal(null)}
           onSaved={() => { setModal(null); load(); }}
@@ -300,22 +301,22 @@ const JobsSection = () => {
           <thead className="bg-gray-800 border-b border-gray-700">
             <tr>
               {["Title", "Department", "Location", "Type", "Status", "Actions"].map((h) => (
-                <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-400">{h}</th>
+                <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-400 whitespace-nowrap">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/50">
             {jobs.map((j) => (
               <tr key={j._id} className="bg-gray-800/50 hover:bg-gray-800 transition">
-                <td className="px-4 py-3 text-white font-medium">{j.title}</td>
-                <td className="px-4 py-3 text-gray-400">{j.department || "—"}</td>
-                <td className="px-4 py-3 text-gray-400">{j.location}</td>
-                <td className="px-4 py-3 text-gray-400">{j.type}</td>
-                <td className="px-4 py-3"><Badge status={j.isActive ? "open" : "closed"} /></td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => setModal(j)} className="text-cyan-400 hover:text-cyan-300 transition"><Pencil size={14} /></button>
-                    <button onClick={() => setConfirm(j)} className="text-red-400 hover:text-red-300 transition"><Trash2 size={14} /></button>
+                <td className="px-4 py-4 text-white font-medium whitespace-nowrap">{j.title}</td>
+                <td className="px-4 py-4 text-gray-400 whitespace-nowrap">{j.department || "—"}</td>
+                <td className="px-4 py-4 text-gray-400 whitespace-nowrap">{j.location}</td>
+                <td className="px-4 py-4 text-gray-400 whitespace-nowrap">{j.type}</td>
+                <td className="px-4 py-4 whitespace-nowrap"><Badge status={j.isActive ? "open" : "closed"} /></td>
+                <td className="px-4 py-4 whitespace-nowrap">
+                  <div className="flex items-center gap-3">
+                    <button onClick={() => setModal(j)} className="text-cyan-400 hover:text-cyan-300 transition p-1"><Pencil size={15} /></button>
+                    <button onClick={() => setConfirm(j)} className="text-red-400 hover:text-red-300 transition p-1"><Trash2 size={15} /></button>
                   </div>
                 </td>
               </tr>
@@ -359,20 +360,20 @@ const ApplicationsSection = () => {
           <thead className="bg-gray-800 border-b border-gray-700">
             <tr>
               {["Name", "Email", "Job", "Phone", "Status", "Applied", "Actions"].map((h) => (
-                <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-400">{h}</th>
+                <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-400 whitespace-nowrap">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-700/50">
             {apps.map((a) => (
               <tr key={a._id} className="bg-gray-800/50 hover:bg-gray-800 transition">
-                <td className="px-4 py-3 text-white font-medium">{a.name}</td>
-                <td className="px-4 py-3 text-gray-400">{a.email}</td>
-                <td className="px-4 py-3 text-gray-300">{a.jobTitle || "—"}</td>
-                <td className="px-4 py-3 text-gray-400">{a.phone || "—"}</td>
-                <td className="px-4 py-3"><Badge status={a.status} /></td>
-                <td className="px-4 py-3 text-gray-500">{new Date(a.createdAt).toLocaleDateString()}</td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-4 text-white font-medium whitespace-nowrap">{a.name}</td>
+                <td className="px-4 py-4 text-gray-400 whitespace-nowrap">{a.email}</td>
+                <td className="px-4 py-4 text-gray-300 whitespace-nowrap">{a.jobTitle || "—"}</td>
+                <td className="px-4 py-4 text-gray-400 whitespace-nowrap">{a.phone || "—"}</td>
+                <td className="px-4 py-4 whitespace-nowrap"><Badge status={a.status} /></td>
+                <td className="px-4 py-4 text-gray-500 whitespace-nowrap">{new Date(a.createdAt).toLocaleDateString()}</td>
+                <td className="px-4 py-4 whitespace-nowrap">
                   <StatusSelect current={a.status} options={APPLICATION_STATUSES} onChange={(s) => changeStatus(a._id, s)} />
                 </td>
               </tr>
@@ -417,7 +418,7 @@ const ContactsSection = () => {
           <thead className="bg-gray-800 border-b border-gray-700">
             <tr>
               {["Name", "Email", "Company", "Service", "Status", "Date", "Actions"].map((h) => (
-                <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-400">{h}</th>
+                <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-400 whitespace-nowrap">{h}</th>
               ))}
             </tr>
           </thead>
@@ -427,13 +428,13 @@ const ContactsSection = () => {
                 <tr key={c._id}
                   className="bg-gray-800/50 hover:bg-gray-800 transition cursor-pointer"
                   onClick={() => setExpanded(expanded === c._id ? null : c._id)}>
-                  <td className="px-4 py-3 text-white font-medium">{c.firstName} {c.lastName}</td>
-                  <td className="px-4 py-3 text-gray-400">{c.email}</td>
-                  <td className="px-4 py-3 text-gray-400">{c.company || "—"}</td>
-                  <td className="px-4 py-3 text-gray-400">{c.service || "—"}</td>
-                  <td className="px-4 py-3"><Badge status={c.status} /></td>
-                  <td className="px-4 py-3 text-gray-500">{new Date(c.createdAt).toLocaleDateString()}</td>
-                  <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                  <td className="px-4 py-4 text-white font-medium whitespace-nowrap">{c.firstName} {c.lastName}</td>
+                  <td className="px-4 py-4 text-gray-400 whitespace-nowrap">{c.email}</td>
+                  <td className="px-4 py-4 text-gray-400 whitespace-nowrap">{c.company || "—"}</td>
+                  <td className="px-4 py-4 text-gray-400 whitespace-nowrap">{c.service || "—"}</td>
+                  <td className="px-4 py-4 whitespace-nowrap"><Badge status={c.status} /></td>
+                  <td className="px-4 py-4 text-gray-500 whitespace-nowrap">{new Date(c.createdAt).toLocaleDateString()}</td>
+                  <td className="px-4 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                     <StatusSelect current={c.status} options={CONTACT_STATUSES} onChange={(s) => changeStatus(c._id, s)} />
                   </td>
                 </tr>
@@ -482,7 +483,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     api.getDashboard()
       .then((d) => setStats(d.data))
-      .catch(() => {});
+      .catch((err) => console.error("Dashboard stats error:", err?.response?.data || err.message));
   }, []);
 
   const logout = () => {
