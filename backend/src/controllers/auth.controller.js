@@ -138,8 +138,32 @@ const getMe = async (req, res) => {
   });
 };
 
+// ================= OAUTH CALLBACK =================
+
+const oauthCallback = (req, res) => {
+  try {
+    const user = req.user;
+    const token = generateToken(user._id);
+    const clientUrl = process.env.CLIENT_URL;
+
+    const params = new URLSearchParams({
+      token,
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });
+
+    res.redirect(`${clientUrl}/auth/callback?${params.toString()}`);
+  } catch (error) {
+    const clientUrl = process.env.CLIENT_URL;
+    res.redirect(`${clientUrl}/login?error=oauth_failed`);
+  }
+};
+
 module.exports = {
   register,
   login,
   getMe,
+  oauthCallback,
 };

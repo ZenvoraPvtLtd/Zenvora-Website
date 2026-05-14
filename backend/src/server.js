@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 
 const connectDB = require("./config/db");
+const passport = require("./config/passport");
 
 const authRoutes = require("./routes/auth.routes");
 const contactRoutes = require("./routes/contact.routes");
@@ -21,6 +22,7 @@ connectDB();
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
+app.use(passport.initialize());
 
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
