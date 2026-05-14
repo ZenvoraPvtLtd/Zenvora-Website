@@ -8,7 +8,7 @@ import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import InternshipProgram from "./pages/InternshipProgram";
+// import InternshipProgram from "./pages/InternshipProgram";
 import AdminDashboard from "./pages/AdminDashboard";
 import OAuthCallback from "./pages/OAuthCallback";
 
@@ -25,7 +25,7 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/internship" element={<InternshipProgram />} />
+          {/* <Route path="/internship" element={<InternshipProgram />} /> */}
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/auth/callback" element={<OAuthCallback />} />
         </Routes>

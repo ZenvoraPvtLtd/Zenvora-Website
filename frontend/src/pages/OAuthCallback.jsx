@@ -24,7 +24,9 @@ const OAuthCallback = () => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
 
-    navigate(user.role === "admin" ? "/admin" : "/");
+    // Admin users go to dashboard, non-admin users go to home page
+    const destination = user.role === "admin" ? "/admin" : "/";
+    navigate(destination);
     window.location.reload();
   }, []);
 
