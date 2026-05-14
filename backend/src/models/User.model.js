@@ -16,8 +16,23 @@ const userSchema = new mongoose.Schema(
 
     password: {
       type: String,
-      required: true,
+      required: false,
       select: false,
+    },
+
+    provider: {
+      type: String,
+      enum: ["local", "google", "microsoft"],
+      default: "local",
+    },
+
+    providerId: {
+      type: String,
+      select: false,
+    },
+
+    avatar: {
+      type: String,
     },
 
     role: {
@@ -37,7 +52,7 @@ const userSchema = new mongoose.Schema(
 
 // Hash Password
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password") || !this.password) return next();
 
   this.password = await bcrypt.hash(this.password, 10);
 
