@@ -38,7 +38,8 @@ const Register = () => {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      navigate(data.user?.role === "admin" ? "/admin" : "/");
+      // New users always go to home page (only admins can access dashboard)
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Register Failed");
     } finally {

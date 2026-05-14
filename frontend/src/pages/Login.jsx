@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { AiOutlineClose } from "react-icons/ai";
 import { api } from "../api";
 
@@ -7,7 +7,9 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError]     = useState("");
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const redirectTo = searchParams.get("redirectTo") || "/";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,7 +24,9 @@ const Login = () => {
       const data = await api.login(formData);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      navigate(data.user?.role === "admin" ? "/admin" : "/");
+      // Admin users go to dashboard, non-admin users go back to where they came from
+      const destination = data.user?.role === "admin" ? "/admin" : redirectTo;
+      navigate(destination);
       window.location.reload();
     } catch (err) {
       setError(err.message);
