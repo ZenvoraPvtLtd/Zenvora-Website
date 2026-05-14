@@ -30,6 +30,15 @@ axiosInstance.interceptors.request.use(
 
 // ================= AUTH =================
 
+// OAuth — redirect browser to backend OAuth route
+const loginWithGoogle = () => {
+  window.location.href = `${BASE_URL}/auth/google`;
+};
+
+const loginWithMicrosoft = () => {
+  window.location.href = `${BASE_URL}/auth/microsoft`;
+};
+
 // Register
 const register = async (formData) => {
   const res = await axiosInstance.post("/auth/register", formData);
@@ -171,6 +180,8 @@ export const api = {
   register,
   login,
   getMe,
+  loginWithGoogle,
+  loginWithMicrosoft,
 
   // Contact
   sendContact,

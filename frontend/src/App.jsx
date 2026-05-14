@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import InternshipProgram from "./pages/InternshipProgram";
 import AdminDashboard from "./pages/AdminDashboard";
+import OAuthCallback from "./pages/OAuthCallback";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/internship" element={<InternshipProgram />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/auth/callback" element={<OAuthCallback />} />
         </Routes>
         <Footer />
       </div>
