@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Creative team work in blue shade</title>
+  <desc id="desc">A blue toned creative teamwork collage with four vertical work images and team labels.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f7fdff"/>
+      <stop offset="1" stop-color="#dff7ff"/>
+    </linearGradient>
+    <linearGradient id="band" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#0e7490"/>
+      <stop offset=".5" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="photo" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#effcff"/>
+      <stop offset="1" stop-color="#65d8f2"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#075985" flood-opacity=".25"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <text x="600" y="92" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="800" fill="#082f49">Creative Team Work</text>
+  <rect y="406" width="1200" height="269" fill="url(#band)" opacity=".42"/>
+
+  <g filter="url(#shadow)">
+    <g transform="translate(108 145)">
+      <rect width="220" height="335" rx="3" fill="url(#photo)"/>
+      <rect x="0" y="0" width="220" height="335" fill="#082f49" opacity=".08"/>
+      <circle cx="72" cy="115" r="35" fill="#0f172a"/>
+      <circle cx="138" cy="93" r="32" fill="#164e63"/>
+      <path d="M40 172c30-40 86-42 124 0v84H40z" fill="#e0f7ff"/>
+      <path d="M105 154c26-31 70-26 91 7v95h-91z" fill="#bae6fd"/>
+      <path d="M92 75h82v16H92zM78 92h94v16H78z" fill="#0284c7"/>
+      <path d="M55 205h118" stroke="#0369a1" stroke-width="9" stroke-linecap="round"/>
+      <path d="M48 232h74" stroke="#38bdf8" stroke-width="9" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(363 145)">
+      <rect width="220" height="335" rx="3" fill="url(#photo)"/>
+      <rect x="36" y="38" width="123" height="190" rx="12" fill="#0f172a"/>
+      <rect x="49" y="53" width="97" height="144" rx="4" fill="#dff8ff"/>
+      <path d="M49 176c22-35 51-47 97-62v83H49z" fill="#0284c7" opacity=".85"/>
+      <rect x="128" y="230" width="72" height="14" rx="7" fill="#082f49"/>
+      <rect x="34" y="246" width="166" height="18" rx="9" fill="#7dd3fc"/>
+      <path d="M166 72c19 33 22 72 2 118" stroke="#22c55e" stroke-width="6" opacity=".45"/>
+    </g>
+
+    <g transform="translate(618 145)">
+      <rect width="220" height="335" rx="3" fill="url(#photo)"/>
+      <rect x="42" y="32" width="136" height="182" fill="#f8feff"/>
+      <path d="M58 53h104M58 82h104M58 111h104M58 140h104M58 169h104" stroke="#94a3b8" stroke-width="3"/>
+      <path d="M80 43v160M110 43v160M140 43v160" stroke="#cbd5e1" stroke-width="3"/>
+      <path d="M72 246c10-45 38-63 76-62 22 0 39 18 49 55" fill="#0e7490"/>
+      <path d="M112 208l45-27" stroke="#082f49" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="160" cy="178" r="10" fill="#082f49"/>
+      <circle cx="86" cy="213" r="13" fill="#164e63"/>
+    </g>
+
+    <g transform="translate(873 145)">
+      <rect width="220" height="335" rx="3" fill="url(#photo)"/>
+      <rect x="42" y="76" width="135" height="112" rx="8" fill="#e0fbff"/>
+      <rect x="75" y="98" width="74" height="47" rx="4" fill="#0ea5e9"/>
+      <path d="M112 185c35 0 70 34 70 81H42c0-47 35-81 70-81z" fill="#0f172a"/>
+      <circle cx="112" cy="156" r="34" fill="#164e63"/>
+      <path d="M78 124c18-24 54-26 75-2l-6 34H83z" fill="#bae6fd"/>
+      <path d="M68 82h83v8H68z" stroke="#0284c7" stroke-width="5"/>
+    </g>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
+    <g transform="translate(218 548)">
+      <text font-size="25" font-weight="800" fill="#ecfeff">Team Work</text>
+      <text y="38" font-size="15" fill="#082f49">Discovery and product strategy</text>
+    </g>
+    <g transform="translate(473 548)">
+      <text font-size="25" font-weight="800" fill="#ecfeff">Team Work</text>
+      <text y="38" font-size="15" fill="#082f49">Engineering and delivery</text>
+    </g>
+    <g transform="translate(728 548)">
+      <text font-size="25" font-weight="800" fill="#ecfeff">Team Work</text>
+      <text y="38" font-size="15" fill="#082f49">Design and planning</text>
+    </g>
+    <g transform="translate(983 548)">
+      <text font-size="25" font-weight="800" fill="#ecfeff">Team Work</text>
+      <text y="38" font-size="15" fill="#082f49">Research and innovation</text>
+    </g>
+  </g>
+</svg>

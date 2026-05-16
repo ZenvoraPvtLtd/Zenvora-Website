@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Base URL
-const BASE_URL = "http://localhost:5000/api";
+// Create frontend/.env with VITE_API_URL=http://localhost:5000/api if your backend URL changes.
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 // Axios Instance
 const axiosInstance = axios.create({
@@ -49,6 +50,13 @@ const register = async (formData) => {
 // Login
 const login = async (formData) => {
   const res = await axiosInstance.post("/auth/login", formData);
+
+  return res.data;
+};
+
+// Backend health
+const health = async () => {
+  const res = await axiosInstance.get("/health");
 
   return res.data;
 };
@@ -179,9 +187,11 @@ export const api = {
   // Auth
   register,
   login,
+  health,
   getMe,
   loginWithGoogle,
   loginWithMicrosoft,
+  baseUrl: BASE_URL,
 
   // Contact
   sendContact,
