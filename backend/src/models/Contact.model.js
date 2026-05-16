@@ -17,11 +17,27 @@ const contactSchema = new mongoose.Schema(
       required: true,
     },
 
+    phone: {
+      type: String,
+    },
+
     company: {
       type: String,
     },
 
     service: {
+      type: String,
+    },
+
+    inquiryType: {
+      type: String,
+    },
+
+    department: {
+      type: String,
+    },
+
+    preferredContact: {
       type: String,
     },
 
