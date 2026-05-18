@@ -1,6 +1,9 @@
 import os
 
-FRONTEND_PATH = "frontend/src"
+REPO_ROOT = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "..")
+)
+FRONTEND_PATH = os.path.join(REPO_ROOT, "frontend", "src")
 
 
 def read_file(file_path):
@@ -17,6 +20,9 @@ def read_file(file_path):
 def scrape_frontend():
 
     all_text = ""
+
+    if not os.path.isdir(FRONTEND_PATH):
+        raise FileNotFoundError(f"Frontend source folder not found: {FRONTEND_PATH}")
 
     for root, dirs, files in os.walk(FRONTEND_PATH):
 
