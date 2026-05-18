@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Base URL
-const BASE_URL = "http://localhost:5000/api";
+// Create frontend/.env with VITE_API_URL=http://localhost:5000/api if your backend URL changes.
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 // Axios Instance
 const axiosInstance = axios.create({
@@ -30,7 +31,14 @@ axiosInstance.interceptors.request.use(
 
 // ================= AUTH =================
 
-// OAuth — redirect browser to backend OAuth route
+// Backend health check
+const health = async () => {
+  const res = await axiosInstance.get("/health");
+
+  return res.data;
+};
+
+// OAuth - redirect browser to backend OAuth route
 const loginWithGoogle = () => {
   window.location.href = `${BASE_URL}/auth/google`;
 };
@@ -176,6 +184,9 @@ const updateApplicationStatus = async (id, body) => {
 
 // Export APIs
 export const api = {
+  baseUrl: BASE_URL,
+  health,
+
   // Auth
   register,
   login,
@@ -207,3 +218,4 @@ export const api = {
   getContacts,
   updateContactStatus,
 };
+

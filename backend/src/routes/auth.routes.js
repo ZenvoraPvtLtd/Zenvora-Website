@@ -15,6 +15,7 @@ router.post(
   [
     body("name").notEmpty(),
     body("email").isEmail(),
+    body("phone").optional({ checkFalsy: true }).matches(/^[0-9+\-\s()]{7,18}$/),
     body("password").isLength({ min: 6 }),
   ],
   validate,

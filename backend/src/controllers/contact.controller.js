@@ -21,7 +21,7 @@ const submitContact = async (req, res) => {
 // Get All Contacts
 const getAllContacts = async (req, res) => {
   try {
-    const contacts = await Contact.find();
+    const contacts = await Contact.find().sort({ createdAt: -1 });
 
     res.json({
       success: true,
@@ -38,18 +38,30 @@ const getAllContacts = async (req, res) => {
 // Update Contact Status
 const updateContactStatus = async (req, res) => {
   try {
-    const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const contact = await Contact.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!contact) {
+      return res.status(404).json({
+        success: false,
+        message: "Contact not found",
+      });
+    }
 
     res.json({
       success: true,
       data: contact,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(error.name === "CastError" ? 400 : 500).json({
       success: false,
-      message: error.message,
+      message: error.name === "CastError" ? "Invalid contact id" : error.message,
     });
   }
 };

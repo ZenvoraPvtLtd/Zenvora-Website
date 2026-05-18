@@ -17,11 +17,27 @@ const contactSchema = new mongoose.Schema(
       required: true,
     },
 
+    phone: {
+      type: String,
+    },
+
     company: {
       type: String,
     },
 
     service: {
+      type: String,
+    },
+
+    inquiryType: {
+      type: String,
+    },
+
+    department: {
+      type: String,
+    },
+
+    preferredContact: {
       type: String,
     },
 
@@ -32,6 +48,7 @@ const contactSchema = new mongoose.Schema(
 
     status: {
       type: String,
+      enum: ["new", "reviewed", "closed"],
       default: "new",
     },
   },
@@ -41,3 +58,4 @@ const contactSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Contact", contactSchema);
+

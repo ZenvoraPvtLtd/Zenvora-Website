@@ -17,12 +17,13 @@ const generateToken = (id) => {
 
 const register = async (req, res) => {
   try {
-    const { name, email, password } =
+    const { name, email, phone, password } =
       req.body;
+    const normalizedEmail = email.trim().toLowerCase();
 
     // Check Existing User
     const userExists =
-      await User.findOne({ email });
+      await User.findOne({ email: normalizedEmail });
 
     if (userExists) {
       return res.status(400).json({
@@ -32,10 +33,10 @@ const register = async (req, res) => {
     }
 
     const user = await User.create({
-      name,
-      email,
+      name: name.trim(),
+      email: normalizedEmail,
+      phone,
       password,
-      role: "admin",
     });
 
     // Generate Token
@@ -50,8 +51,10 @@ const register = async (req, res) => {
 
       user: {
         id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
         role: user.role,
       },
     });
@@ -70,10 +73,11 @@ const login = async (req, res) => {
   try {
     const { email, password } =
       req.body;
+    const normalizedEmail = email.trim().toLowerCase();
 
     // Find User
     const user = await User.findOne({
-      email,
+      email: normalizedEmail,
     }).select("+password");
 
     // Check User
@@ -115,8 +119,10 @@ const login = async (req, res) => {
 
       user: {
         id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
         role: user.role,
       },
     });

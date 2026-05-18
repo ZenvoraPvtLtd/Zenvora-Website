@@ -29,6 +29,13 @@ router.post(
 // Admin Routes
 router.get("/", protect, adminOnly, getAllContacts);
 
-router.patch("/:id/status", protect, adminOnly, updateContactStatus);
+router.patch(
+  "/:id/status",
+  protect,
+  adminOnly,
+  [body("status").isIn(["new", "reviewed", "closed"])],
+  validate,
+  updateContactStatus,
+);
 
 module.exports = router;

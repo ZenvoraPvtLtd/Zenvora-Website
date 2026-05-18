@@ -45,12 +45,22 @@ const Home = () => {
 
         <div className="relative mx-auto grid min-h-[520px] max-w-7xl items-center gap-12 px-6 py-20 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:py-24">
           <div className="max-w-2xl">
-            <h1 className="text-[44px] font-black leading-[1.08] tracking-normal text-white sm:text-6xl lg:text-[64px]">
+            {/* <h1 className="text-[44px] font-black leading-[1.08] tracking-normal text-white sm:text-6xl lg:text-[64px]">
               Welcome to
               <span className="block">
                 <span className="text-[#15c8ff]">Zenvora</span> Infotech
               </span>
-            </h1>
+            </h1> */}
+
+            <h1 className="text-[40px] font-black leading-[1.08] tracking-tight text-white sm:text-6xl lg:text-[64px]">
+  <span className="block text-white">
+    Software Development
+  </span>
+
+  <span className="block bg-gradient-to-r from-[#15c8ff] via-[#4fdcff] to-[#8be8ff] bg-clip-text text-transparent">
+    Company & IT Solutions
+  </span>
+</h1>
 
             <p className="mt-7 text-xl font-semibold text-white sm:text-2xl">
               Transforming Ideas into Innovative IT Solutions
@@ -216,3 +226,4 @@ function StatItem({ icon: Icon, num, title }) {
 }
 
 export default Home;
+

@@ -30,7 +30,6 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
                 provider: "google",
                 providerId: profile.id,
                 avatar: profile.photos?.[0]?.value,
-                role: "admin",
               });
             }
           }
@@ -71,7 +70,6 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
                 email,
                 provider: "microsoft",
                 providerId: profile.id,
-                role: "admin",
               });
             }
           }

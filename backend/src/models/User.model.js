@@ -12,6 +12,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    phone: {
+      type: String,
+      trim: true,
     },
 
     password: {
@@ -37,7 +44,8 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      default: "admin",
+      enum: ["user", "admin"],
+      default: "user",
     },
 
     isActive: {
@@ -61,6 +69,8 @@ userSchema.pre("save", async function (next) {
 
 // Compare Password
 userSchema.methods.comparePassword = async function (password) {
+  if (!this.password) return false;
+
   return await bcrypt.compare(password, this.password);
 };
 

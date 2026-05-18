@@ -11,18 +11,37 @@ const applicationSchema = new mongoose.Schema(
       type: String,
     },
 
+    track: {
+      type: String,
+      trim: true,
+    },
+
     name: {
       type: String,
       required: true,
+      trim: true,
     },
 
     email: {
       type: String,
       required: true,
+      lowercase: true,
+      trim: true,
     },
 
     phone: {
       type: String,
+      trim: true,
+    },
+
+    portfolio: {
+      type: String,
+      trim: true,
+    },
+
+    skills: {
+      type: String,
+      trim: true,
     },
 
     coverLetter: {
@@ -35,6 +54,7 @@ const applicationSchema = new mongoose.Schema(
 
     status: {
       type: String,
+      enum: ["pending", "reviewed", "accepted", "rejected"],
       default: "pending",
     },
   },
