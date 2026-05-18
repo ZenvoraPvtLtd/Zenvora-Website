@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
+const { sendWelcomeEmail, sendLoginNotification } = require("../utils/email");
 
 // ================= GENERATE TOKEN =================
 
@@ -17,17 +18,23 @@ const generateToken = (id) => {
 
 const register = async (req, res) => {
   try {
-    const { name, email, password } =
-      req.body;
+    const { name, email, password } = req.body;
+
+    // Validate input
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, email, and password are required",
+      });
+    }
 
     // Check Existing User
-    const userExists =
-      await User.findOne({ email });
+    const userExists = await User.findOne({ email });
 
     if (userExists) {
       return res.status(400).json({
         success: false,
-        message: "User already exists",
+        message: "Email already registered. Please log in or use a different email.",
       });
     }
 
@@ -35,19 +42,22 @@ const register = async (req, res) => {
       name,
       email,
       password,
-      role: "admin",
+      role: "user",
+      provider: "local",
     });
 
     // Generate Token
     const token = generateToken(user._id);
 
+    // Send welcome email asynchronously
+    sendWelcomeEmail(user).catch((err) => {
+      console.error("Failed to send welcome email:", err);
+    });
+
     res.status(201).json({
       success: true,
-      message:
-        "Account created successfully",
-
+      message: "Account created successfully",
       token,
-
       user: {
         id: user._id,
         name: user.name,
@@ -55,11 +65,10 @@ const register = async (req, res) => {
         role: user.role,
       },
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message || "Registration failed",
     });
   }
 };
@@ -68,8 +77,15 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } =
-      req.body;
+    const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required",
+      });
+    }
 
     // Find User
     const user = await User.findOne({
@@ -78,20 +94,19 @@ const login = async (req, res) => {
 
     // Check User
     if (!user) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
-        message: "User not found",
+        message: "Invalid email or password",
       });
     }
 
     // Check Password
-    const isMatch =
-      await user.comparePassword(password);
+    const isMatch = await user.comparePassword(password);
 
     if (!isMatch) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
-        message: "Invalid password",
+        message: "Invalid email or password",
       });
     }
 
@@ -99,20 +114,22 @@ const login = async (req, res) => {
     if (!user.isActive) {
       return res.status(403).json({
         success: false,
-        message:
-          "Account is deactivated",
+        message: "Account is deactivated. Please contact support.",
       });
     }
 
     // Generate Token
     const token = generateToken(user._id);
 
+    // Send login notification asynchronously
+    sendLoginNotification(user).catch((err) => {
+      console.error("Failed to send login notification:", err);
+    });
+
     res.json({
       success: true,
       message: "Login successful",
-
       token,
-
       user: {
         id: user._id,
         name: user.name,
@@ -120,11 +137,10 @@ const login = async (req, res) => {
         role: user.role,
       },
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message || "Login failed",
     });
   }
 };
@@ -140,11 +156,16 @@ const getMe = async (req, res) => {
 
 // ================= OAUTH CALLBACK =================
 
-const oauthCallback = (req, res) => {
+const oauthCallback = async (req, res) => {
   try {
     const user = req.user;
     const token = generateToken(user._id);
     const clientUrl = process.env.CLIENT_URL;
+
+    // Send login notification for OAuth
+    sendLoginNotification(user).catch((err) => {
+      console.error("Failed to send login notification:", err);
+    });
 
     const params = new URLSearchParams({
       token,
@@ -154,9 +175,9 @@ const oauthCallback = (req, res) => {
       role: user.role,
     });
 
-    res.redirect(`${clientUrl}/auth/callback?${params.toString()}`);
+    res.redirect(`${clientUrl}/login?${params.toString()}`);
   } catch (error) {
-    const clientUrl = process.env.CLIENT_URL;
+    const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
     res.redirect(`${clientUrl}/login?error=oauth_failed`);
   }
 };

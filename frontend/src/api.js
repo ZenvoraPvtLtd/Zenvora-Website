@@ -68,6 +68,13 @@ const getMe = async () => {
   return res.data;
 };
 
+// Logout
+const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  localStorage.removeItem("rememberedEmail");
+};
+
 // ================= CONTACT =================
 
 // Send Contact Form
