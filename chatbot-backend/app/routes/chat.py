@@ -192,9 +192,9 @@ def chat(req: ChatRequest):
     if intent == "jobs":
         return intent_response(
             "jobs",
-            "You can explore open roles and apply through the Careers page. Share your details there and the hiring team will review your application.",
+            "Great, you can apply from the Careers page. Open it, choose the role or internship track that fits you, and submit your details there. Our hiring team will review your application and get back to you.",
             "/careers",
-            ["How to apply for jobs?", "Contact Team", "About company"]
+            ["Open Careers", "How to apply for jobs?", "Contact Team"]
         )
 
     if is_faq_list_request(user_message):
@@ -284,10 +284,26 @@ How can I help you today?
 
 
 def intent_response(intent, reply, page, suggestions):
+    page_titles = {
+        "services": "Services",
+        "contact": "Contact",
+        "company": "About Zenvora",
+        "jobs": "Careers",
+    }
+
+    action_labels = {
+        "services": "View services",
+        "contact": "Contact team",
+        "company": "About company",
+        "jobs": "Open Careers page",
+    }
+
     return {
         "reply": reply,
         "intent": intent,
         "page": page,
+        "pageTitle": page_titles.get(intent, "Open page"),
+        "actionLabel": action_labels.get(intent, "Open page"),
         "suggestions": suggestions
     }
 

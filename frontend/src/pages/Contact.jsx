@@ -15,6 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { FaFacebookF, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 import { api } from "../api";
 
 const services = [
@@ -77,6 +78,12 @@ const emailTopics = [
   { label: "About Experts", topic: "About Experts" },
   { label: "Contact Team", topic: "Contact Team" },
   { label: "Company Information", topic: "Company Information" },
+];
+
+const chatQuickActions = [
+  { label: "Apply For Job", message: "Apply For Job" },
+  { label: "View Services", message: "View Services" },
+  { label: "Our experts", message: "our experts" },
 ];
 
 const initialForm = {
@@ -261,6 +268,8 @@ const Contact = () => {
           text: data.reply || "I could not find an answer for that.",
           experts: data.experts || [],
           page: data.page,
+          pageTitle: data.pageTitle,
+          actionLabel: data.actionLabel,
           intent: data.intent,
         },
       ]);
@@ -279,10 +288,6 @@ const Contact = () => {
 
   const handleFaqClick = (faq) => {
     sendChatMessage(faq.question);
-  };
-
-  const handleExpertsClick = () => {
-    sendChatMessage("our experts");
   };
 
   const handleEmailTopicClick = (topic) => {
@@ -615,14 +620,17 @@ const Contact = () => {
                       Email me: {topic.label}
                     </button>
                   ))}
-                  <button
-                    type="button"
-                    onClick={handleExpertsClick}
-                    disabled={chatLoading}
-                    className="rounded-lg border border-cyan-200 bg-cyan-600 px-3 py-2 text-left text-xs font-semibold text-white transition hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    Our experts
-                  </button>
+                  {chatQuickActions.map((action) => (
+                    <button
+                      key={action.label}
+                      type="button"
+                      onClick={() => sendChatMessage(action.message)}
+                      disabled={chatLoading}
+                      className="rounded-lg border border-cyan-200 bg-cyan-600 px-3 py-2 text-left text-xs font-semibold text-white transition hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {action.label}
+                    </button>
+                  ))}
                   {faqs.map((faq) => (
                     <button
                       key={faq.question}
@@ -640,12 +648,14 @@ const Contact = () => {
                 <div key={`${message.from}-${index}`} className={`rounded-lg px-3 py-2 text-sm ${message.from === "user" ? "ml-8 bg-cyan-500 text-black" : "mr-8 bg-slate-100 text-slate-700 dark:bg-gray-900 dark:text-slate-200"}`}>
                   <p className="whitespace-pre-line">{message.text}</p>
                   {message.page && (
-                    <a
-                      href={message.page}
-                      className="mt-3 inline-flex rounded-lg bg-cyan-500 px-3 py-2 text-xs font-bold text-black transition hover:bg-cyan-400"
+                    <Link
+                      to={message.page}
+                      onClick={() => setChatOpen(false)}
+                      className="mt-3 inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-3 py-2 text-xs font-bold text-black transition hover:bg-cyan-400"
                     >
-                      Open page
-                    </a>
+                      {message.actionLabel || `Open ${message.pageTitle || "page"}`}
+                      <ArrowRight size={14} />
+                    </Link>
                   )}
                   {message.experts?.length > 0 && (
                     <div className="mt-3 grid gap-2">
