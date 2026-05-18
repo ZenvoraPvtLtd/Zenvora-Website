@@ -72,6 +72,13 @@ const businessHours = [
   ["Sunday", "Closed"],
 ];
 
+const emailTopics = [
+  { label: "View Services", topic: "View Services" },
+  { label: "About Experts", topic: "About Experts" },
+  { label: "Contact Team", topic: "Contact Team" },
+  { label: "Company Information", topic: "Company Information" },
+];
+
 const initialForm = {
   firstName: "",
   lastName: "",
@@ -96,6 +103,10 @@ const Contact = () => {
     { from: "team", text: "Hi! Tell us what you need help with." },
   ]);
   const [chatInput, setChatInput] = useState("");
+  const [chatLoading, setChatLoading] = useState(false);
+  const [pendingEmailTopic, setPendingEmailTopic] = useState(null);
+  const [customQuestionStep, setCustomQuestionStep] = useState(null);
+  const [customQuestion, setCustomQuestion] = useState("");
 
   const responseNote = useMemo(() => {
     if (formData.department === "Support") return "Support requests are usually reviewed within 4 business hours.";
@@ -162,15 +173,130 @@ const Contact = () => {
     }
   };
 
-  const sendChatMessage = () => {
-    if (!chatInput.trim()) return;
+  const sendChatMessage = async (message = chatInput) => {
+    const trimmedMessage = message.trim();
 
+    if (!trimmedMessage || chatLoading) return;
+
+    setChatLoading(true);
     setChatMessages((current) => [
       ...current,
-      { from: "user", text: chatInput.trim() },
-      { from: "team", text: "Thanks. Please leave your email in the form and our team will reply quickly." },
+      { from: "user", text: trimmedMessage },
     ]);
     setChatInput("");
+
+    try {
+      if (customQuestionStep === "question") {
+        setCustomQuestion(trimmedMessage);
+        setCustomQuestionStep("email");
+        setChatMessages((current) => [
+          ...current,
+          { from: "team", text: "Please share your email address. Our team will reply to your question there." },
+        ]);
+        return;
+      }
+
+      if (customQuestionStep === "email") {
+        if (!/^\S+@\S+\.\S+$/.test(trimmedMessage)) {
+          setChatMessages((current) => [
+            ...current,
+            { from: "team", text: "Please enter a valid email address so I can send your question to the team." },
+          ]);
+          return;
+        }
+
+        const data = await api.sendChatQuestionEmail({
+          email: trimmedMessage,
+          question: customQuestion,
+        });
+
+        setChatMessages((current) => [
+          ...current,
+          { from: "team", text: data.reply || "Your question has been sent." },
+        ]);
+        setCustomQuestionStep(null);
+        setCustomQuestion("");
+        return;
+      }
+
+      if (pendingEmailTopic) {
+        if (!/^\S+@\S+\.\S+$/.test(trimmedMessage)) {
+          setChatMessages((current) => [
+            ...current,
+            { from: "team", text: "Please enter a valid email address so I can send the details." },
+          ]);
+          return;
+        }
+
+        const data = await api.sendChatEmail({
+          email: trimmedMessage,
+          topic: pendingEmailTopic,
+        });
+
+        setChatMessages((current) => [
+          ...current,
+          { from: "team", text: data.reply || "Email request processed." },
+        ]);
+        setPendingEmailTopic(null);
+        return;
+      }
+
+      const selectedEmailTopic = emailTopics.find((item) => item.topic === trimmedMessage);
+
+      if (selectedEmailTopic) {
+        setPendingEmailTopic(selectedEmailTopic.topic);
+        setChatMessages((current) => [
+          ...current,
+          { from: "team", text: `Please share your email address. I will send you ${selectedEmailTopic.label} details.` },
+        ]);
+        return;
+      }
+
+      const data = await api.sendChatMessage(trimmedMessage);
+
+      setChatMessages((current) => [
+        ...current,
+        {
+          from: "team",
+          text: data.reply || "I could not find an answer for that.",
+          experts: data.experts || [],
+          page: data.page,
+          intent: data.intent,
+        },
+      ]);
+    } catch (err) {
+      setChatMessages((current) => [
+        ...current,
+        {
+          from: "team",
+          text: `Chatbot is not reachable at ${api.chatbotUrl}. Please try again in a moment.`,
+        },
+      ]);
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
+  const handleFaqClick = (faq) => {
+    sendChatMessage(faq.question);
+  };
+
+  const handleExpertsClick = () => {
+    sendChatMessage("our experts");
+  };
+
+  const handleEmailTopicClick = (topic) => {
+    sendChatMessage(topic.topic);
+  };
+
+  const handleCustomQuestionEmailClick = () => {
+    setPendingEmailTopic(null);
+    setCustomQuestion("");
+    setCustomQuestionStep("question");
+    setChatMessages((current) => [
+      ...current,
+      { from: "team", text: "Please type your question. I will email it to our team." },
+    ]);
   };
 
   const inputClass = (name) =>
@@ -467,15 +593,94 @@ const Contact = () => {
               </button>
             </div>
             <div className="max-h-64 space-y-3 overflow-auto p-4">
+              <div className="rounded-lg border border-cyan-200 bg-cyan-50 p-3 dark:border-cyan-900/60 dark:bg-cyan-950/20">
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-cyan-700 dark:text-cyan-300">Quick actions</p>
+                <div className="mt-2 grid gap-2">
+                  <button
+                    type="button"
+                    onClick={handleCustomQuestionEmailClick}
+                    disabled={chatLoading}
+                    className="rounded-lg border border-cyan-200 bg-cyan-600 px-3 py-2 text-left text-xs font-semibold text-white transition hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    Send my question by email
+                  </button>
+                  {emailTopics.map((topic) => (
+                    <button
+                      key={topic.topic}
+                      type="button"
+                      onClick={() => handleEmailTopicClick(topic)}
+                      disabled={chatLoading}
+                      className="rounded-lg border border-cyan-200 bg-white px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-cyan-400 hover:text-cyan-700 disabled:cursor-not-allowed disabled:opacity-60 dark:border-gray-800 dark:bg-gray-900 dark:text-slate-200"
+                    >
+                      Email me: {topic.label}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={handleExpertsClick}
+                    disabled={chatLoading}
+                    className="rounded-lg border border-cyan-200 bg-cyan-600 px-3 py-2 text-left text-xs font-semibold text-white transition hover:bg-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    Our experts
+                  </button>
+                  {faqs.map((faq) => (
+                    <button
+                      key={faq.question}
+                      type="button"
+                      onClick={() => handleFaqClick(faq)}
+                      disabled={chatLoading}
+                      className="rounded-lg border border-cyan-200 bg-white px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:border-cyan-400 hover:text-cyan-700 disabled:cursor-not-allowed disabled:opacity-60 dark:border-gray-800 dark:bg-gray-900 dark:text-slate-200"
+                    >
+                      {faq.question}
+                    </button>
+                  ))}
+                </div>
+              </div>
               {chatMessages.map((message, index) => (
                 <div key={`${message.from}-${index}`} className={`rounded-lg px-3 py-2 text-sm ${message.from === "user" ? "ml-8 bg-cyan-500 text-black" : "mr-8 bg-slate-100 text-slate-700 dark:bg-gray-900 dark:text-slate-200"}`}>
-                  {message.text}
+                  <p className="whitespace-pre-line">{message.text}</p>
+                  {message.page && (
+                    <a
+                      href={message.page}
+                      className="mt-3 inline-flex rounded-lg bg-cyan-500 px-3 py-2 text-xs font-bold text-black transition hover:bg-cyan-400"
+                    >
+                      Open page
+                    </a>
+                  )}
+                  {message.experts?.length > 0 && (
+                    <div className="mt-3 grid gap-2">
+                      {message.experts.map((expert) => (
+                        <div key={expert.id} className="rounded-lg border border-cyan-200 bg-white p-3 text-xs text-slate-700 dark:border-gray-800 dark:bg-black dark:text-slate-200">
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="font-bold text-slate-950 dark:text-white">{expert.name}</p>
+                            <span className="shrink-0 rounded-full bg-emerald-50 px-2 py-0.5 font-semibold text-emerald-700">
+                              {expert.availability}
+                            </span>
+                          </div>
+                          <p className="mt-1 font-semibold text-cyan-600">{expert.role}</p>
+                          <p className="mt-1 text-slate-500 dark:text-slate-400">{expert.experience}+ years - {expert.department}</p>
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {expert.skills?.slice(0, 4).map((skill) => (
+                              <span key={skill} className="rounded-full bg-cyan-50 px-2 py-0.5 font-semibold text-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-200">
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
+              {chatLoading && (
+                <div className="mr-8 rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-700 dark:bg-gray-900 dark:text-slate-200">
+                  Typing...
+                </div>
+              )}
             </div>
             <div className="flex gap-2 border-t border-slate-200 p-3 dark:border-gray-800">
-              <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendChatMessage()} className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none dark:border-gray-800 dark:bg-black" placeholder="Type a message" />
-              <button type="button" onClick={sendChatMessage} className="rounded-lg bg-cyan-500 px-3 py-2 text-black">
+              <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendChatMessage()} className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none dark:border-gray-800 dark:bg-black" placeholder="Type a message" disabled={chatLoading} />
+              <button type="button" onClick={() => sendChatMessage()} disabled={chatLoading} className="rounded-lg bg-cyan-500 px-3 py-2 text-black disabled:cursor-not-allowed disabled:opacity-60">
                 <Send size={16} />
               </button>
             </div>
