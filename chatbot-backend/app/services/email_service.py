@@ -4,7 +4,11 @@ from email.message import EmailMessage
 
 from dotenv import load_dotenv
 
-load_dotenv()
+ENV_PATH = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", ".env")
+)
+
+load_dotenv(ENV_PATH)
 
 SMTP_HOST = os.getenv("SMTP_HOST") or os.getenv("EMAIL_HOST") or "smtp.gmail.com"
 SMTP_PORT = int(os.getenv("SMTP_PORT") or os.getenv("EMAIL_PORT") or "587")

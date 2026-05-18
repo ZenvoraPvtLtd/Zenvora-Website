@@ -150,6 +150,21 @@ def chat(req: ChatRequest):
     matched_faq = find_matching_faq(user_message)
     matched_experts = find_matching_experts(user_message)
 
+    if intent == "experts" or matched_experts:
+        experts_to_show = matched_experts or EXPERTS[:3]
+
+        return {
+            "reply": format_expert_reply(experts_to_show),
+            "intent": "experts",
+            "page": "/experts",
+            "experts": experts_to_show,
+            "suggestions": [
+                "Show AI experts",
+                "Show cloud experts",
+                "Book consultation"
+            ]
+        }
+
     if intent == "services":
         return intent_response(
             "services",
@@ -200,19 +215,6 @@ def chat(req: ChatRequest):
                 "Tell me about services",
                 "How to apply for jobs?",
                 "Contact support"
-            ]
-        }
-
-    if matched_experts:
-        return {
-            "reply": format_expert_reply(matched_experts),
-            "intent": "experts",
-            "page": "/experts",
-            "experts": matched_experts,
-            "suggestions": [
-                "Show AI experts",
-                "Show cloud experts",
-                "Book consultation"
             ]
         }
 
@@ -361,6 +363,23 @@ def detect_intent(user_message):
     message_words = set(normalized_message.split())
 
     intent_keywords = {
+        "experts": {
+            "expert",
+            "experts",
+            "specialist",
+            "consultant",
+            "developer",
+            "engineer",
+            "architect",
+            "team",
+            "mern",
+            "cloud",
+            "devops",
+            "security",
+            "cybersecurity",
+            "design",
+            "data",
+        },
         "services": {
             "service",
             "services",
@@ -443,6 +462,12 @@ def detect_intent(user_message):
 
     if "ai automation" in normalized_message:
         scores["services"] += 3
+
+    if "about expert" in normalized_message or "about experts" in normalized_message:
+        scores["experts"] += 4
+
+    if "our expert" in normalized_message or "our experts" in normalized_message:
+        scores["experts"] += 4
 
     if "project estimate" in normalized_message or "request estimate" in normalized_message:
         scores["contact"] += 2
