@@ -318,7 +318,7 @@
 //             </div>
 
 //             <h2 className="text-2xl font-bold text-white mb-3">Application Submitted!</h2>
-            
+
 //             <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 mb-6">
 //               <p className="text-emerald-300 text-sm mb-2">
 //                 <span className="font-semibold">Track:</span> {selectedTrack?.title}

@@ -252,7 +252,7 @@ const Careers = () => {
 
         <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
 
-         <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-4 py-2 rounded-full mb-6">
+          <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-4 py-2 rounded-full mb-6">
             Company
           </span>
 

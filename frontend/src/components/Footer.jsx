@@ -88,7 +88,7 @@ const Footer = () => {
               </a>
               <a href="#" className="hover:text-blue-400 transition">
                 <FaLinkedin size={20} />
-            
+
               </a>
             </div>
           </div>
