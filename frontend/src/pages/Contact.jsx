@@ -91,11 +91,7 @@ const Contact = () => {
   const [toast, setToast] = useState(null);
   const [loading, setLoading] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
-  const [chatOpen, setChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([
-    { from: "team", text: "Hi! Tell us what you need help with." },
-  ]);
-  const [chatInput, setChatInput] = useState("");
+
 
   const responseNote = useMemo(() => {
     if (formData.department === "Support") return "Support requests are usually reviewed within 4 business hours.";
@@ -162,31 +158,60 @@ const Contact = () => {
     }
   };
 
-  const sendChatMessage = () => {
-    if (!chatInput.trim()) return;
 
-    setChatMessages((current) => [
-      ...current,
-      { from: "user", text: chatInput.trim() },
-      { from: "team", text: "Thanks. Please leave your email in the form and our team will reply quickly." },
-    ]);
-    setChatInput("");
-  };
 
   const inputClass = (name) =>
-    `w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/15 dark:bg-gray-950 dark:text-white ${
-      errors[name] ? "border-red-400" : "border-slate-200 dark:border-gray-800"
+    `w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/15 dark:bg-gray-950 dark:text-white ${errors[name] ? "border-red-400" : "border-slate-200 dark:border-gray-800"
     }`;
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950 dark:bg-black dark:text-white">
+
+
+
+      <section className="relative overflow-hidden border-b border-cyan-400/10 bg-[#020815] py-24">
+
+        {/* Background Glow */}
+        <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" />
+
+        {/* Grid Overlay */}
+        <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:60px_60px]" />
+
+        <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+
+         <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-4 py-2 rounded-full mb-6">
+            Company
+          </span>
+
+          <h1 className="mb-5 text-5xl font-black md:text-6xl">
+            {/* Contract{" "} */} 
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Contract
+            </span>
+          </h1>
+          <div className="flex items-center justify-center gap-3 text-sm md:text-base">
+            <a
+              href="/"
+              className="font-medium text-cyan-400 transition hover:text-cyan-300"
+            >
+              Home
+            </a>
+
+            <span className="text-gray-600">/</span>
+
+            <span className="text-gray-400">Contract</span>
+          </div>
+        </div>
+      </section>
+
+
       {toast && (
         <div
-          className={`fixed right-4 top-20 z-50 flex max-w-sm items-center gap-3 rounded-lg border px-4 py-3 text-sm shadow-2xl ${
-            toast.type === "success"
+          className={`fixed right-4 top-20 z-50 flex max-w-sm items-center gap-3 rounded-lg border px-4 py-3 text-sm shadow-2xl ${toast.type === "success"
               ? "border-emerald-300 bg-emerald-50 text-emerald-800"
               : "border-red-300 bg-red-50 text-red-800"
-          }`}
+            }`}
           role="status"
         >
           {toast.type === "success" ? <CheckCircle2 size={18} /> : <X size={18} />}
@@ -457,34 +482,7 @@ const Contact = () => {
         </div>
       </section>
 
-      <div className="fixed bottom-5 right-5 z-40">
-        {chatOpen && (
-          <div className="mb-3 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-950">
-            <div className="flex items-center justify-between bg-black px-4 py-3 text-white">
-              <span className="font-bold">Live chat</span>
-              <button type="button" onClick={() => setChatOpen(false)} aria-label="Close chat">
-                <X size={18} />
-              </button>
-            </div>
-            <div className="max-h-64 space-y-3 overflow-auto p-4">
-              {chatMessages.map((message, index) => (
-                <div key={`${message.from}-${index}`} className={`rounded-lg px-3 py-2 text-sm ${message.from === "user" ? "ml-8 bg-cyan-500 text-black" : "mr-8 bg-slate-100 text-slate-700 dark:bg-gray-900 dark:text-slate-200"}`}>
-                  {message.text}
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-2 border-t border-slate-200 p-3 dark:border-gray-800">
-              <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendChatMessage()} className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none dark:border-gray-800 dark:bg-black" placeholder="Type a message" />
-              <button type="button" onClick={sendChatMessage} className="rounded-lg bg-cyan-500 px-3 py-2 text-black">
-                <Send size={16} />
-              </button>
-            </div>
-          </div>
-        )}
-        <button type="button" onClick={() => setChatOpen(!chatOpen)} className="grid h-14 w-14 place-items-center rounded-full bg-cyan-400 text-black shadow-2xl shadow-cyan-500/30 transition hover:scale-105" aria-label="Open live chat">
-          <MessageCircle size={24} />
-        </button>
-      </div>
+
     </main>
   );
 };

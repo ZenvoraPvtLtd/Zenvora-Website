@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 // import InternshipProgram from "./pages/InternshipProgram";
 import AdminDashboard from "./pages/AdminDashboard";
 import OAuthCallback from "./pages/OAuthCallback";
+import Chatbot from "./components/Chatbot";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/auth/callback" element={<OAuthCallback />} />
         </Routes>
+        <Chatbot />
         <Footer />
       </div>
     </Router>
