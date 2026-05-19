@@ -14,6 +14,7 @@ import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import Dashboard from "./pages/Dashboard";
 import OAuthCallback from "./pages/OAuthCallback";
+import Chatbot from "./components/Chatbot";
 
 const App = () => {
   return (
@@ -48,6 +49,7 @@ const App = () => {
           />
           <Route path="/auth/callback" element={<OAuthCallback />} />
         </Routes>
+        <Chatbot />
         <Footer />
       </div>
     </Router>

@@ -240,6 +240,50 @@ const Careers = () => {
 
   return (
     <main className="min-h-screen bg-[#020815] text-white">
+
+      <section className="relative overflow-hidden border-b border-cyan-400/10 bg-[#020815] py-24">
+
+        {/* Background Glow */}
+        <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" />
+
+        {/* Grid Overlay */}
+        <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:60px_60px]" />
+
+        <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+
+          <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-4 py-2 rounded-full mb-6">
+            Company
+          </span>
+
+          <h1 className="mb-5 text-5xl font-black md:text-6xl">
+            Our{" "}
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Careers
+            </span>
+          </h1>
+          {/* 
+    <p className="mx-auto mb-8 max-w-2xl text-base leading-8 text-gray-400">
+      Kickstart your career with real-world projects, mentorship,
+      and hands-on internship opportunities at Zenvora Infotech.
+    </p> */}
+
+          <div className="flex items-center justify-center gap-3 text-sm md:text-base">
+            <a
+              href="/"
+              className="font-medium text-cyan-400 transition hover:text-cyan-300"
+            >
+              Home
+            </a>
+
+            <span className="text-gray-600">/</span>
+
+            <span className="text-gray-400">Careers</span>
+          </div>
+        </div>
+      </section>
+
+
       <section className="relative overflow-hidden border-b border-cyan-400/10 bg-[radial-gradient(circle_at_70%_45%,rgba(0,101,255,0.35),transparent_34%),linear-gradient(120deg,#020714_0%,#061225_62%,#020815_100%)]">
         <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_16%_18%,rgba(21,200,255,0.55)_1px,transparent_2px),radial-gradient(circle_at_72%_12%,rgba(21,200,255,0.5)_1px,transparent_2px)] bg-[length:120px_90px,180px_120px]" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr]">

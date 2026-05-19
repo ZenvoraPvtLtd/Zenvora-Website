@@ -4,3 +4,6 @@ dist
 build
 .vscode
 .DS_Store
+__pycache__/
+*.py[cod]
+chatbot-backend/rag_index/

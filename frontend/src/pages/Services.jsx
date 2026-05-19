@@ -302,7 +302,64 @@ const process = [
 const Services = () => {
   return (
     <main className="min-h-screen bg-[#020815] text-white">
-      <section className="relative overflow-hidden border-b border-cyan-400/10 bg-[radial-gradient(circle_at_50%_115%,rgba(0,125,255,0.45),transparent_34%),linear-gradient(180deg,#020714_0%,#031327_100%)]">
+
+
+<section className="relative bg-gray-900 border-b border-gray-800 overflow-hidden py-24">
+        
+        {/* Background Glow */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+
+        {/* Grid Overlay */}
+        <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:60px_60px]" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          
+          <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-4 py-2 rounded-full mb-6">
+            Company
+          </span>
+
+          <h1 className="text-5xl md:text-6xl font-black mb-5">
+            {/* About{" "} */} Our{" "} 
+            <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+             Services
+            </span>
+          </h1>
+
+          <div className="flex items-center justify-center gap-3 text-sm md:text-base">
+            <Link
+              to="/"
+              className="text-cyan-400 hover:text-cyan-300 transition font-medium"
+            >
+              Home
+            </Link>
+
+            <span className="text-gray-600">/</span>
+
+            <span className="text-gray-400">
+              Services
+            </span>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      {/* <section className="relative overflow-hidden border-b border-cyan-400/10 bg-[radial-gradient(circle_at_50%_115%,rgba(0,125,255,0.45),transparent_34%),linear-gradient(180deg,#020714_0%,#031327_100%)]">
         <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_26%_44%,rgba(21,200,255,0.7)_1px,transparent_2px),radial-gradient(circle_at_70%_22%,rgba(21,200,255,0.55)_1px,transparent_2px)] bg-[length:130px_80px,170px_110px]" />
         <div className="absolute -bottom-24 left-1/2 h-52 w-[920px] -translate-x-1/2 rounded-[50%] border-t-2 border-[#168bff] shadow-[0_-20px_55px_rgba(21,130,255,0.55)]" />
 
@@ -323,7 +380,7 @@ const Services = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="border-b border-cyan-400/10 bg-[radial-gradient(circle_at_center,rgba(4,37,78,0.72),transparent_62%),#020815] py-8 sm:py-10">
         <div className="mx-auto max-w-7xl px-6 sm:px-8">

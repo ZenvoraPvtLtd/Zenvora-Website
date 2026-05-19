@@ -70,11 +70,10 @@ const ExpertCard = ({ expert, onOpen, lightMode }) => {
       onMouseMove={handleMove}
       onMouseLeave={() => setTilt({ rotateX: 0, rotateY: 0 })}
       style={{ transformStyle: "preserve-3d", rotateX: tilt.rotateX, rotateY: tilt.rotateY }}
-      className={`group relative overflow-hidden rounded-3xl border p-5 shadow-2xl transition ${
-        lightMode
+      className={`group relative overflow-hidden rounded-3xl border p-5 shadow-2xl transition ${lightMode
           ? "border-sky-100 bg-white shadow-sky-100/70"
           : "border-white/10 bg-white/[0.06] shadow-cyan-950/30 backdrop-blur-xl"
-      }`}
+        }`}
     >
       <div className="absolute inset-x-0 top-0 h-28 bg-linear-to-r from-cyan-400/30 via-blue-500/20 to-sky-300/20 opacity-0 blur-2xl transition group-hover:opacity-100" />
       <div className="relative">
@@ -103,9 +102,8 @@ const ExpertCard = ({ expert, onOpen, lightMode }) => {
           {expert.skills.map((skill) => (
             <span
               key={skill}
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                lightMode ? "bg-cyan-50 text-cyan-700" : "bg-cyan-400/10 text-cyan-200"
-              }`}
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${lightMode ? "bg-cyan-50 text-cyan-700" : "bg-cyan-400/10 text-cyan-200"
+                }`}
             >
               {skill}
             </span>
@@ -121,11 +119,10 @@ const ExpertCard = ({ expert, onOpen, lightMode }) => {
                   key={key}
                   href={href}
                   aria-label={`${expert.name} ${key}`}
-                  className={`grid h-9 w-9 place-items-center rounded-full transition ${
-                    lightMode
+                  className={`grid h-9 w-9 place-items-center rounded-full transition ${lightMode
                       ? "bg-slate-100 text-slate-600 hover:bg-cyan-100 hover:text-cyan-700"
                       : "bg-white/10 text-slate-300 hover:bg-cyan-400 hover:text-black"
-                  }`}
+                    }`}
                 >
                   <Icon size={15} />
                 </a>
@@ -154,9 +151,8 @@ const ExpertModal = ({ expert, onClose, lightMode }) => {
         initial={{ opacity: 0, scale: 0.94, y: 24 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.94 }}
-        className={`max-h-[90vh] w-full max-w-4xl overflow-auto rounded-3xl border p-6 shadow-2xl ${
-          lightMode ? "border-sky-100 bg-white text-slate-950" : "border-white/10 bg-slate-950 text-white"
-        }`}
+        className={`max-h-[90vh] w-full max-w-4xl overflow-auto rounded-3xl border p-6 shadow-2xl ${lightMode ? "border-sky-100 bg-white text-slate-950" : "border-white/10 bg-slate-950 text-white"
+          }`}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -169,9 +165,8 @@ const ExpertModal = ({ expert, onClose, lightMode }) => {
           <button
             type="button"
             onClick={onClose}
-            className={`grid h-10 w-10 place-items-center rounded-full ${
-              lightMode ? "bg-slate-100 hover:bg-slate-200" : "bg-white/10 hover:bg-white/20"
-            }`}
+            className={`grid h-10 w-10 place-items-center rounded-full ${lightMode ? "bg-slate-100 hover:bg-slate-200" : "bg-white/10 hover:bg-white/20"
+              }`}
             aria-label="Close expert profile"
           >
             <X size={18} />
@@ -257,6 +252,68 @@ const Experts = () => {
 
   return (
     <main className={`min-h-screen overflow-hidden transition ${pageClass}`}>
+
+ <section className="relative bg-gray-900 border-b border-gray-800 overflow-hidden py-24">
+        
+        {/* Background Glow */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+
+        {/* Grid Overlay */}
+        <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:60px_60px]" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          
+          <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-4 py-2 rounded-full mb-6">
+            Company
+          </span>
+
+          <h1 className="text-5xl md:text-6xl font-black mb-5">
+           Our  {" "}
+            <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+             Experts
+            </span>
+          </h1>
+
+          <div className="flex items-center justify-center gap-3 text-sm md:text-base">
+            <Link
+              to="/"
+              className="text-cyan-400 hover:text-cyan-300 transition font-medium"
+            >
+              Home
+            </Link>
+
+            <span className="text-gray-600">/</span>
+
+            <span className="text-gray-400">
+              Our Experts
+            </span>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <section className="relative px-4 py-24 sm:px-6 lg:px-8">
         <div className="absolute inset-0 -z-10">
           <div className="absolute left-10 top-10 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl" />
@@ -321,6 +378,75 @@ const Experts = () => {
         </div>
       </section>
 
+
+      {/* <section
+        className={`relative overflow-hidden py-24 sm:py-28 ${lightMode
+            ? "bg-[#f6eff1]"
+            : "bg-[#07111f]"
+          }`}
+      >
+        
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
+
+          <div className="absolute right-10 bottom-0 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl" />
+
+          {!lightMode && (
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.05)_1px,transparent_1px)] bg-[size:40px_40px]" />
+          )}
+        </div>
+
+        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <motion.h1
+            initial={{ opacity: 0, y: 35 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className={`text-4xl font-black tracking-tight sm:text-5xl ${lightMode
+                ? "text-slate-800"
+                : "text-white"
+              }`}
+          >
+            Our Experts
+          </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.15,
+              duration: 0.7,
+            }}
+            className="mt-5 flex items-center justify-center gap-3 text-lg"
+          >
+            <Link
+              to="/"
+              className="font-semibold text-cyan-400 transition hover:text-cyan-300"
+            >
+              Home
+            </Link>
+
+            <span
+              className={
+                lightMode
+                  ? "text-slate-400"
+                  : "text-slate-500"
+              }
+            >
+              /
+            </span>
+
+            <span
+              className={`font-medium ${lightMode
+                  ? "text-slate-600"
+                  : "text-slate-300"
+                }`}
+            >
+              Our Experts
+            </span>
+          </motion.div>
+        </div>
+      </section> */}
+
       <section className="px-4 pb-16 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-4">
           {stats.map((stat) => (
@@ -354,9 +480,8 @@ const Experts = () => {
                   key={team}
                   type="button"
                   onClick={() => setActiveTeam(team)}
-                  className={`rounded-full px-4 py-2 text-sm font-bold transition ${
-                    activeTeam === team ? "bg-cyan-400 text-black" : lightMode ? "bg-white text-slate-600" : "bg-white/10 text-slate-300"
-                  }`}
+                  className={`rounded-full px-4 py-2 text-sm font-bold transition ${activeTeam === team ? "bg-cyan-400 text-black" : lightMode ? "bg-white text-slate-600" : "bg-white/10 text-slate-300"
+                    }`}
                 >
                   {team}
                 </button>

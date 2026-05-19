@@ -20,13 +20,11 @@ const generateToken = (id) => {
 
 const register = async (req, res) => {
   try {
-    const { name, email, phone, password, role } =
-      req.body;
+    const { name, email, phone, password, role } = req.body;
     const normalizedEmail = email.trim().toLowerCase();
 
     // Check Existing User
-    const userExists =
-      await User.findOne({ email: normalizedEmail });
+    const userExists = await User.findOne({ email: normalizedEmail });
 
     if (userExists) {
       return res.status(400).json({
@@ -41,6 +39,7 @@ const register = async (req, res) => {
       phone,
       password,
       role: role || "user",
+      provider: "local",
     });
 
     // Generate Token
@@ -76,8 +75,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } =
-      req.body;
+    const { email, password } = req.body;
     const normalizedEmail = email.trim().toLowerCase();
 
     // Find User
@@ -155,7 +153,7 @@ const oauthCallback = async (req, res) => {
   try {
     const user = req.user;
     const token = generateToken(user._id);
-    const clientUrl = process.env.CLIENT_URL;
+    const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
 
     // Send login notification for OAuth
     sendLoginNotification(user).catch((err) => {
@@ -172,7 +170,7 @@ const oauthCallback = async (req, res) => {
 
     res.redirect(`${clientUrl}/login?${params.toString()}`);
   } catch (error) {
-    const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+    const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
     res.redirect(`${clientUrl}/login?error=oauth_failed`);
   }
 };
