@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
 const { sendWelcomeEmail, sendLoginNotification } = require("../utils/email");
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // ================= GENERATE TOKEN =================
 
@@ -18,18 +20,13 @@ const generateToken = (id) => {
 
 const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-
-    // Validate input
-    if (!name || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Name, email, and password are required",
-      });
-    }
+    const { name, email, phone, password, role } =
+      req.body;
+    const normalizedEmail = email.trim().toLowerCase();
 
     // Check Existing User
-    const userExists = await User.findOne({ email });
+    const userExists =
+      await User.findOne({ email: normalizedEmail });
 
     if (userExists) {
       return res.status(400).json({
@@ -39,11 +36,11 @@ const register = async (req, res) => {
     }
 
     const user = await User.create({
-      name,
-      email,
+      name: name.trim(),
+      email: normalizedEmail,
+      phone,
       password,
-      role: "user",
-      provider: "local",
+      role: role || "user",
     });
 
     // Generate Token
@@ -60,8 +57,10 @@ const register = async (req, res) => {
       token,
       user: {
         id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
         role: user.role,
       },
     });
@@ -77,19 +76,13 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    // Validate input
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Email and password are required",
-      });
-    }
+    const { email, password } =
+      req.body;
+    const normalizedEmail = email.trim().toLowerCase();
 
     // Find User
     const user = await User.findOne({
-      email,
+      email: normalizedEmail,
     }).select("+password");
 
     // Check User
@@ -132,8 +125,10 @@ const login = async (req, res) => {
       token,
       user: {
         id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
         role: user.role,
       },
     });
@@ -182,9 +177,106 @@ const oauthCallback = async (req, res) => {
   }
 };
 
+// ================= GOOGLE OAUTH LOGIN =================
+
+const googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: "Google ID token is required",
+      });
+    }
+
+    // Verify Google Token
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, name, picture } = payload;
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Check existing user by googleId
+    let user = await User.findOne({ googleId });
+
+    if (!user) {
+      // Check existing user by email
+      user = await User.findOne({ email: normalizedEmail });
+
+      if (user) {
+        // Link googleId and picture to existing local user
+        user.googleId = googleId;
+        if (!user.picture) user.picture = picture;
+        if (!user.avatar) user.avatar = picture;
+        await user.save();
+      } else {
+        // Create new Google user
+        user = await User.create({
+          name,
+          email: normalizedEmail,
+          googleId,
+          picture,
+          avatar: picture,
+          provider: "google",
+          providerId: googleId,
+          role: "user",
+        });
+      }
+    } else {
+      // Sync Google profile picture if it changed
+      if (picture && user.picture !== picture) {
+        user.picture = picture;
+        user.avatar = picture;
+        await user.save();
+      }
+    }
+
+    // Check if account is active
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Account is deactivated. Please contact support.",
+      });
+    }
+
+    // Generate JWT
+    const jwtToken = generateToken(user._id);
+
+    // Send email login alert asynchronously
+    sendLoginNotification(user).catch((err) => {
+      console.error("Failed to send login notification email:", err);
+    });
+
+    res.json({
+      success: true,
+      message: "Google authentication successful",
+      token: jwtToken,
+      user: {
+        id: user._id,
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        picture: user.picture,
+        avatar: user.avatar,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Google token verification failed:", error);
+    res.status(401).json({
+      success: false,
+      message: "Google authentication failed: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
   getMe,
   oauthCallback,
+  googleLogin,
 };

@@ -1,6 +1,5 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 const connectDB = require("./config/db");
 const User = require("./models/User.model");
 const Job = require("./models/Job.model");
@@ -41,11 +40,19 @@ const seed = async () => {
   // Seed users (skip existing emails)
   let addedUsers = 0;
   for (const u of users) {
-    const exists = await User.findOne({ email: u.email });
+    const exists = await User.findOne({ email: u.email }).select("+password");
     if (!exists) {
-      const hashed = await bcrypt.hash(u.password, 10);
-      await User.create({ ...u, password: hashed });
+      await User.create(u);
       addedUsers++;
+    } else {
+      const passwordWorks = await exists.comparePassword(u.password);
+      if (!passwordWorks) {
+        exists.password = u.password;
+        exists.name = u.name;
+        exists.role = u.role;
+        exists.isActive = u.isActive;
+        await exists.save();
+      }
     }
   }
 

@@ -80,11 +80,11 @@ const Navbar = () => {
                     {user.name?.split(" ")[0]}
                   </span>
                 </span>
-                {user?.role === "admin" && (
+                {isLoggedIn && (
                   <Link
-                    to="/admin"
+                    to={user?.role === "admin" ? "/admin" : "/dashboard"}
                     className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
-                      isActive("/admin")
+                      isActive("/admin") || isActive("/dashboard")
                         ? "border-cyan-500 text-cyan-400"
                         : "border-gray-600 text-gray-300 hover:border-cyan-500 hover:text-cyan-400"
                     }`}
@@ -158,9 +158,9 @@ const Navbar = () => {
                   Hi,{" "}
                   <span className="font-medium text-cyan-400">{user.name}</span>
                 </p>
-                {user?.role === "admin" && (
+                {isLoggedIn && (
                   <Link
-                    to="/admin"
+                    to={user?.role === "admin" ? "/admin" : "/dashboard"}
                     onClick={() => setIsOpen(false)}
                     className="rounded-md px-3 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-[#0a1b31]"
                   >
@@ -198,3 +198,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

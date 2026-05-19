@@ -31,7 +31,14 @@ axiosInstance.interceptors.request.use(
 
 // ================= AUTH =================
 
-// OAuth — redirect browser to backend OAuth route
+// Backend health check
+const health = async () => {
+  const res = await axiosInstance.get("/health");
+
+  return res.data;
+};
+
+// OAuth - redirect browser to backend OAuth route
 const loginWithGoogle = () => {
   window.location.href = `${BASE_URL}/auth/google`;
 };
@@ -54,9 +61,9 @@ const login = async (formData) => {
   return res.data;
 };
 
-// Backend health
-const health = async () => {
-  const res = await axiosInstance.get("/health");
+// Google Token Login
+const googleLogin = async (idToken) => {
+  const res = await axiosInstance.post("/auth/google", { token: idToken });
 
   return res.data;
 };
@@ -191,14 +198,16 @@ const updateApplicationStatus = async (id, body) => {
 
 // Export APIs
 export const api = {
+  baseUrl: BASE_URL,
+  health,
+
   // Auth
   register,
   login,
-  health,
+  googleLogin,
   getMe,
   loginWithGoogle,
   loginWithMicrosoft,
-  baseUrl: BASE_URL,
 
   // Contact
   sendContact,
@@ -224,3 +233,4 @@ export const api = {
   getContacts,
   updateContactStatus,
 };
+

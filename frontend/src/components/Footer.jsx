@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-
-
 import { FaFacebook, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
@@ -118,3 +116,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

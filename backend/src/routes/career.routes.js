@@ -12,20 +12,27 @@ const {
   updateApplicationStatus,
 } = require("../controllers/career.controller");
 
-const { protect, adminOnly } = require("../middleware/auth.middleware");
+const { protect, optionalAuth, adminOnly } = require("../middleware/auth.middleware");
 
 const validate = require("../middleware/validate.middleware");
 
 const router = express.Router();
 
 // Public Routes
-router.get("/jobs", getJobs);
+router.get("/jobs", optionalAuth, getJobs);
 
 router.get("/jobs/:id", getJobById);
 
 router.post(
   "/apply",
-  [body("jobId").notEmpty(), body("name").notEmpty(), body("email").isEmail()],
+  [
+    body("name").trim().notEmpty(),
+    body("email").trim().isEmail(),
+    body().custom((value) => {
+      if (value.jobId || value.track) return true;
+      throw new Error("jobId or track is required");
+    }),
+  ],
   validate,
   applyForJob,
 );
@@ -43,6 +50,8 @@ router.patch(
   "/applications/:id/status",
   protect,
   adminOnly,
+  [body("status").isIn(["pending", "reviewed", "accepted", "rejected"])],
+  validate,
   updateApplicationStatus,
 );
 

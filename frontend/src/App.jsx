@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 // import InternshipProgram from "./pages/InternshipProgram";
 import AdminDashboard from "./pages/AdminDashboard";
+import Dashboard from "./pages/Dashboard";
 import OAuthCallback from "./pages/OAuthCallback";
 
 const App = () => {
@@ -37,6 +38,14 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/auth/callback" element={<OAuthCallback />} />
         </Routes>
         <Footer />
@@ -46,3 +55,4 @@ const App = () => {
 };
 
 export default App;
+

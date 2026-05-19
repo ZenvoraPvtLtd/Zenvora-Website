@@ -48,6 +48,7 @@ const contactSchema = new mongoose.Schema(
 
     status: {
       type: String,
+      enum: ["new", "reviewed", "closed"],
       default: "new",
     },
   },
@@ -57,3 +58,4 @@ const contactSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Contact", contactSchema);
+

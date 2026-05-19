@@ -4,7 +4,8 @@ const Application = require("../models/Application.model");
 // Get All Jobs
 const getJobs = async (req, res) => {
   try {
-    const jobs = await Job.find({ isActive: true });
+    const filter = req.user?.role === "admin" ? {} : { isActive: true };
+    const jobs = await Job.find(filter).sort({ createdAt: -1 });
 
     res.json({
       success: true,
@@ -35,9 +36,9 @@ const getJobById = async (req, res) => {
       data: job,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(error.name === "CastError" ? 400 : 500).json({
       success: false,
-      message: error.message,
+      message: error.name === "CastError" ? "Invalid job id" : error.message,
     });
   }
 };
@@ -64,16 +65,24 @@ const updateJob = async (req, res) => {
   try {
     const job = await Job.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
+      runValidators: true,
     });
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
 
     res.json({
       success: true,
       data: job,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(error.name === "CastError" ? 400 : 500).json({
       success: false,
-      message: error.message,
+      message: error.name === "CastError" ? "Invalid job id" : error.message,
     });
   }
 };
@@ -81,16 +90,23 @@ const updateJob = async (req, res) => {
 // Delete Job
 const deleteJob = async (req, res) => {
   try {
-    await Job.findByIdAndDelete(req.params.id);
+    const job = await Job.findByIdAndDelete(req.params.id);
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: "Job not found",
+      });
+    }
 
     res.json({
       success: true,
       message: "Job Deleted",
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(error.name === "CastError" ? 400 : 500).json({
       success: false,
-      message: error.message,
+      message: error.name === "CastError" ? "Invalid job id" : error.message,
     });
   }
 };
@@ -98,7 +114,27 @@ const deleteJob = async (req, res) => {
 // Apply Job
 const applyForJob = async (req, res) => {
   try {
-    const application = await Application.create(req.body);
+    const { jobId, track } = req.body;
+    let jobTitle = req.body.jobTitle;
+
+    if (jobId) {
+      const job = await Job.findById(jobId);
+
+      if (!job || !job.isActive) {
+        return res.status(404).json({
+          success: false,
+          message: "Job not found",
+        });
+      }
+
+      jobTitle = job.title;
+    }
+
+    const application = await Application.create({
+      ...req.body,
+      email: req.body.email.trim().toLowerCase(),
+      jobTitle: jobTitle || track,
+    });
 
     res.status(201).json({
       success: true,
@@ -106,9 +142,9 @@ const applyForJob = async (req, res) => {
       data: application,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(error.name === "CastError" ? 400 : 500).json({
       success: false,
-      message: error.message,
+      message: error.name === "CastError" ? "Invalid job id" : error.message,
     });
   }
 };
@@ -116,7 +152,7 @@ const applyForJob = async (req, res) => {
 // Get Applications
 const getApplications = async (req, res) => {
   try {
-    const applications = await Application.find();
+    const applications = await Application.find().sort({ createdAt: -1 });
 
     res.json({
       success: true,
@@ -135,18 +171,25 @@ const updateApplicationStatus = async (req, res) => {
   try {
     const application = await Application.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true },
+      { status: req.body.status },
+      { new: true, runValidators: true },
     );
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+    }
 
     res.json({
       success: true,
       data: application,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(error.name === "CastError" ? 400 : 500).json({
       success: false,
-      message: error.message,
+      message: error.name === "CastError" ? "Invalid application id" : error.message,
     });
   }
 };

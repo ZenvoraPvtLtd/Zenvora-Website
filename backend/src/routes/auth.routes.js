@@ -2,7 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const passport = require("../config/passport");
 
-const { register, login, getMe, oauthCallback } = require("../controllers/auth.controller");
+const { register, login, getMe, oauthCallback, googleLogin } = require("../controllers/auth.controller");
 
 const { protect } = require("../middleware/auth.middleware");
 const validate = require("../middleware/validate.middleware");
@@ -15,6 +15,7 @@ router.post(
   [
     body("name").notEmpty(),
     body("email").isEmail(),
+    body("phone").optional({ checkFalsy: true }).matches(/^[0-9+\-\s()]{7,18}$/),
     body("password").isLength({ min: 6 }),
   ],
   validate,
@@ -33,6 +34,7 @@ router.post(
 router.get("/me", protect, getMe);
 
 // Google OAuth
+router.post("/google", googleLogin);
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"], session: false }));
 router.get("/google/callback", passport.authenticate("google", { failureRedirect: `${process.env.CLIENT_URL}/login?error=google_failed`, session: false }), oauthCallback);
 
