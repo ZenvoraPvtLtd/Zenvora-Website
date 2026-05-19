@@ -48,12 +48,12 @@ Zenvora has experts across MERN engineering, AI, cloud, cybersecurity, UX, and d
 
 Featured experts include:
 
-- Aarav Mehta: Principal MERN Architect
-- Isha Rao: AI Product Specialist
-- Kabir Soni: Cloud & DevOps Lead
-- Naina Kapoor: Cybersecurity Consultant
-- Reyansh Jain: UX Systems Designer
-- Meera Shah: Data Engineering Lead
+- Prince sharma: Principal MERN Architect
+- pramod Karpenter: AI Product Specialist
+- Hitesh Sharma: Cloud & DevOps Lead
+- derek json: Cybersecurity Consultant
+- Suriyankant Soni: UX Systems Designer
+- daksh sharma: Data Engineering Lead
 
 The team can help with architecture, development, automation, cloud, security, and consultation.
 

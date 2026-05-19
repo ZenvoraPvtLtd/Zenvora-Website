@@ -43,7 +43,7 @@ CONTACT_FAQS = [
 EXPERTS = [
     {
         "id": 1,
-        "name": "Aarav Mehta",
+        "name": "Prince sharma",
         "role": "Principal MERN Architect",
         "department": "Engineering",
         "experience": 9,
@@ -57,7 +57,7 @@ EXPERTS = [
     },
     {
         "id": 2,
-        "name": "Isha Rao",
+        "name": "pramod Karpenter",
         "role": "AI Product Specialist",
         "department": "AI",
         "experience": 7,
@@ -71,7 +71,7 @@ EXPERTS = [
     },
     {
         "id": 3,
-        "name": "Kabir Soni",
+        "name": "Hitesh Sharma",
         "role": "Cloud & DevOps Lead",
         "department": "Cloud",
         "experience": 10,
@@ -85,7 +85,7 @@ EXPERTS = [
     },
     {
         "id": 4,
-        "name": "Naina Kapoor",
+        "name": "derek json",
         "role": "Cybersecurity Consultant",
         "department": "Security",
         "experience": 8,
@@ -99,7 +99,7 @@ EXPERTS = [
     },
     {
         "id": 5,
-        "name": "Reyansh Jain",
+        "name": "Suriyankant Soni",
         "role": "UX Systems Designer",
         "department": "Design",
         "experience": 6,
@@ -113,7 +113,7 @@ EXPERTS = [
     },
     {
         "id": 6,
-        "name": "Meera Shah",
+        "name": "daksh sharma",
         "role": "Data Engineering Lead",
         "department": "Engineering",
         "experience": 8,
@@ -196,6 +196,12 @@ def chat(req: ChatRequest):
             "/careers",
             ["Open Careers", "How to apply for jobs?", "Contact Team"]
         )
+
+    if is_need_help_request(user_message):
+        return {
+            "reply": "Aapko kis service mein madad chahiye? AI automation, cloud solutions, cybersecurity, ya product engineering? Bataiye main aapko best option batata hoon.",
+            "suggestions": ["AI automation", "Cloud solutions", "Cybersecurity", "Product engineering"]
+        }
 
     if is_faq_list_request(user_message):
         return {
@@ -521,6 +527,42 @@ def find_matching_faq(user_message):
 def is_faq_list_request(user_message):
     message_words = set(normalize_text(user_message).split())
     return bool(message_words & {"faq", "faqs", "question", "questions"})
+
+
+def is_need_help_request(user_message):
+    normalized = normalize_text(user_message)
+    if not normalized:
+        return False
+
+    help_words = {
+        "help",
+        "madad",
+        "chahiye",
+        "kya",
+        "choose",
+        "choosing",
+        "select",
+        "selecting",
+        "suggest",
+        "suggestion",
+        "kise",
+        "kaun",
+        "konsa",
+        "service",
+        "services",
+        "pick",
+        "best",
+        "need",
+    }
+
+    message_words = set(normalized.split())
+    generic_help = bool(message_words & {"help", "madad", "chahiye", "kya", "konsa", "kaun", "select", "suggest", "pick", "need", "best"})
+    service_words = bool(message_words & {"service", "services", "solution", "solutions", "ai", "cloud", "security", "devops", "product", "software", "web", "app", "automation", "chatbot"})
+
+    if "what service" in normalized or "service should" in normalized or "kya service" in normalized:
+        return True
+
+    return generic_help and not bool(message_words & {"faq", "expert", "experts", "company", "job", "career", "contact", "phone", "email", "whatsapp"})
 
 
 def normalize_text(text):

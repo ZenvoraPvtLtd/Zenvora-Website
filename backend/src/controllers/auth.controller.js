@@ -18,16 +18,7 @@ const generateToken = (id) => {
 
 const register = async (req, res) => {
   try {
-<<<<<<< HEAD
-    const { name, email, phone, password } =
-      req.body;
-    const normalizedEmail = email.trim().toLowerCase();
-
-    // Check Existing User
-    const userExists =
-      await User.findOne({ email: normalizedEmail });
-=======
-    const { name, email, password } = req.body;
+    const { name, email, phone, password } = req.body;
 
     // Validate input
     if (!name || !email || !password) {
@@ -37,9 +28,10 @@ const register = async (req, res) => {
       });
     }
 
+    const normalizedEmail = email.trim().toLowerCase();
+
     // Check Existing User
-    const userExists = await User.findOne({ email });
->>>>>>> 6eb00780cec250374e92723e029209eb8d6ee432
+    const userExists = await User.findOne({ email: normalizedEmail });
 
     if (userExists) {
       return res.status(400).json({
@@ -53,11 +45,8 @@ const register = async (req, res) => {
       email: normalizedEmail,
       phone,
       password,
-<<<<<<< HEAD
-=======
       role: "user",
       provider: "local",
->>>>>>> 6eb00780cec250374e92723e029209eb8d6ee432
     });
 
     // Generate Token
@@ -93,11 +82,6 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-<<<<<<< HEAD
-    const { email, password } =
-      req.body;
-    const normalizedEmail = email.trim().toLowerCase();
-=======
     const { email, password } = req.body;
 
     // Validate input
@@ -107,7 +91,8 @@ const login = async (req, res) => {
         message: "Email and password are required",
       });
     }
->>>>>>> 6eb00780cec250374e92723e029209eb8d6ee432
+
+    const normalizedEmail = email.trim().toLowerCase();
 
     // Find User
     const user = await User.findOne({

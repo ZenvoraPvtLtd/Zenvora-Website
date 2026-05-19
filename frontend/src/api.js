@@ -1,8 +1,7 @@
 import axios from "axios";
 
 // Base URL
-// Create frontend/.env with VITE_API_URL=http://localhost:5000/api if your backend URL changes.
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 const CHATBOT_URL = import.meta.env.VITE_CHATBOT_API_URL || "http://localhost:8000";
 
 // Axios Instance

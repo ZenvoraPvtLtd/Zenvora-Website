@@ -171,11 +171,6 @@ const Careers = () => {
   const [showTermsModal, setShowTermsModal] = useState(false);
 
   const openApplyForm = (track) => {
-    if (!isLoggedIn) {
-      navigate("/login?redirectTo=/careers");
-      return;
-    }
-
     setSelectedTrack(track);
     setFormData({
       name: user?.name || "",
