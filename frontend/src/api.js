@@ -3,10 +3,18 @@ import axios from "axios";
 // Base URL
 // Create frontend/.env with VITE_API_URL=http://localhost:5000/api if your backend URL changes.
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const CHATBOT_URL = import.meta.env.VITE_CHATBOT_API_URL || "http://localhost:8000";
 
 // Axios Instance
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+const chatbotInstance = axios.create({
+  baseURL: CHATBOT_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -80,6 +88,36 @@ const logout = () => {
 // Send Contact Form
 const sendContact = async (formData) => {
   const res = await axiosInstance.post("/contact", formData);
+
+  return res.data;
+};
+
+const sendChatMessage = async (message) => {
+  const res = await chatbotInstance.post("/chat", { message });
+
+  return res.data;
+};
+
+const getChatFaqs = async () => {
+  const res = await chatbotInstance.get("/faqs");
+
+  return res.data;
+};
+
+const getChatExperts = async () => {
+  const res = await chatbotInstance.get("/experts");
+
+  return res.data;
+};
+
+const sendChatEmail = async ({ email, topic }) => {
+  const res = await chatbotInstance.post("/email-info", { email, topic });
+
+  return res.data;
+};
+
+const sendChatQuestionEmail = async ({ email, question }) => {
+  const res = await chatbotInstance.post("/email-question", { email, question });
 
   return res.data;
 };
@@ -203,6 +241,11 @@ export const api = {
 
   // Contact
   sendContact,
+  sendChatMessage,
+  getChatFaqs,
+  getChatExperts,
+  sendChatEmail,
+  sendChatQuestionEmail,
 
   // Careers
   getJobs,

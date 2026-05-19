@@ -7,16 +7,47 @@ const Chatbot = () => {
     { from: "team", text: "Hi! Tell us what you need help with." },
   ]);
   const [chatInput, setChatInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const sendChatMessage = () => {
-    if (!chatInput.trim()) return;
+  const sendChatMessage = async () => {
+    if (!chatInput.trim() || isLoading) return;
 
+    const userText = chatInput.trim();
     setChatMessages((current) => [
       ...current,
-      { from: "user", text: chatInput.trim() },
-      { from: "team", text: "Thanks. Please visit our contact page and leave your email, our team will reply quickly." },
+      { from: "user", text: userText },
     ]);
     setChatInput("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:8000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: userText }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      
+      setChatMessages((current) => [
+        ...current,
+        { from: "team", text: data.reply },
+      ]);
+    } catch (error) {
+      console.error("Chat error:", error);
+      setChatMessages((current) => [
+        ...current,
+        { from: "team", text: "Oops, something went wrong. Please try again later." },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -31,14 +62,19 @@ const Chatbot = () => {
           </div>
           <div className="max-h-64 space-y-3 overflow-auto p-4">
             {chatMessages.map((message, index) => (
-              <div key={`${message.from}-${index}`} className={`rounded-lg px-3 py-2 text-sm ${message.from === "user" ? "ml-8 bg-cyan-500 text-black" : "mr-8 bg-slate-100 text-slate-700 dark:bg-gray-900 dark:text-slate-200"}`}>
+              <div key={`${message.from}-${index}`} className={`rounded-lg px-3 py-2 text-sm whitespace-pre-wrap ${message.from === "user" ? "ml-8 bg-cyan-500 text-black" : "mr-8 bg-slate-100 text-slate-700 dark:bg-gray-900 dark:text-slate-200"}`}>
                 {message.text}
               </div>
             ))}
+            {isLoading && (
+              <div className="mr-8 rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-700 dark:bg-gray-900 dark:text-slate-200">
+                <span className="animate-pulse">Typing...</span>
+              </div>
+            )}
           </div>
           <div className="flex gap-2 border-t border-slate-200 p-3 dark:border-gray-800">
-            <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendChatMessage()} className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none dark:border-gray-800 dark:bg-black" placeholder="Type a message" />
-            <button type="button" onClick={sendChatMessage} className="rounded-lg bg-cyan-500 px-3 py-2 text-black">
+            <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendChatMessage()} disabled={isLoading} className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none dark:border-gray-800 dark:bg-black disabled:opacity-50" placeholder="Type a message" />
+            <button type="button" onClick={sendChatMessage} disabled={isLoading} className="rounded-lg bg-cyan-500 px-3 py-2 text-black disabled:opacity-50">
               <Send size={16} />
             </button>
           </div>

@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Loader from "../components/Loader";
+
 import {
   ArrowRight,
   BadgeCheck,
@@ -37,6 +40,22 @@ const stats = [
 ];
 
 const Home = () => {
+  
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
+
   return (
     <main className="bg-[#020815] text-white overflow-hidden">
       <section className="relative border-b border-cyan-400/10">
