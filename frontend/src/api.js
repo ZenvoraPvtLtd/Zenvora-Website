@@ -68,6 +68,13 @@ const login = async (formData) => {
   return res.data;
 };
 
+// Google Token Login
+const googleLogin = async (idToken) => {
+  const res = await axiosInstance.post("/auth/google", { token: idToken });
+
+  return res.data;
+};
+
 // Get Current User
 const getMe = async () => {
   const res = await axiosInstance.get("/auth/me");
@@ -237,6 +244,7 @@ export const api = {
   // Auth
   register,
   login,
+  googleLogin,
   getMe,
   loginWithGoogle,
   loginWithMicrosoft,

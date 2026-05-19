@@ -22,13 +22,17 @@ connectDB();
 // Verify Email Configuration
 verifyEmailConfig();
 
-// Middleware
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000,http://localhost:5173,http://localhost:5174").split(",");
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-    ],
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1 && !allowedOrigins.includes(origin)) {
+        return callback(new Error("CORS Policy: Origin not allowed"), false);
+      }
+      return callback(null, true);
+    },
     credentials: true,
   })
 );

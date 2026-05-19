@@ -523,7 +523,7 @@
 
 
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   ArrowRight,
@@ -531,12 +531,10 @@ import {
   EyeOff,
   KeyRound,
   Mail,
-  QrCode,
-  ScanLine,
   ShieldCheck,
-  Upload,
 } from "lucide-react";
 import { api } from "../api";
+import { GoogleLogin } from "@react-oauth/google";
 
 const getOAuthUserFromParams = (searchParams) => ({
   id: searchParams.get("id"),
@@ -546,10 +544,6 @@ const getOAuthUserFromParams = (searchParams) => ({
 });
 
 const Login = () => {
-  const videoRef = useRef(null);
-  const fileInputRef = useRef(null);
-  const scannerTimerRef = useRef(null);
-  const cameraStreamRef = useRef(null);
   const rememberedEmail = localStorage.getItem("rememberedEmail") || "";
 
   const [formData, setFormData] = useState({ email: rememberedEmail, password: "" });
@@ -558,8 +552,6 @@ const Login = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [apiStatus, setApiStatus] = useState("checking");
-  const [scannerActive, setScannerActive] = useState(false);
-  const [scannerMessage, setScannerMessage] = useState("Choose camera scan or upload a QR image.");
   const [loading, setLoading] = useState(false);
 
   const [searchParams] = useSearchParams();
@@ -569,6 +561,39 @@ const Login = () => {
     searchParams.get("error") ? "OAuth login failed. Please try again." : "",
   );
   const captchaCode = useMemo(() => "8Ad4F", []);
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    setError("");
+    try {
+      const data = await api.googleLogin(credentialResponse.credential);
+      
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      if (rememberMe) {
+        localStorage.setItem("rememberedEmail", data.user.email);
+      } else {
+        localStorage.removeItem("rememberedEmail");
+      }
+
+      // Admins go to /admin, other users go to /dashboard
+      const destination = data.user?.role === "admin" ? "/admin" : "/dashboard";
+      navigate(destination);
+      window.location.reload();
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+        "Google login authentication failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError("Google OAuth login failed. Please try again.");
+  };
 
   useEffect(() => {
     const token = searchParams.get("token");
@@ -594,14 +619,6 @@ const Login = () => {
 
     return () => {
       mounted = false;
-
-      if (scannerTimerRef.current) {
-        clearInterval(scannerTimerRef.current);
-      }
-
-      if (cameraStreamRef.current) {
-        cameraStreamRef.current.getTracks().forEach((track) => track.stop());
-      }
     };
   }, []);
 
@@ -664,161 +681,6 @@ const Login = () => {
       setError(getLoginErrorMessage(err));
     } finally {
       setLoading(false);
-    }
-  };
-
-  const finishQrLogin = async (value) => {
-    setScannerMessage("QR code scanned successfully.");
-    setError("");
-
-    try {
-      const decoded = JSON.parse(value);
-
-      if (decoded.token && decoded.user) {
-        saveSession(decoded);
-        return;
-      }
-
-      if (decoded.email && decoded.password) {
-        const credentials = { email: decoded.email, password: decoded.password };
-        setFormData(credentials);
-        setLoading(true);
-
-        try {
-          const data = await api.login(credentials);
-          saveSession(data);
-          return;
-        } catch (err) {
-          setError(getLoginErrorMessage(err));
-        } finally {
-          setLoading(false);
-        }
-      }
-
-      if (decoded.email) {
-        setFormData((current) => ({ ...current, email: decoded.email }));
-        setScannerMessage("QR email found. Password is still required.");
-        return;
-      }
-    } catch {
-      // QR payloads can also be URLs or plain text.
-    }
-
-    try {
-      const qrUrl = new URL(value);
-      const token = qrUrl.searchParams.get("token");
-      const email = qrUrl.searchParams.get("email");
-      const name = qrUrl.searchParams.get("name");
-      const role = qrUrl.searchParams.get("role") || "user";
-
-      if (token && email) {
-        saveSession({ token, user: { email, name, role } });
-        return;
-      }
-
-      if (email) {
-        setFormData((current) => ({ ...current, email }));
-        setScannerMessage("QR email found. Password is still required.");
-        return;
-      }
-    } catch {
-      // Not a URL.
-    }
-
-    if (/^\S+@\S+\.\S+$/.test(value)) {
-      setFormData((current) => ({ ...current, email: value }));
-      setScannerMessage("QR email found. Password is still required.");
-      return;
-    }
-
-    setScannerMessage("QR scanned, but it does not contain a login token or email.");
-  };
-
-  const stopScanner = () => {
-    if (scannerTimerRef.current) {
-      clearInterval(scannerTimerRef.current);
-      scannerTimerRef.current = null;
-    }
-
-    const stream = videoRef.current?.srcObject;
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
-    }
-
-    cameraStreamRef.current = null;
-    setScannerActive(false);
-  };
-
-  const handleCameraScan = async () => {
-    if (!window.BarcodeDetector) {
-      setScannerMessage("This browser cannot scan QR codes directly. Upload a QR image instead.");
-      return;
-    }
-
-    if (!navigator.mediaDevices?.getUserMedia) {
-      setScannerMessage("Camera access is not available in this browser.");
-      return;
-    }
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-        audio: false,
-      });
-
-      cameraStreamRef.current = stream;
-      videoRef.current.srcObject = stream;
-      await videoRef.current.play();
-      setScannerActive(true);
-      setScannerMessage("Point your camera at the QR code.");
-
-      const detector = new window.BarcodeDetector({ formats: ["qr_code"] });
-      scannerTimerRef.current = window.setInterval(async () => {
-        if (!videoRef.current || videoRef.current.readyState < 2) return;
-
-        try {
-          const codes = await detector.detect(videoRef.current);
-
-          if (codes.length > 0) {
-            stopScanner();
-            finishQrLogin(codes[0].rawValue);
-          }
-        } catch (err) {
-          setScannerMessage(err.message || "Scanner could not read this frame.");
-        }
-      }, 700);
-    } catch (err) {
-      setScannerMessage(err.message || "Camera permission was blocked.");
-      stopScanner();
-    }
-  };
-
-  const handleQrUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!window.BarcodeDetector) {
-      setScannerMessage("QR image scanning needs a browser with BarcodeDetector support.");
-      e.target.value = "";
-      return;
-    }
-
-    try {
-      const bitmap = await createImageBitmap(file);
-      const detector = new window.BarcodeDetector({ formats: ["qr_code"] });
-      const codes = await detector.detect(bitmap);
-      bitmap.close();
-
-      if (codes.length === 0) {
-        setScannerMessage("No QR code found in that image.");
-      } else {
-        finishQrLogin(codes[0].rawValue);
-      }
-    } catch (err) {
-      setScannerMessage(err.message || "Could not scan that QR image.");
-    } finally {
-      e.target.value = "";
     }
   };
 
@@ -978,43 +840,6 @@ const Login = () => {
                 </button>
               </form>
 
-              <div className="space-y-4">
-                <div className="relative h-32 w-full overflow-hidden rounded-xl border border-slate-700/50 bg-slate-900/50 shadow-inner">
-                  {scannerActive ? (
-                    <>
-                      <video ref={videoRef} muted playsInline className="h-full w-full object-cover" aria-label="QR scanner camera preview" />
-                      <div className="pointer-events-none absolute inset-0 border-2 border-cyan-500/50" />
-                      <div className="pointer-events-none absolute inset-4 border border-cyan-500/30" />
-                    </>
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-slate-400 transition-colors hover:text-cyan-400">
-                      <QrCode size={40} />
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col gap-3">
-                  <button
-                    type="button"
-                    onClick={scannerActive ? stopScanner : handleCameraScan}
-                    className="flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-2.5 text-sm font-semibold text-slate-100 transition-all duration-300 hover:border-cyan-500/50 hover:bg-slate-800/80 hover:text-cyan-300"
-                  >
-                    <ScanLine size={16} />
-                    {scannerActive ? "Stop Camera" : "Scan QR Code"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center justify-center gap-2 rounded-lg bg-linear-to-r from-cyan-500/80 to-blue-600/80 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:from-cyan-500 hover:to-blue-600 hover:shadow-cyan-500/40"
-                  >
-                    <Upload size={16} />
-                    Upload QR Image
-                  </button>
-                  <input ref={fileInputRef} type="file" accept="image/*" onChange={handleQrUpload} className="hidden" aria-label="Upload QR code image" />
-                  <p className="text-center text-xs text-slate-400">{scannerMessage}</p>
-                </div>
-              </div>
-
               <div className="mt-6 space-y-4">
                 <div className="relative flex items-center">
                   <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-700 to-transparent" />
@@ -1022,20 +847,31 @@ const Login = () => {
                   <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-700 to-transparent" />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={api.loginWithGoogle}
-                    className="flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-2.5 text-sm font-semibold text-slate-100 transition-all duration-300 hover:border-slate-600 hover:bg-slate-800/80"
-                  >
-                    Google
-                  </button>
+                <div className="flex flex-col gap-4">
+                  <div className="w-full flex justify-center overflow-hidden rounded-lg bg-slate-900/50 hover:bg-slate-800/80 border border-slate-700 transition duration-300 p-1">
+                    <div className="w-full flex justify-center [&>div]:w-full">
+                      <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={handleGoogleError}
+                        theme="filled_blue"
+                        shape="rectangular"
+                        size="large"
+                        width="350"
+                      />
+                    </div>
+                  </div>
                   <button
                     type="button"
                     onClick={api.loginWithMicrosoft}
-                    className="flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-2.5 text-sm font-semibold text-slate-100 transition-all duration-300 hover:border-slate-600 hover:bg-slate-800/80"
+                    className="flex items-center justify-center gap-2.5 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-sm font-semibold text-slate-100 transition-all duration-300 hover:border-slate-600 hover:bg-slate-800/80 cursor-pointer"
                   >
-                    Microsoft
+                    <span className="grid grid-cols-2 gap-0.5">
+                      <i className="block h-2 w-2 bg-red-500 rounded-2xs" />
+                      <i className="block h-2 w-2 bg-green-500 rounded-2xs" />
+                      <i className="block h-2 w-2 bg-blue-500 rounded-2xs" />
+                      <i className="block h-2 w-2 bg-yellow-400 rounded-2xs" />
+                    </span>
+                    Continue with Microsoft
                   </button>
                 </div>
               </div>
@@ -1066,7 +902,7 @@ const Login = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-cyan-400" />
-                    <span>QR Code Scan</span>
+                    <span>Real-time Sync</span>
                   </div>
                 </div>
               </div>

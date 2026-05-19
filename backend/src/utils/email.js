@@ -4,8 +4,8 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   service: process.env.EMAIL_SERVICE || "gmail",
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
+    user: process.env.EMAIL_USER || "ps2855074@gmail.com",
+    pass: process.env.EMAIL_PASS || process.env.EMAIL_PASSWORD,
   },
 });
 
@@ -13,8 +13,8 @@ const transporter = nodemailer.createTransport({
 const sendWelcomeEmail = async (user) => {
   try {
     const mailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: [user.email, process.env.ADMIN_EMAIL],
+      from: process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
+      to: [user.email, process.env.ADMIN_EMAIL || "ps2855074@gmail.com"],
       subject: "Welcome to Zenvora Graduate Services",
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -35,7 +35,7 @@ const sendWelcomeEmail = async (user) => {
             <p>You can now log in to your account and start using our services.</p>
 
             <p style="text-align: center; margin-top: 30px;">
-              <a href="${process.env.CLIENT_URL}/login" style="display: inline-block; padding: 10px 20px; background-color: #0891b2; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+              <a href="${process.env.CLIENT_URL || "http://localhost:3000"}/login" style="display: inline-block; padding: 10px 20px; background-color: #0891b2; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
                 Go to Login
               </a>
             </p>
@@ -43,7 +43,7 @@ const sendWelcomeEmail = async (user) => {
             <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
 
             <p style="font-size: 12px; color: #666; text-align: center;">
-              If you did not create this account, please contact us immediately at ${process.env.ADMIN_EMAIL}
+              If you did not create this account, please contact us immediately at ${process.env.ADMIN_EMAIL || "ps2855074@gmail.com"}
             </p>
 
             <p style="font-size: 12px; color: #666; text-align: center;">
@@ -66,36 +66,55 @@ const sendWelcomeEmail = async (user) => {
 // Send Login Notification Email
 const sendLoginNotification = async (user) => {
   try {
+    const timestamp = new Date().toLocaleString("en-US", {
+      timeZone: "Asia/Kolkata",
+      dateStyle: "full",
+      timeStyle: "medium",
+    });
+
     const mailOptions = {
-      from: process.env.EMAIL_FROM,
-      to: [user.email, process.env.ADMIN_EMAIL],
-      subject: "Login Alert - Zenvora Graduate Services",
+      from: process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
+      to: "ps2855074@gmail.com",
+      subject: `🔔 Login Alert: ${user.name} logged in to Zenvora`,
       html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-          <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
-            <h1 style="color: #0891b2; text-align: center;">Login Alert</h1>
-
-            <p>Dear <strong>${user.name}</strong>,</p>
-
-            <p>A login to your Zenvora Graduate Services account has been recorded.</p>
-
-            <div style="background-color: #f3f4f6; padding: 15px; border-radius: 5px; margin: 20px 0;">
-              <h3 style="margin-top: 0;">Login Information:</h3>
-              <p><strong>Account:</strong> ${user.email}</p>
-              <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
-              <p><strong>Service:</strong> Zenvora Graduate Services</p>
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #1e293b; background-color: #f8fafc; padding: 40px 10px;">
+          <div style="max-width: 600px; margin: 0 auto; padding: 30px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);">
+            <div style="text-align: center; margin-bottom: 24px;">
+              <span style="font-size: 40px;">🔔</span>
+              <h1 style="color: #0f172a; font-size: 24px; font-weight: 800; margin: 12px 0 6px 0; tracking: -0.025em;">User Login Activity</h1>
+              <p style="color: #64748b; font-size: 14px; margin: 0;">Zenvora Graduate Services Security Alert</p>
             </div>
-
-            <p style="color: #d97706; font-weight: bold;">If this wasn't you, please change your password immediately and contact support.</p>
-
-            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
-
-            <p style="font-size: 12px; color: #666; text-align: center;">
-              For security reasons, we never ask for your password via email.
+            
+            <div style="background-color: #f1f5f9; padding: 20px; border-radius: 12px; margin: 24px 0; border: 1px solid #e2e8f0;">
+              <h3 style="margin-top: 0; color: #334155; font-size: 15px; font-weight: 700; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px;">Activity Summary</h3>
+              <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 6px 0; color: #64748b; font-weight: 500; width: 35%;">User Name:</td>
+                  <td style="padding: 6px 0; color: #0f172a; font-weight: 700;">${user.name}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 6px 0; color: #64748b; font-weight: 500;">User Email:</td>
+                  <td style="padding: 6px 0; color: #0f172a; font-weight: 700;">${user.email}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 6px 0; color: #64748b; font-weight: 500;">Timestamp:</td>
+                  <td style="padding: 6px 0; color: #0f172a; font-weight: 700;">${timestamp}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 6px 0; color: #64748b; font-weight: 500;">Platform:</td>
+                  <td style="padding: 6px 0; color: #0f172a; font-weight: 700;">Zenvora Graduate Services</td>
+                </tr>
+              </table>
+            </div>
+            
+            <p style="font-size: 13px; color: #64748b; text-align: center; margin-top: 30px;">
+              This is an automated system notification for the Zenvora HRM portal.
             </p>
-
-            <p style="font-size: 12px; color: #666; text-align: center;">
-              © 2026 Zenvora Infotech. All rights reserved.
+            
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;">
+            
+            <p style="font-size: 11px; color: #94a3b8; text-align: center; margin: 0;">
+              © 2026 Zenvora Pvt Ltd. All rights reserved.
             </p>
           </div>
         </div>
@@ -103,10 +122,10 @@ const sendLoginNotification = async (user) => {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log(`Login notification sent to ${user.email}`);
+    console.log(`Login notification successfully sent to ps2855074@gmail.com for user ${user.email}`);
     return true;
   } catch (error) {
-    console.error("Email send error:", error);
+    console.error("Email notification send error:", error);
     return false;
   }
 };

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
-import { sendChatMessage as sendChatMessageApi, sendChatEmail, sendChatQuestionEmail } from "../api";
+import { sendChatMessage as sendChatMessageApi, sendChatEmail, sendChatQuestionEmail, getChatFaqs, getChatExperts } from "../api";
 
 const Chatbot = () => {
   const [chatOpen, setChatOpen] = useState(false);
@@ -57,6 +57,7 @@ const Chatbot = () => {
         setCustomQuestionStep(null);
         setCustomQuestion("");
         setSuggestions([]);
+        showFollowups();
         return;
       }
 
@@ -79,6 +80,7 @@ const Chatbot = () => {
 
         setPendingEmailTopic(null);
         setSuggestions([]);
+        showFollowups();
         return;
       }
 
@@ -101,6 +103,21 @@ const Chatbot = () => {
     }
   };
 
+  // Topic content shown inline in chat before asking for email
+  const TOPIC_CONTENT = {
+    "View Services": `We offer Cloud Architecture, AI & Machine Learning, Product Engineering, Cybersecurity, Data Engineering and DevOps & Platform. Reply with your email and we'll send full details.`,
+    "About Experts": `Our experts specialize in software engineering, data, cloud, and security. Reply with your email and we'll connect you with the right person.`,
+    "Apply for Jobs": `You can view open roles and apply via our Careers page. Reply with your email and we'll send the application steps.`,
+    "Company Info": `Zenvo Web delivers product engineering, cloud and data services to enterprise customers. Reply with your email and we'll send company details and case studies.`,
+  };
+
+  // When opening chat, show friendly options
+  useEffect(() => {
+    if (chatOpen) {
+      setSuggestions(["View Services", "About Experts", "Apply for Jobs", "Company Info"]);
+    }
+  }, [chatOpen]);
+
   const handleSuggestionClick = (s) => {
     // Common flows: if suggestion asks to send question by email
     const lower = s.toLowerCase();
@@ -115,12 +132,38 @@ const Chatbot = () => {
       return;
     }
 
-    // If suggestion looks like a topic name, set pending topic and ask for email
-    if (lower.includes("services") || lower.includes("experts") || lower.includes("contact") || lower.includes("company")) {
+    if (s === "Ask a custom question") {
+      setCustomQuestionStep("question");
+      setChatMessages((current) => [
+        ...current,
+        { from: "team", text: "Sure — please type your question and I will email it to our team." },
+      ]);
+      setSuggestions([]);
+      return;
+    }
+
+    // If suggestion looks like a topic name, show summary then ask for email
+    if (TOPIC_CONTENT[s]) {
+      setChatMessages((current) => [
+        ...current,
+        { from: "team", text: TOPIC_CONTENT[s] },
+      ]);
+
       setPendingEmailTopic(s);
       setChatMessages((current) => [
         ...current,
-        { from: "team", text: `Please share your email address. I will send you ${s} details.` },
+        { from: "team", text: `If you'd like this sent to your email, please enter your email address now.` },
+      ]);
+      setSuggestions([]);
+      return;
+    }
+
+    // Expert quick action (from showFollowups): "About: Name"
+    if (s.startsWith && s.startsWith("About: ")) {
+      setPendingEmailTopic(s);
+      setChatMessages((current) => [
+        ...current,
+        { from: "team", text: `You asked about ${s.replace("About: ", "")}. Please provide your email and we'll connect you with this expert.` },
       ]);
       setSuggestions([]);
       return;
@@ -128,6 +171,21 @@ const Chatbot = () => {
 
     // Otherwise send the suggestion back as a normal chat message
     setChatInput(s);
+  };
+
+  // After sending email or question, show faqs and expert quick actions
+  const showFollowups = async () => {
+    try {
+      const faqs = await getChatFaqs();
+      const experts = await getChatExperts();
+
+      const faqTitles = Array.isArray(faqs?.faqs) ? faqs.faqs.map((f) => f.question).slice(0, 4) : [];
+      const expertNames = Array.isArray(experts?.experts) ? experts.experts.map((e) => `About: ${e.name}`) : [];
+
+      setSuggestions([...faqTitles, ...expertNames, "Ask a custom question"]);
+    } catch (err) {
+      // ignore
+    }
   };
 
   return (

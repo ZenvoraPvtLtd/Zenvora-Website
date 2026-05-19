@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LogIn, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -34,18 +34,23 @@ const Navbar = () => {
     window.location.reload();
   };
 
-  const isActive = (href) =>
-    href === "/" ? location.pathname === "/" : location.pathname.startsWith(href);
+  const isActive = (href) => {
+    if (href === "/") {
+      return location.pathname === "/";
+    }
+    return location.pathname.startsWith(href);
+  };
 
   return (
     <nav className="sticky top-0 z-50 border-b border-cyan-400/15 bg-[#020815]/95 backdrop-blur-xl">
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <div className="flex h-[70px] items-center justify-between">
-          <Link to="/" className="flex shrink-0 items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#15c8ff] text-2xl font-black italic text-[#031120] shadow-[0_0_20px_rgba(21,200,255,0.28)]">
-              Z
-            </span>
-            <span className="text-2xl font-black text-[#15c8ff]">Zenvora</span>
+          <Link to="/" className="flex shrink-0 items-center">
+            <img 
+              src="/logo.png" 
+              alt="Zenvora Logo" 
+              className="h-[52px] w-auto object-contain brightness-110" 
+            />
           </Link>
 
           <div className="hidden items-center gap-5 md:flex lg:gap-7">
@@ -53,6 +58,7 @@ const Navbar = () => {
               <Link
                 key={item.href}
                 to={item.href}
+                onClick={() => setIsOpen(false)}
                 className={`relative px-1 py-6 text-sm font-bold transition-colors ${
                   isActive(item.href)
                     ? "text-[#15c8ff] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-[#15c8ff]"
@@ -65,13 +71,6 @@ const Navbar = () => {
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
-            <Link
-              to="/contact"
-              className="rounded-md bg-[#15c8ff] px-5 py-2.5 text-sm font-black text-[#02101c] shadow-[0_0_20px_rgba(21,200,255,0.24)] transition hover:bg-[#4ed8ff]"
-            >
-              Get In Touch
-            </Link>
-
             {isLoggedIn ? (
               <>
                 <span className="text-sm text-gray-400">
@@ -80,18 +79,16 @@ const Navbar = () => {
                     {user.name?.split(" ")[0]}
                   </span>
                 </span>
-                {user?.role === "admin" && (
-                  <Link
-                    to="/admin"
-                    className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
-                      isActive("/admin")
-                        ? "border-cyan-500 text-cyan-400"
-                        : "border-gray-600 text-gray-300 hover:border-cyan-500 hover:text-cyan-400"
-                    }`}
-                  >
-                    Dashboard
-                  </Link>
-                )}
+                <Link
+                  to={user?.role === "admin" ? "/admin" : "/dashboard"}
+                  className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
+                    location.pathname === "/admin" || location.pathname === "/dashboard"
+                      ? "border-cyan-500 text-cyan-400"
+                      : "border-gray-600 text-gray-300 hover:border-cyan-500 hover:text-cyan-400"
+                  }`}
+                >
+                  Dashboard
+                </Link>
                 <button
                   type="button"
                   onClick={logout}
@@ -100,19 +97,7 @@ const Navbar = () => {
                   Logout
                 </button>
               </>
-            ) : (
-              <Link
-                to="/login"
-                className={`inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold transition ${
-                  isActive("/login") || isActive("/register")
-                    ? "bg-cyan-400 text-black shadow-lg shadow-cyan-500/20"
-                    : "text-gray-200 hover:bg-[#0a1b31] hover:text-cyan-300"
-                }`}
-              >
-                <LogIn size={16} />
-                Login
-              </Link>
-            )}
+            ) : null}
           </div>
 
           <button
@@ -144,29 +129,19 @@ const Navbar = () => {
               </Link>
             ))}
 
-            <Link
-              to="/contact"
-              onClick={() => setIsOpen(false)}
-              className="mt-3 flex items-center justify-center rounded-md bg-[#15c8ff] px-4 py-3 text-sm font-black text-[#02101c]"
-            >
-              Get In Touch
-            </Link>
-
             {isLoggedIn ? (
               <div className="mt-2 flex flex-col gap-2 border-t border-cyan-400/15 pt-3">
                 <p className="px-3 text-sm text-gray-400">
                   Hi,{" "}
                   <span className="font-medium text-cyan-400">{user.name}</span>
                 </p>
-                {user?.role === "admin" && (
-                  <Link
-                    to="/admin"
-                    onClick={() => setIsOpen(false)}
-                    className="rounded-md px-3 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-[#0a1b31]"
-                  >
-                    Dashboard
-                  </Link>
-                )}
+                <Link
+                  to={user?.role === "admin" ? "/admin" : "/dashboard"}
+                  onClick={() => setIsOpen(false)}
+                  className="rounded-md px-3 py-2.5 text-sm font-medium text-cyan-400 transition hover:bg-[#0a1b31]"
+                >
+                  Dashboard
+                </Link>
                 <button
                   type="button"
                   onClick={() => {
@@ -178,18 +153,7 @@ const Navbar = () => {
                   Logout
                 </button>
               </div>
-            ) : (
-              <div className="mt-2 border-t border-cyan-400/15 pt-3">
-                <Link
-                  to="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-cyan-400 px-3 py-2.5 text-sm font-semibold text-black transition hover:bg-cyan-300"
-                >
-                  <LogIn size={16} />
-                  Login
-                </Link>
-              </div>
-            )}
+            ) : null}
           </div>
         </div>
       )}
@@ -198,4 +162,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
