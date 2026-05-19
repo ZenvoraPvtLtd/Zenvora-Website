@@ -75,10 +75,10 @@ const Footer = () => {
           {/* Contact & Social */}
           <div>
             <h4 className="text-white font-bold mb-4">Contact</h4>
-            <p className="text-gray-400 mb-4">
+            <a href="mailto:hr@zenvorainfo.com" className="text-gray-400 hover:text-blue-400 transition mb-4 block">
               <MdEmail size={16} className="inline mr-2" />
-              info@zenvora.com
-            </p>
+              hr@zenvorainfo.com
+            </a>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-blue-400 transition">
                 <FaFacebook size={20} />
