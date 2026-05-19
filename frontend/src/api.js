@@ -122,6 +122,9 @@ const sendChatQuestionEmail = async ({ email, question }) => {
   return res.data;
 };
 
+// Direct named exports for convenience
+export { sendChatMessage, getChatFaqs, getChatExperts, sendChatEmail, sendChatQuestionEmail };
+
 // Get All Contacts (admin)
 const getContacts = async () => {
   const res = await axiosInstance.get("/contact");

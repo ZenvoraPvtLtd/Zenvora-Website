@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
+import { sendChatMessage as sendChatMessageApi, sendChatEmail, sendChatQuestionEmail } from "../api";
 
 const Chatbot = () => {
   const [chatOpen, setChatOpen] = useState(false);
@@ -8,6 +9,10 @@ const Chatbot = () => {
   ]);
   const [chatInput, setChatInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [pendingEmailTopic, setPendingEmailTopic] = useState(null);
+  const [customQuestionStep, setCustomQuestionStep] = useState(null); // null | 'question' | 'email'
+  const [customQuestion, setCustomQuestion] = useState("");
 
   const sendChatMessage = async () => {
     if (!chatInput.trim() || isLoading) return;
@@ -21,24 +26,70 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: userText }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+      // Handle special email flows
+      if (customQuestionStep === "question") {
+        // store the question and ask for email
+        setCustomQuestion(userText);
+        setCustomQuestionStep("email");
+        setChatMessages((current) => [
+          ...current,
+          { from: "team", text: "Please share your email address. Our team will reply to your question there." },
+        ]);
+        return;
       }
 
-      const data = await response.json();
-      
+      if (customQuestionStep === "email") {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userText)) {
+          setChatMessages((current) => [
+            ...current,
+            { from: "team", text: "Please enter a valid email address so I can send your question to the team." },
+          ]);
+          return;
+        }
+
+        const data = await sendChatQuestionEmail({ email: userText, question: customQuestion });
+
+        setChatMessages((current) => [
+          ...current,
+          { from: "team", text: data?.reply || "Your question has been sent." },
+        ]);
+
+        setCustomQuestionStep(null);
+        setCustomQuestion("");
+        setSuggestions([]);
+        return;
+      }
+
+      if (pendingEmailTopic) {
+        // expecting an email address from the user
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userText)) {
+          setChatMessages((current) => [
+            ...current,
+            { from: "team", text: "Please enter a valid email address so I can send the details." },
+          ]);
+          return;
+        }
+
+        const data = await sendChatEmail({ email: userText, topic: pendingEmailTopic });
+
+        setChatMessages((current) => [
+          ...current,
+          { from: "team", text: data?.reply || "Email request processed." },
+        ]);
+
+        setPendingEmailTopic(null);
+        setSuggestions([]);
+        return;
+      }
+
+      const data = await sendChatMessageApi(userText);
+
       setChatMessages((current) => [
         ...current,
-        { from: "team", text: data.reply },
+        { from: "team", text: data?.reply || "Sorry, I could not get an answer right now." },
       ]);
+
+      setSuggestions(data?.suggestions || []);
     } catch (error) {
       console.error("Chat error:", error);
       setChatMessages((current) => [
@@ -48,6 +99,35 @@ const Chatbot = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSuggestionClick = (s) => {
+    // Common flows: if suggestion asks to send question by email
+    const lower = s.toLowerCase();
+
+    if (lower.includes("send my question") || lower.includes("email my question") || lower.includes("custom question")) {
+      setCustomQuestionStep("question");
+      setChatMessages((current) => [
+        ...current,
+        { from: "team", text: "Sure — please type your question and I will email it to our team." },
+      ]);
+      setSuggestions([]);
+      return;
+    }
+
+    // If suggestion looks like a topic name, set pending topic and ask for email
+    if (lower.includes("services") || lower.includes("experts") || lower.includes("contact") || lower.includes("company")) {
+      setPendingEmailTopic(s);
+      setChatMessages((current) => [
+        ...current,
+        { from: "team", text: `Please share your email address. I will send you ${s} details.` },
+      ]);
+      setSuggestions([]);
+      return;
+    }
+
+    // Otherwise send the suggestion back as a normal chat message
+    setChatInput(s);
   };
 
   return (
@@ -66,6 +146,15 @@ const Chatbot = () => {
                 {message.text}
               </div>
             ))}
+            {suggestions.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {suggestions.map((s, i) => (
+                  <button key={i} type="button" onClick={() => handleSuggestionClick(s)} className="rounded-md bg-slate-200 px-2 py-1 text-xs">
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
             {isLoading && (
               <div className="mr-8 rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-700 dark:bg-gray-900 dark:text-slate-200">
                 <span className="animate-pulse">Typing...</span>
