@@ -86,9 +86,8 @@ const Footer = () => {
               <a href="#" className="hover:text-blue-400 transition">
                 <FaTwitter size={20} />
               </a>
-              <a href="#" className="hover:text-blue-400 transition">
+              <a href="https://www.linkedin.com/company/zenvorapvtltd/" target="_blank" rel="noreferrer" className="hover:text-blue-400 transition">
                 <FaLinkedin size={20} />
-
               </a>
             </div>
           </div>

@@ -9,32 +9,26 @@ const stats = [
 
 const values = [
   {
-    icon: "⚡",
     title: "Innovation First",
     desc: "We stay ahead of the curve, embracing emerging technologies to build solutions that are future-ready.",
   },
   {
-    icon: "🎯",
     title: "Precision Delivery",
     desc: "On time, on budget, on spec. We take ownership of every milestone from kickoff to launch.",
   },
   {
-    icon: "🤝",
     title: "Client Partnership",
     desc: "We don't just deliver projects — we build long-term partnerships rooted in trust and transparency.",
   },
   {
-    icon: "🛡️",
     title: "Security & Reliability",
     desc: "Enterprise-grade security and 99.9% uptime are non-negotiables in everything we build.",
   },
   {
-    icon: "🌍",
     title: "India-Rooted, Global-Ready",
     desc: "Headquartered in Indore, we serve clients across industries and continents with world-class expertise.",
   },
   {
-    icon: "📈",
     title: "Outcome-Driven",
     desc: "We measure success by the impact we create — growth, efficiency, and competitive advantage for our clients.",
   },
@@ -44,22 +38,18 @@ const team = [
   {
     role: "Leadership",
     desc: "Visionary leaders with decades of combined industry experience across tech and business.",
-    emoji: "👔",
   },
   {
     role: "Engineers",
     desc: "Full-stack experts, cloud architects, and ML specialists building the future, one commit at a time.",
-    emoji: "💻",
   },
   {
     role: "Designers",
     desc: "UX/UI professionals who craft intuitive experiences that users love and businesses trust.",
-    emoji: "🎨",
   },
   {
     role: "Strategists",
     desc: "Business analysts and consultants who turn complex problems into clear digital roadmaps.",
-    emoji: "📋",
   },
 ];
 
@@ -186,7 +176,7 @@ const AboutSection = ({ isPage = false }) => {
             <div className="grid grid-cols-1 gap-5">
               {/* Mission */}
               <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/5 border border-cyan-500/20 rounded-2xl p-7">
-                <div className="text-2xl mb-3">🎯</div>
+                <div className="mb-3 h-12 w-12 rounded-full bg-cyan-500/10" />
                 <h3 className="text-xl font-bold text-cyan-400 mb-3">Our Mission</h3>
                 <p className="text-gray-300 text-sm leading-relaxed">
                   To empower businesses with cutting-edge technology solutions
@@ -196,7 +186,7 @@ const AboutSection = ({ isPage = false }) => {
               </div>
               {/* Vision */}
               <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/20 rounded-2xl p-7">
-                <div className="text-2xl mb-3">🔭</div>
+                <div className="mb-3 h-12 w-12 rounded-full bg-purple-500/10" />
                 <h3 className="text-xl font-bold text-cyan-400 mb-3">Our Vision</h3>
                 <p className="text-gray-300 text-sm leading-relaxed">
                   To be the most trusted technology partner for forward-thinking
@@ -260,8 +250,8 @@ const AboutSection = ({ isPage = false }) => {
                 key={idx}
                 className="group bg-gray-800/50 border border-gray-700 hover:border-cyan-500 rounded-2xl p-6 text-center transition-all duration-300"
               >
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500/30 to-blue-600/20 border border-cyan-500/30 flex items-center justify-center mx-auto mb-4 text-2xl group-hover:scale-110 transition-transform duration-300">
-                  {member.emoji}
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500/30 to-blue-600/20 border border-cyan-500/30 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <span className="text-base font-semibold text-cyan-400">{member.role.charAt(0)}</span>
                 </div>
                 <h3 className="text-base font-bold text-cyan-400 mb-2">{member.role}</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">{member.desc}</p>

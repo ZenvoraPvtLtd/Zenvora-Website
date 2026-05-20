@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Moon, Sun } from "lucide-react";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -11,7 +11,7 @@ const navItems = [
   { label: "Contact", href: "/contact" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ theme, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-cyan-400/15 bg-[#020815]/95 backdrop-blur-xl">
+    <nav className="sticky top-0 z-50 border-b border-cyan-400/15 backdrop-blur-xl" style={{ backgroundColor: "rgba(var(--surface-rgb),0.95)" }}>
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <div className="flex h-[70px] items-center justify-between">
           <Link to="/" className="flex shrink-0 items-center">
@@ -71,6 +71,15 @@ const Navbar = () => {
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="rounded-full border border-gray-600 bg-white/5 px-3 py-2 text-sm text-gray-300 transition hover:border-cyan-500 hover:text-cyan-400"
+              style={{ backgroundColor: "rgba(var(--surface-rgb),0.80)" }}
+              aria-label="Toggle color mode"
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
             {isLoggedIn ? (
               <>
                 <span className="text-sm text-gray-400">
@@ -112,8 +121,17 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="border-t border-cyan-400/15 bg-[#051120] md:hidden">
+        <div className="border-t border-cyan-400/15 md:hidden" style={{ backgroundColor: "rgba(var(--surface-rgb),0.95)" }}>
           <div className="space-y-1 px-4 py-3">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="flex w-full items-center justify-center rounded-full border border-gray-600 bg-white/5 px-3 py-2 text-sm text-gray-300 transition hover:border-cyan-500 hover:text-cyan-400 mb-3"
+              style={{ backgroundColor: "rgba(var(--surface-rgb),0.80)" }}
+              aria-label="Toggle color mode"
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
             {navItems.map((item) => (
               <Link
                 key={item.href}

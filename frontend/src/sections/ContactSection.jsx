@@ -390,7 +390,7 @@ const ContactSection = ({ isPage = false }) => {
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
+          <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 shadow-sm dark:border-gray-700 dark:bg-slate-950">
             <h3 className="flex items-center gap-2 text-xl font-bold">
               <Clock className="text-cyan-500" size={20} />
               Business hours
@@ -409,7 +409,7 @@ const ContactSection = ({ isPage = false }) => {
             <h3 className="text-xl font-bold">Follow us</h3>
             <div className="mt-5 flex gap-3">
               {[
-                [FaLinkedinIn, "LinkedIn", "https://www.linkedin.com"],
+                [FaLinkedinIn, "LinkedIn", "https://www.linkedin.com/company/zenvorapvtltd/"],
                 [FaXTwitter, "Twitter", "https://twitter.com"],
                 [FaFacebookF, "Facebook", "https://facebook.com"],
               ].map(([Icon, label, href]) => (
@@ -590,8 +590,8 @@ const ContactSection = ({ isPage = false }) => {
       {/* ================= CHAT WINDOW ================= */}
       <div className="fixed bottom-5 right-5 z-40">
         {chatOpen && (
-          <div className="mb-3 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-950">
-            <div className="flex items-center justify-between bg-black px-4 py-3 text-white">
+          <div className="mb-3 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-slate-800 bg-slate-950 shadow-2xl dark:border-gray-700 dark:bg-slate-950">
+            <div className="flex items-center justify-between bg-slate-900 px-4 py-3 text-white">
               <span className="font-bold">Live chat</span>
               <button type="button" onClick={() => setChatOpen(false)} aria-label="Close chat">
                 <X size={18} />
@@ -599,13 +599,13 @@ const ContactSection = ({ isPage = false }) => {
             </div>
             <div className="max-h-64 space-y-3 overflow-auto p-4">
               {chatMessages.map((message, index) => (
-                <div key={`${message.from}-${index}`} className={`rounded-lg px-3 py-2 text-sm ${message.from === "user" ? "ml-8 bg-cyan-500 text-black" : "mr-8 bg-slate-100 text-slate-700 dark:bg-gray-900 dark:text-slate-200"}`}>
+                <div key={`${message.from}-${index}`} className={`rounded-lg px-3 py-2 text-sm ${message.from === "user" ? "ml-8 bg-cyan-500 text-black" : "mr-8 bg-slate-800 text-slate-200"}`}>
                   {message.text}
                 </div>
               ))}
             </div>
-            <div className="flex gap-2 border-t border-slate-200 p-3 dark:border-gray-800">
-              <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendChatMessage()} className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none dark:border-gray-800 dark:bg-black" placeholder="Type a message" />
+            <div className="flex gap-2 border-t border-slate-800 p-3 dark:border-gray-800">
+              <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendChatMessage()} className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none" placeholder="Type a message" />
               <button type="button" onClick={sendChatMessage} className="rounded-lg bg-cyan-500 px-3 py-2 text-black">
                 <Send size={16} />
               </button>

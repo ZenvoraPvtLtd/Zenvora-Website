@@ -22,9 +22,15 @@ const OAuthCallback = lazy(() => import("./pages/OAuthCallback"));
 
 const App = () => {
   const [appLoading, setAppLoading] = useState(true);
+  const [theme, setTheme] = useState("dark");
 
   // Show branded Z-logo loader for 2.5 seconds on first load
   useEffect(() => {
+    const storedTheme = window.localStorage.getItem("siteTheme");
+    const initialTheme = storedTheme === "light" ? "light" : "dark";
+    setTheme(initialTheme);
+    document.documentElement.dataset.theme = initialTheme;
+
     const timer = setTimeout(() => {
       setAppLoading(false);
       try { sessionStorage.setItem('appLoaded', '1'); } catch (e) { /* ignore */ }
@@ -32,16 +38,25 @@ const App = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const toggleTheme = () => {
+    setTheme((currentTheme) => {
+      const nextTheme = currentTheme === "dark" ? "light" : "dark";
+      window.localStorage.setItem("siteTheme", nextTheme);
+      document.documentElement.dataset.theme = nextTheme;
+      return nextTheme;
+    });
+  };
+
   if (appLoading) {
     return <Loader />;
   }
 
   return (
     <Router>
-      <div className="bg-black min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--bg)", color: "var(--text)" }}>
         <ScrollToTop />
-        <Navbar />
-        <Suspense fallback={<div style={{ background: "#020815", minHeight: "100vh" }} />}>
+        <Navbar theme={theme} toggleTheme={toggleTheme} />
+        <Suspense fallback={<div style={{ background: "var(--bg)", minHeight: "100vh" }} />}>
           <Routes>
             <Route path="/"             element={<Home />} />
             <Route path="/about"        element={<About />} />
