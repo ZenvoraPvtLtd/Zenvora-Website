@@ -7,6 +7,11 @@ const { register, login, getMe, oauthCallback, googleLogin } = require("../contr
 const { protect } = require("../middleware/auth.middleware");
 const validate = require("../middleware/validate.middleware");
 
+
+const { OAuth2Client } = require("google-auth-library");
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 const router = express.Router();
 
 // Register

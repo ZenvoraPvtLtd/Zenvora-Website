@@ -20,7 +20,7 @@ const app = express();
 connectDB();
 
 // Verify Email Configuration
-verifyEmailConfig();
+// verifyEmailConfig();
 
 const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000,http://localhost:5173,http://localhost:5174").split(",");
 

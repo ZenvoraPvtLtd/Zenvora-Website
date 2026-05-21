@@ -13,6 +13,7 @@ const navItems = [
 
 const Navbar = ({ theme, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -46,10 +47,10 @@ const Navbar = ({ theme, toggleTheme }) => {
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <div className="flex h-[70px] items-center justify-between">
           <Link to="/" className="flex shrink-0 items-center">
-            <img 
-              src="/logo.png" 
-              alt="Zenvora Logo" 
-              className="h-[52px] w-auto object-contain brightness-110" 
+            <img
+              src="/logo.png"
+              alt="Zenvora Logo"
+              className="h-[52px] w-auto object-contain brightness-110"
             />
           </Link>
 
@@ -71,6 +72,12 @@ const Navbar = ({ theme, toggleTheme }) => {
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
+            <Link
+              to={isLoggedIn && user?.role === "admin" ? "/admin" : "/admin-login"}
+              className="rounded-md border border-gray-600 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-300 transition hover:border-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-100"
+            >
+              Admin
+            </Link>
             <button
               type="button"
               onClick={toggleTheme}
@@ -84,9 +91,7 @@ const Navbar = ({ theme, toggleTheme }) => {
               <>
                 <span className="text-sm text-gray-400">
                   Hi,{" "}
-                  <span className="font-medium text-cyan-400">
-                    {user.name?.split(" ")[0]}
-                  </span>
+                  <span className="font-medium text-cyan-400">{user.name?.split(" ")[0]}</span>
                 </span>
                 <Link
                   to={user?.role === "admin" ? "/admin" : "/dashboard"}
@@ -123,6 +128,13 @@ const Navbar = ({ theme, toggleTheme }) => {
       {isOpen && (
         <div className="border-t border-cyan-400/15 md:hidden" style={{ backgroundColor: "rgba(var(--surface-rgb),0.95)" }}>
           <div className="space-y-1 px-4 py-3">
+            <Link
+              to={isLoggedIn && user?.role === "admin" ? "/admin" : "/admin-login"}
+              onClick={() => setIsOpen(false)}
+              className="flex w-full items-center justify-center rounded-full border border-gray-600 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-300 transition hover:border-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-100 mb-3"
+            >
+              Admin
+            </Link>
             <button
               type="button"
               onClick={toggleTheme}
@@ -146,7 +158,6 @@ const Navbar = ({ theme, toggleTheme }) => {
                 {item.label}
               </Link>
             ))}
-
             {isLoggedIn ? (
               <div className="mt-2 flex flex-col gap-2 border-t border-cyan-400/15 pt-3">
                 <p className="px-3 text-sm text-gray-400">

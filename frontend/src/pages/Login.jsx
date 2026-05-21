@@ -525,6 +525,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
+
 import {
   ArrowRight,
   Eye,
@@ -566,7 +568,16 @@ const Login = () => {
     setLoading(true);
     setError("");
     try {
-      const data = await api.googleLogin(credentialResponse.credential);
+      // const data = await api.googleLogin(credentialResponse.credential);
+      const response = await axios.post(
+  // "http://localhost:8000/api/auth/google",
+  "http://localhost:5000/api/auth/google",
+  {
+    token: credentialResponse.credential,
+  }
+);
+
+const data = response.data;
       
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
@@ -851,16 +862,23 @@ const Login = () => {
                   <div className="w-full flex justify-center overflow-hidden rounded-lg bg-slate-900/50 hover:bg-slate-800/80 border border-slate-700 transition duration-300 p-1">
                     <div className="w-full flex justify-center [&>div]:w-full">
                       <GoogleLogin
-                        onSuccess={handleGoogleSuccess}
-                        onError={handleGoogleError}
+                        onSuccess={(credentialResponse) => {
+                          console.log("LOGIN SUCCESS", credentialResponse);
+                          handleGoogleSuccess(credentialResponse);
+                        }}
+                        onError={() => {
+                          console.log("Login Failed");
+                          handleGoogleError();
+                        }}
                         theme="filled_blue"
                         shape="rectangular"
                         size="large"
-                        width="350"
+                        width="500"
                       />
                     </div>
                   </div>
-                  <button
+                  {/* Microsoft login button hidden */}
+                  {/* <button
                     type="button"
                     onClick={api.loginWithMicrosoft}
                     className="flex items-center justify-center gap-2.5 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-sm font-semibold text-slate-100 transition-all duration-300 hover:border-slate-600 hover:bg-slate-800/80 cursor-pointer"
@@ -872,7 +890,7 @@ const Login = () => {
                       <i className="block h-2 w-2 bg-yellow-400 rounded-2xs" />
                     </span>
                     Continue with Microsoft
-                  </button>
+                  </button> */}
                 </div>
               </div>
 

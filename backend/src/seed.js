@@ -9,14 +9,14 @@ const users = [
   { name: "Bob Smith", email: "bob@example.com", password: "password123", role: "user", isActive: true },
   { name: "Carol White", email: "carol@example.com", password: "password123", role: "user", isActive: false },
   { name: "David Brown", email: "david@example.com", password: "password123", role: "user", isActive: true },
-  { name: "Eva Martinez", email: "eva@example.com", password: "password123", role: "admin", isActive: true },
+  // { name: "Eva Martinez", email: "eva@example.com", password: "password123", role: "admin", isActive: true },
+  { name: "Zenvora Admin", email: "admin@zenvora.com", password: "password123", role: "admin", isActive: true },
   { name: "Frank Lee", email: "frank@example.com", password: "password123", role: "user", isActive: true },
   { name: "Grace Kim", email: "grace@example.com", password: "password123", role: "user", isActive: true },
   { name: "Henry Davis", email: "henry@example.com", password: "password123", role: "user", isActive: false },
   { name: "Iris Wilson", email: "iris@example.com", password: "password123", role: "user", isActive: true },
   { name: "Jack Taylor", email: "jack@example.com", password: "password123", role: "user", isActive: true },
-  { name: "Karen Anderson", email: "karen@example.com", password: "password123", role: "admin", isActive: true },
-  { name: "Liam Thomas", email: "liam@example.com", password: "password123", role: "user", isActive: true },
+  // { name: "Karen Anderson", email: "karen@example.com", password: "password123", role: "admin", isActive: true },
 ];
 
 const jobs = [

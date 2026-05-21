@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   X,
 } from "lucide-react";
+import { GoogleLogin } from "@react-oauth/google";
 import { api } from "../api";
 
 const getPasswordStrength = (password) => {
@@ -41,6 +42,30 @@ const Register = () => {
   const [fieldErrors, setFieldErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    setError("");
+    try {
+      const data = await api.googleLogin(credentialResponse.credential);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      const destination = data.user?.role === "admin" ? "/admin" : "/dashboard";
+      navigate(destination);
+      window.location.reload();
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+        "Google signup authentication failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError("Google OAuth signup failed. Please try again.");
+  };
 
   const passwordStrength = useMemo(
     () => getPasswordStrength(formData.password),
@@ -283,7 +308,7 @@ const Register = () => {
                   <label className="mb-2 block text-sm font-semibold text-slate-300 transition-colors group-hover:text-cyan-300">
                     Account Role
                   </label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3">
                     <button
                       type="button"
                       onClick={() => setFormData({ ...formData, role: "user" })}
@@ -296,7 +321,8 @@ const Register = () => {
                       <User size={16} />
                       User
                     </button>
-                    <button
+                    {/* Admin option hidden - only user registration allowed */}
+                    {/* <button
                       type="button"
                       onClick={() => setFormData({ ...formData, role: "admin" })}
                       className={`flex items-center justify-center gap-2 rounded-lg border py-3 text-sm font-semibold transition-all duration-300 cursor-pointer ${
@@ -307,7 +333,7 @@ const Register = () => {
                     >
                       <ShieldCheck size={16} />
                       Admin
-                    </button>
+                    </button> */}
                   </div>
                 </div>
 
@@ -363,21 +389,33 @@ const Register = () => {
                   <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-700 to-transparent" />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => api.loginWithGoogle()}
-                    className="flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-2.5 text-sm font-semibold text-slate-100 transition-all duration-300 hover:border-slate-600 hover:bg-slate-800/80"
-                  >
-                    Google
-                  </button>
-                  <button
+                <div className="flex flex-col gap-3">
+                  <div className="w-full flex justify-center overflow-hidden rounded-lg bg-slate-900/50 hover:bg-slate-800/80 border border-slate-700 transition duration-300 p-1">
+                    <div className="w-full flex justify-center [&>div]:w-full">
+                      <GoogleLogin
+                        onSuccess={(credentialResponse) => {
+                          console.log("SIGNUP SUCCESS", credentialResponse);
+                          handleGoogleSuccess(credentialResponse);
+                        }}
+                        onError={() => {
+                          console.log("Signup Failed");
+                          handleGoogleError();
+                        }}
+                        theme="filled_blue"
+                        shape="rectangular"
+                        size="large"
+                        width="500"
+                      />
+                    </div>
+                  </div>
+                  {/* Microsoft signup button hidden */}
+                  {/* <button
                     type="button"
                     onClick={() => api.loginWithMicrosoft()}
                     className="flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-2.5 text-sm font-semibold text-slate-100 transition-all duration-300 hover:border-slate-600 hover:bg-slate-800/80"
                   >
                     Microsoft
-                  </button>
+                  </button> */}
                 </div>
               </div>
 

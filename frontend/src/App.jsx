@@ -16,6 +16,7 @@ const Careers       = lazy(() => import("./pages/Careers"));
 const Contact       = lazy(() => import("./pages/Contact"));
 const Login         = lazy(() => import("./pages/Login"));
 const Register      = lazy(() => import("./pages/Register"));
+const AdminLogin    = lazy(() => import("./pages/AdminLogin"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const Dashboard     = lazy(() => import("./pages/Dashboard"));
 const OAuthCallback = lazy(() => import("./pages/OAuthCallback"));
@@ -66,6 +67,7 @@ const App = () => {
             <Route path="/contact"      element={<Contact />} />
             <Route path="/login"        element={<Login />} />
             <Route path="/register"     element={<Register />} />
+            <Route path="/admin-login"  element={<AdminLogin />} />
             <Route
               path="/admin"
               element={

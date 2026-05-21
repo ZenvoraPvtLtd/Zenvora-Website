@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -169,8 +169,18 @@ const Careers = () => {
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
+  const [jobs, setJobs] = useState([]);
+  const [jobsLoading, setJobsLoading] = useState(true);
+  const [jobsError, setJobsError] = useState("");
 
   const openApplyForm = (track) => {
+    // Check if user is logged in
+    if (!isLoggedIn) {
+      // Redirect to login page
+      navigate(`/login?redirectTo=/careers`);
+      return;
+    }
+
     setSelectedTrack(track);
     setFormData({
       name: user?.name || "",
@@ -232,6 +242,23 @@ const Careers = () => {
     setSelectedTrack(null);
     setShowTermsModal(false);
   };
+
+  useEffect(() => {
+    const loadJobs = async () => {
+      setJobsLoading(true);
+      setJobsError("");
+      try {
+        const response = await api.getJobs();
+        setJobs((response.data || []).filter((job) => job.isActive !== false));
+      } catch (err) {
+        setJobsError("Unable to load open positions at the moment.");
+      } finally {
+        setJobsLoading(false);
+      }
+    };
+
+    loadJobs();
+  }, []);
 
   return (
     <main className="min-h-screen bg-[#020815] text-white">
@@ -313,6 +340,79 @@ const Careers = () => {
           </div>
 
           <HeroLaptop />
+        </div>
+      </section>
+
+      <section className="border-b border-cyan-400/10 bg-[#020815] py-11">
+        <div className="mx-auto max-w-7xl px-6 sm:px-8">
+          <SectionTitle
+            eyebrow="Open Roles"
+            title="Current Job Openings"
+            subtitle="See all live positions created by the admin dashboard and apply for the right role."
+          />
+
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {jobsLoading ? (
+              <div className="col-span-full rounded-3xl border border-[#17406f] bg-[#081627] px-6 py-10 text-center text-slate-300">
+                Loading job openings...
+              </div>
+            ) : jobsError ? (
+              <div className="col-span-full rounded-3xl border border-[#a855f7]/20 bg-[#081627] px-6 py-10 text-center text-slate-300">
+                {jobsError}
+              </div>
+            ) : jobs.length === 0 ? (
+              <div className="col-span-full rounded-3xl border border-[#17406f] bg-[#081627] px-6 py-10 text-center text-slate-300">
+                No open roles available right now. Please check back soon.
+              </div>
+            ) : (
+              jobs.map((job) => (
+                <div
+                  key={job._id}
+                  className="rounded-3xl border border-[#17406f] bg-[radial-gradient(circle_at_top_left,rgba(21,200,255,0.15),transparent_45%)] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
+                >
+                  <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-300">
+                        {job.department || "General"}
+                      </p>
+                      <h3 className="mt-3 text-xl font-black text-white">
+                        {job.title}
+                      </h3>
+                    </div>
+                    <span className={`rounded-full border px-3 py-1 text-xs font-bold uppercase ${job.isActive !== false ? "border-cyan-500 text-cyan-300 bg-cyan-500/10" : "border-slate-600 text-slate-400 bg-slate-800/70"}`}>
+                      {job.isActive !== false ? "Open" : "Closed"}
+                    </span>
+                  </div>
+
+                  <div className="mb-5 space-y-3 text-sm text-slate-300">
+                    <p>{job.description || "A great opportunity to grow your skills on a real product team."}</p>
+                    <div className="flex flex-wrap gap-2 text-xs text-slate-400">
+                      <span className="rounded-full border border-[#173e6d] bg-[#031425] px-3 py-1">
+                        {job.location || "Remote"}
+                      </span>
+                      <span className="rounded-full border border-[#173e6d] bg-[#031425] px-3 py-1">
+                        {job.type || "Full-time"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => openApplyForm({ title: job.title })}
+                      className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-3 text-sm font-black text-white transition hover:brightness-110"
+                    >
+                      Apply now
+                      <ArrowRight size={16} />
+                    </button>
+                    <div className="text-xs text-slate-400">
+                      Posted by admin. Live from your dashboard.
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </section>
 

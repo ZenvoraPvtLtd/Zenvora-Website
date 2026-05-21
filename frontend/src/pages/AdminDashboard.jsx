@@ -581,68 +581,124 @@ const JobsSection = () => {
           <Plus size={15} /> New Job
         </button>
       </div>
-      <div className="overflow-x-auto rounded-xl border border-gray-700">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-800 border-b border-gray-700">
-            <tr>
-              {[
-                "Title",
-                "Department",
-                "Location",
-                "Type",
-                "Status",
-                "Actions",
-              ].map((h) => (
-                <th
-                  key={h}
-                  className="px-4 py-3 text-left text-xs font-medium text-gray-400 whitespace-nowrap"
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-700/50">
-            {slice.map((j) => (
-              <tr
-                key={j._id}
-                className="bg-gray-800/50 hover:bg-gray-800 transition"
-              >
-                <td className="px-4 py-4 text-white font-medium whitespace-nowrap">
-                  {j.title}
-                </td>
-                <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
-                  {j.department || "—"}
-                </td>
-                <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
-                  {j.location}
-                </td>
-                <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
-                  {j.type}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap">
-                  <Badge status={j.isActive ? "open" : "closed"} />
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap">
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => setModal(j)}
-                      className="text-cyan-400 hover:text-cyan-300 transition p-1"
-                    >
-                      <Pencil size={15} />
-                    </button>
-                    <button
-                      onClick={() => setConfirm(j)}
-                      className="text-red-400 hover:text-red-300 transition p-1"
-                    >
-                      <Trash2 size={15} />
-                    </button>
-                  </div>
-                </td>
+      <div className="space-y-4">
+        <div className="hidden lg:block overflow-x-auto rounded-xl border border-gray-700">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-800 border-b border-gray-700">
+              <tr>
+                {[
+                  "Title",
+                  "Department",
+                  "Skills",
+                  "Location",
+                  "Type",
+                  "Status",
+                  "Actions",
+                ].map((h) => (
+                  <th
+                    key={h}
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-400 whitespace-nowrap"
+                  >
+                    {h}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-700/50">
+              {slice.map((j) => (
+                <tr
+                  key={j._id}
+                  className="bg-gray-800/50 hover:bg-gray-800 transition"
+                >
+                  <td className="px-4 py-4 text-white font-medium whitespace-nowrap">
+                    {j.title}
+                  </td>
+                  <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
+                    {j.department || "—"}
+                  </td>
+                  <td className="px-4 py-4 text-gray-400 max-w-[180px] truncate" title={(j.requirements || []).join(", ")}>
+                    {(j.requirements || []).join(", ") || "—"}
+                  </td>
+                  <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
+                    {j.location}
+                  </td>
+                  <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
+                    {j.type}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <Badge status={j.isActive ? "open" : "closed"} />
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => setModal(j)}
+                        className="text-cyan-400 hover:text-cyan-300 transition p-1"
+                      >
+                        <Pencil size={15} />
+                      </button>
+                      <button
+                        onClick={() => setConfirm(j)}
+                        className="text-red-400 hover:text-red-300 transition p-1"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="grid gap-4 lg:hidden">
+          {slice.map((j) => (
+            <article
+              key={j._id}
+              className="rounded-3xl border border-gray-700 bg-gray-900/80 p-5 shadow-lg shadow-black/20"
+            >
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                      {j.department || "General"}
+                    </p>
+                    <Badge status={j.isActive ? "open" : "closed"} />
+                  </div>
+                  <h3 className="mt-3 text-lg font-black text-white">
+                    {j.title}
+                  </h3>
+                  <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">
+                    Skills: {(j.requirements || []).join(", ") || "—"}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2 text-xs text-gray-400">
+                  <span className="rounded-full border border-gray-700 bg-gray-800/80 px-3 py-1">
+                    {j.location}
+                  </span>
+                  <span className="rounded-full border border-gray-700 bg-gray-800/80 px-3 py-1">
+                    {j.type}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+                <button
+                  onClick={() => setModal(j)}
+                  className="rounded-full bg-cyan-500/15 px-4 py-2 text-cyan-200 transition hover:bg-cyan-500/25"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => setConfirm(j)}
+                  className="rounded-full bg-red-500/15 px-4 py-2 text-red-300 transition hover:bg-red-500/25"
+                >
+                  Delete
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+
         {!jobs.length && (
           <p className="text-center text-gray-500 py-8 text-sm">
             No jobs posted yet.
