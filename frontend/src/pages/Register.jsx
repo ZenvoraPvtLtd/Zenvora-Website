@@ -12,8 +12,8 @@ import {
   ShieldCheck,
   X,
 } from "lucide-react";
-import { GoogleLogin } from "@react-oauth/google";
 import { api } from "../api";
+import { GoogleLogin } from "@react-oauth/google";
 
 const getPasswordStrength = (password) => {
   let score = 0;
@@ -56,7 +56,7 @@ const Register = () => {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        "Google signup authentication failed. Please try again."
+          "Google signup authentication failed. Please try again.",
       );
     } finally {
       setLoading(false);

@@ -568,17 +568,14 @@ const Login = () => {
     setLoading(true);
     setError("");
     try {
-      // const data = await api.googleLogin(credentialResponse.credential);
       const response = await axios.post(
-  // "http://localhost:8000/api/auth/google",
-  "http://localhost:5000/api/auth/google",
-  {
-    token: credentialResponse.credential,
-  }
-);
+        "http://localhost:5000/api/auth/google",
+        {
+          token: credentialResponse.credential,
+        },
+      );
+      const data = response.data;
 
-const data = response.data;
-      
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -588,14 +585,13 @@ const data = response.data;
         localStorage.removeItem("rememberedEmail");
       }
 
-      // Admins go to /admin, other users go to /dashboard
       const destination = data.user?.role === "admin" ? "/admin" : "/dashboard";
       navigate(destination);
       window.location.reload();
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        "Google login authentication failed. Please try again."
+          "Google login authentication failed. Please try again.",
       );
     } finally {
       setLoading(false);

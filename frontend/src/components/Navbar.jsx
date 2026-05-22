@@ -72,12 +72,14 @@ const Navbar = ({ theme, toggleTheme }) => {
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
+            {/*
             <Link
               to={isLoggedIn && user?.role === "admin" ? "/admin" : "/admin-login"}
               className="rounded-md border border-gray-600 bg-cyan-500/10 px-3 py-2 text-sm font-semibold text-cyan-300 transition hover:border-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-100"
             >
               Admin
             </Link>
+            */}
             <button
               type="button"
               onClick={toggleTheme}
@@ -128,6 +130,7 @@ const Navbar = ({ theme, toggleTheme }) => {
       {isOpen && (
         <div className="border-t border-cyan-400/15 md:hidden" style={{ backgroundColor: "rgba(var(--surface-rgb),0.95)" }}>
           <div className="space-y-1 px-4 py-3">
+            {/*
             <Link
               to={isLoggedIn && user?.role === "admin" ? "/admin" : "/admin-login"}
               onClick={() => setIsOpen(false)}
@@ -135,6 +138,7 @@ const Navbar = ({ theme, toggleTheme }) => {
             >
               Admin
             </Link>
+            */}
             <button
               type="button"
               onClick={toggleTheme}
