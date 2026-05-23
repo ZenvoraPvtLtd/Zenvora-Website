@@ -164,12 +164,8 @@ const ServicesSection = ({ isPage = false }) => {
           />
 
           <div className="mx-auto mt-12 grid max-w-[1100px] gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {processSteps.map((item, index) => (
-              <ProcessCard
-                key={item.title}
-                item={item}
-                showArrow={index < processSteps.length - 1}
-              />
+            {processSteps.map((item) => (
+              <ProcessCard key={item.title} item={item} />
             ))}
           </div>
         </div>
@@ -270,12 +266,6 @@ function ProcessCard({ item, showArrow }) {
           </div>
         </div>
       </article>
-      {showArrow && (
-        <div className="pointer-events-none absolute right-[-34px] top-1/2 hidden -translate-y-1/2 items-center gap-1 text-[#168cff] lg:flex">
-          <span className="text-2xl font-black leading-none">...</span>
-          <ArrowRight size={22} strokeWidth={3} />
-        </div>
-      )}
     </div>
   );
 }
