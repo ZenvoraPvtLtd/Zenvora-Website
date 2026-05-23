@@ -1,29 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* ======================================================
+   LIGHT MODE — DEFAULT (professional clean theme)
+   ====================================================== */
 :root {
-  color-scheme: dark;
-  --bg: #020815;
-  --surface: #040b16;
-  --surface-rgb: 4 11 22;
-  --text: #f8fafc;
-  --muted: #94a3b8;
-  --border: rgba(56,189,248,0.18);
-  --card: rgba(8,18,35,0.92);
-  --shadow: 0 35px 120px rgba(0, 0, 0, 0.25);
-}
-
-html[data-theme='light'] {
   color-scheme: light;
   --bg: #f8fafc;
+  --bg-alt: #f1f5f9;
   --surface: #ffffff;
   --surface-rgb: 255 255 255;
   --text: #0f172a;
-  --muted: #475569;
-  --border: rgba(148,163,184,0.40);
-  --card: rgba(255,255,255,0.96);
-  --shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+  --text-secondary: #334155;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --card: #ffffff;
+  --shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 12px 40px rgba(15, 23, 42, 0.12);
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #eff6ff;
+  --accent: #0ea5e9;
+  --success: #10b981;
+  --tag-bg: #eff6ff;
+  --tag-text: #1d4ed8;
+  --tag-border: #bfdbfe;
 }
 
+/* ======================================================
+   DARK MODE — TOGGLED via html[data-theme='dark']
+   ====================================================== */
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #020815;
+  --bg-alt: #040c1a;
+  --surface: #040b16;
+  --surface-rgb: 4 11 22;
+  --text: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --muted: #94a3b8;
+  --border: rgba(56, 189, 248, 0.18);
+  --border-strong: rgba(56, 189, 248, 0.32);
+  --card: rgba(8, 18, 35, 0.92);
+  --shadow: 0 35px 120px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 50px 140px rgba(0, 0, 0, 0.35);
+  --primary: #15c8ff;
+  --primary-hover: #4fdcff;
+  --primary-light: rgba(21, 200, 255, 0.1);
+  --accent: #15c8ff;
+  --success: #34d399;
+  --tag-bg: rgba(21, 200, 255, 0.08);
+  --tag-text: #15c8ff;
+  --tag-border: rgba(21, 200, 255, 0.25);
+}
+
+/* ======================================================
+   BASE STYLES
+   ====================================================== */
 html,
 body,
 #root {
@@ -34,9 +68,17 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 16px;
   line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.2;
+  font-weight: 700;
 }
 
 #root {
@@ -44,52 +86,101 @@ body {
   color: var(--text);
 }
 
-html[data-theme='light'] .text-white,
-html[data-theme='light'] .text-slate-100,
-html[data-theme='light'] .text-slate-200,
-html[data-theme='light'] .text-gray-50,
-html[data-theme='light'] .text-gray-100,
-html[data-theme='light'] .text-gray-200,
-html[data-theme='light'] .text-gray-300 {
+/* ======================================================
+   LIGHT MODE OVERRIDES FOR DARK TAILWIND HARDCODED CLASSES
+   ====================================================== */
+html:not([data-theme='dark']) .text-white,
+html:not([data-theme='dark']) .text-slate-100,
+html:not([data-theme='dark']) .text-slate-200,
+html:not([data-theme='dark']) .text-gray-50,
+html:not([data-theme='dark']) .text-gray-100,
+html:not([data-theme='dark']) .text-gray-200,
+html:not([data-theme='dark']) .text-gray-300 {
   color: var(--text) !important;
 }
 
-html[data-theme='light'] .bg-black,
-html[data-theme='light'] .bg-gray-900,
-html[data-theme='light'] .bg-gray-800,
-html[data-theme='light'] .bg-slate-950,
-html[data-theme='light'] .bg-slate-900,
-html[data-theme='light'] .bg-slate-800,
-html[data-theme='light'] .bg-white\/5,
-html[data-theme='light'] .bg-black\/30,
-html[data-theme='light'] .bg-black\/40,
-html[data-theme='light'] .bg-black\/70,
-html[data-theme='light'] .bg-black\/75,
-html[data-theme='light'] .bg-black\/80,
-html[data-theme='light'] [class*="bg-[#"] {
+html:not([data-theme='dark']) .text-gray-400 {
+  color: var(--muted) !important;
+}
+
+html:not([data-theme='dark']) .text-slate-300 {
+  color: var(--text-secondary) !important;
+}
+
+html:not([data-theme='dark']) .text-cyan-400,
+html:not([data-theme='dark']) .text-cyan-300 {
+  color: var(--primary) !important;
+}
+
+html:not([data-theme='dark']) .bg-black,
+html:not([data-theme='dark']) .bg-gray-900,
+html:not([data-theme='dark']) .bg-gray-800,
+html:not([data-theme='dark']) .bg-slate-950,
+html:not([data-theme='dark']) .bg-slate-900,
+html:not([data-theme='dark']) .bg-slate-800,
+html:not([data-theme='dark']) .bg-black\/30,
+html:not([data-theme='dark']) .bg-black\/40,
+html:not([data-theme='dark']) .bg-black\/70,
+html:not([data-theme='dark']) .bg-black\/75,
+html:not([data-theme='dark']) .bg-black\/80,
+html:not([data-theme='dark']) .bg-white\/5 {
   background-color: var(--surface) !important;
 }
 
-html[data-theme='light'] .border-gray-800,
-html[data-theme='light'] .border-gray-700,
-html[data-theme='light'] .border-white\/10,
-html[data-theme='light'] .border-white\/15,
-html[data-theme='light'] .border-black\/10,
-html[data-theme='light'] .border-black\/20,
-html[data-theme='light'] .border-black\/30,
-html[data-theme='light'] .border-black\/40 {
+html:not([data-theme='dark']) .bg-gray-800\/50,
+html:not([data-theme='dark']) .bg-gray-800\/60,
+html:not([data-theme='dark']) .bg-gray-900\/40 {
+  background-color: var(--bg-alt) !important;
+}
+
+html:not([data-theme='dark']) .border-gray-800,
+html:not([data-theme='dark']) .border-gray-700,
+html:not([data-theme='dark']) .border-gray-600,
+html:not([data-theme='dark']) .border-white\/10,
+html:not([data-theme='dark']) .border-white\/15,
+html:not([data-theme='dark']) .border-black\/10,
+html:not([data-theme='dark']) .border-black\/20,
+html:not([data-theme='dark']) .border-black\/30,
+html:not([data-theme='dark']) .border-black\/40 {
   border-color: var(--border) !important;
 }
 
-html[data-theme='light'] input,
-html[data-theme='light'] textarea,
-html[data-theme='light'] select,
-html[data-theme='light'] button {
+html:not([data-theme='dark']) input,
+html:not([data-theme='dark']) textarea,
+html:not([data-theme='dark']) select {
   color: var(--text) !important;
   background-color: var(--surface) !important;
+  border-color: var(--border) !important;
 }
 
-html[data-theme='light'] ::placeholder {
+html:not([data-theme='dark']) ::placeholder {
   color: #94a3b8 !important;
 }
 
+/* ======================================================
+   SCROLLBAR STYLING
+   ====================================================== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* ======================================================
+   SMOOTH TRANSITIONS
+   ====================================================== */
+*, *::before, *::after {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+}
+
+a, button, input, textarea, select {
+  transition: all 0.15s ease;
+}
