@@ -23,12 +23,12 @@ const OAuthCallback = lazy(() => import("./pages/OAuthCallback"));
 
 const App = () => {
   const [appLoading, setAppLoading] = useState(true);
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
 
   // Show branded Z-logo loader for 2.5 seconds on first load
   useEffect(() => {
     const storedTheme = window.localStorage.getItem("siteTheme");
-    const initialTheme = storedTheme === "light" ? "light" : "dark";
+    const initialTheme = storedTheme === "dark" ? "dark" : "light";
     setTheme(initialTheme);
     document.documentElement.dataset.theme = initialTheme;
 
@@ -56,7 +56,7 @@ const App = () => {
     <Router>
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--bg)", color: "var(--text)" }}>
         <ScrollToTop />
-        <Navbar theme={theme} toggleTheme={toggleTheme} />
+        <Navbar />
         <Suspense fallback={<div style={{ background: "var(--bg)", minHeight: "100vh" }} />}>
           <Routes>
             <Route path="/"             element={<Home />} />
