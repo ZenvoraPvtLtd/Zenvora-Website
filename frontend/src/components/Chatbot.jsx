@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
 import { sendChatMessage as sendChatMessageApi, sendChatEmail, sendChatQuestionEmail, getChatFaqs, getChatExperts } from "../api";
+
+const defaultSuggestions = ["View Services", "About Experts", "Apply for Jobs", "Company Info"];
 
 const Chatbot = () => {
   const [chatOpen, setChatOpen] = useState(false);
@@ -111,13 +113,6 @@ const Chatbot = () => {
     "Company Info": `Zenvo Web delivers product engineering, cloud and data services to enterprise customers. Reply with your email and we'll send company details and case studies.`,
   };
 
-  // When opening chat, show friendly options
-  useEffect(() => {
-    if (chatOpen) {
-      setSuggestions(["View Services", "About Experts", "Apply for Jobs", "Company Info"]);
-    }
-  }, [chatOpen]);
-
   const handleSuggestionClick = (s) => {
     // Common flows: if suggestion asks to send question by email
     const lower = s.toLowerCase();
@@ -183,51 +178,89 @@ const Chatbot = () => {
       const expertNames = Array.isArray(experts?.experts) ? experts.experts.map((e) => `About: ${e.name}`) : [];
 
       setSuggestions([...faqTitles, ...expertNames, "Ask a custom question"]);
-    } catch (err) {
+    } catch {
       // ignore
     }
+  };
+
+  const toggleChat = () => {
+    if (!chatOpen && suggestions.length === 0) {
+      setSuggestions(defaultSuggestions);
+    }
+    setChatOpen((open) => !open);
   };
 
   return (
     <div className="fixed bottom-5 right-5 z-40">
       {chatOpen && (
-        <div className="mb-3 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-slate-800 bg-slate-950 shadow-2xl dark:border-gray-700 dark:bg-slate-950">
-          <div className="flex items-center justify-between bg-slate-900 px-4 py-3 text-white">
+        <div className="mb-3 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border shadow-lg" style={{
+          backgroundColor: "var(--surface)",
+          borderColor: "var(--border)",
+          boxShadow: "var(--shadow-lg)"
+        }}>
+          <div className="flex items-center justify-between px-4 py-3" style={{
+            backgroundColor: "var(--bg-alt)",
+            borderBottomColor: "var(--border)",
+            borderBottom: "1px solid",
+            color: "var(--text)"
+          }}>
             <span className="font-bold">Live chat</span>
-            <button type="button" onClick={() => setChatOpen(false)} aria-label="Close chat">
+            <button type="button" onClick={() => setChatOpen(false)} aria-label="Close chat" style={{ color: "var(--text-secondary)" }}>
               <X size={18} />
             </button>
           </div>
-          <div className="max-h-64 space-y-3 overflow-auto p-4">
+          <div className="max-h-64 space-y-3 overflow-auto p-4" style={{ backgroundColor: "var(--surface)" }}>
             {chatMessages.map((message, index) => (
-              <div key={`${message.from}-${index}`} className={`rounded-lg px-3 py-2 text-sm whitespace-pre-wrap ${message.from === "user" ? "ml-8 bg-cyan-500 text-black" : "mr-8 bg-slate-800 text-slate-200"}`}>
+              <div key={`${message.from}-${index}`} className={`rounded-lg px-3 py-2 text-sm whitespace-pre-wrap ${message.from === "user" ? "ml-8" : "mr-8"}`} style={{
+                backgroundColor: message.from === "user" ? "#0ea5e9" : "var(--bg-alt)",
+                color: message.from === "user" ? "#ffffff" : "var(--text-secondary)"
+              }}>
                 {message.text}
               </div>
             ))}
             {suggestions.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-2">
                 {suggestions.map((s, i) => (
-                  <button key={i} type="button" onClick={() => handleSuggestionClick(s)} className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-100">
+                  <button key={i} type="button" onClick={() => handleSuggestionClick(s)} className="rounded-md px-2 py-1 text-xs transition" style={{
+                    backgroundColor: "var(--bg-alt)",
+                    color: "var(--text-secondary)",
+                    border: `1px solid var(--border)`
+                  }}>
                     {s}
                   </button>
                 ))}
               </div>
             )}
             {isLoading && (
-              <div className="mr-8 rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-700 dark:bg-gray-900 dark:text-slate-200">
+              <div className="mr-8 rounded-lg px-3 py-2 text-sm" style={{
+                backgroundColor: "var(--bg-alt)",
+                color: "var(--text-secondary)"
+              }}>
                 <span className="animate-pulse">Typing...</span>
               </div>
             )}
           </div>
-          <div className="flex gap-2 border-t border-slate-800 p-3">
-            <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendChatMessage()} disabled={isLoading} className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none disabled:opacity-50" placeholder="Type a message" />
-            <button type="button" onClick={sendChatMessage} disabled={isLoading} className="rounded-lg bg-cyan-500 px-3 py-2 text-black disabled:opacity-50">
+          <div className="flex gap-2 border-t p-3" style={{
+            backgroundColor: "var(--surface)",
+            borderTopColor: "var(--border)"
+          }}>
+            <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendChatMessage()} disabled={isLoading} className="min-w-0 flex-1 rounded-lg border px-3 py-2 text-sm outline-none disabled:opacity-50" style={{
+              borderColor: "var(--border)",
+              backgroundColor: "var(--bg-alt)",
+              color: "var(--text)"
+            }} placeholder="Type a message" />
+            <button type="button" onClick={sendChatMessage} disabled={isLoading} className="rounded-lg px-3 py-2 text-white disabled:opacity-50" style={{
+              backgroundColor: "#0ea5e9"
+            }}>
               <Send size={16} />
             </button>
           </div>
         </div>
       )}
-      <button type="button" onClick={() => setChatOpen(!chatOpen)} className="grid h-14 w-14 place-items-center rounded-full bg-cyan-400 text-black shadow-2xl shadow-cyan-500/30 transition hover:scale-105" aria-label="Open live chat">
+      <button type="button" onClick={toggleChat} className="grid h-14 w-14 place-items-center rounded-full text-white shadow-lg transition hover:scale-105" style={{
+        backgroundColor: "#0ea5e9",
+        boxShadow: "0 0 24px rgba(14, 165, 233, 0.3)"
+      }} aria-label="Open live chat">
         <MessageCircle size={24} />
       </button>
     </div>

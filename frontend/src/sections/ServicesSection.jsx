@@ -319,7 +319,7 @@ function ServiceCard({ icon: Icon, title, description, tags, iconBg, accentColor
             boxShadow: `0 4px 16px ${accentColor}33`,
           }}
         >
-          <Icon size={24} className="text-white" />
+          <Icon size={24} style={{ color: "#ffffff" }} />
         </div>
         <div className="flex-1">
           <h3 className="text-lg font-bold" style={{ color: "#0f172a" }}>{title}</h3>

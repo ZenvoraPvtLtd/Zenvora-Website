@@ -15,7 +15,7 @@ const Home = () => {
 
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1200);
+    }, 2500);
 
     return () => clearTimeout(timer);
   }, [appLoaded]);
@@ -25,7 +25,7 @@ const Home = () => {
   }
 
   return (
-    <main className="bg-[#020815] text-white overflow-hidden min-h-screen">
+    <main className="bg-[var(--bg)] text-[var(--text)] overflow-hidden min-h-screen">
       {/* 1. Hero Dynamic Entrance */}
       <HeroSection />
 
@@ -36,22 +36,22 @@ const Home = () => {
       <ServicesSection isPage={false} />
 
       {/* 4. Home Dedicated Rocket CTA Banner */}
-      <section className="bg-[#03101d] px-6 py-20 sm:px-8 border-t border-cyan-400/10">
-        <div className="relative mx-auto grid max-w-7xl overflow-hidden rounded-2xl border border-[#15c8ff]/70 bg-[radial-gradient(circle_at_76%_58%,rgba(14,125,255,0.44),transparent_30%),linear-gradient(112deg,#06101e_0%,#081b35_100%)] lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="bg-[var(--bg)] px-6 py-20 sm:px-8 border-t border-[var(--border)]">
+        <div className="relative mx-auto grid max-w-7xl overflow-hidden rounded-2xl border border-[var(--border)] bg-linear-to-br from-white via-[var(--bg-alt)] to-blue-50/40 shadow-xl shadow-blue-100/30 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="relative z-10 px-8 py-14 sm:px-16 sm:py-16">
-            <p className="text-xs font-black uppercase tracking-[0.12em] text-[#15c8ff]">
+            <p className="text-xs font-black uppercase tracking-[0.12em] text-[var(--primary)]">
               Let's Grow Together
             </p>
-            <h2 className="mt-4 max-w-lg text-4xl font-black leading-tight sm:text-5xl">
+            <h2 className="mt-4 max-w-lg text-4xl font-black leading-tight sm:text-5xl text-[var(--text)]">
               Ready to Transform Your Business?
             </h2>
-            <p className="mt-6 max-w-md text-base leading-8 text-slate-300">
+            <p className="mt-6 max-w-md text-base leading-8 text-[var(--text-secondary)]">
               Let's work together to bring your ideas to life with innovative
               technology solutions.
             </p>
             <Link
               to="/contact"
-              className="mt-8 inline-flex h-14 items-center gap-3 rounded-md bg-[#15c8ff] px-7 text-sm font-black text-[#02101c] transition hover:bg-[#4ed8ff]"
+              className="mt-8 inline-flex h-14 items-center gap-3 rounded-md bg-[var(--primary)] px-7 text-sm font-black text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition hover:bg-[var(--primary-hover)]"
             >
               Get Started Today
               <ArrowRight size={17} />
@@ -59,14 +59,14 @@ const Home = () => {
           </div>
 
           <div className="relative hidden min-h-[345px] items-end justify-center lg:flex">
-            <div className="absolute bottom-0 h-56 w-[62%] rounded-t-full bg-[#15c8ff]/40 blur-2xl" />
-            <div className="absolute bottom-0 h-32 w-full bg-[radial-gradient(ellipse_at_center,#15c8ff_0%,rgba(21,200,255,0.22)_28%,transparent_62%)]" />
+            <div className="absolute bottom-0 h-56 w-[62%] rounded-t-full bg-blue-400/10 blur-2xl" />
+            <div className="absolute bottom-0 h-32 w-full bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.15)_0%,rgba(59,130,246,0.05)_30%,transparent_65%)]" />
             <div className="rocket relative mb-12 h-56 w-24">
-              <div className="absolute left-1/2 top-0 h-44 w-20 -translate-x-1/2 rounded-t-full rounded-b-[36px] border border-white/50 bg-[linear-gradient(90deg,#08234f,#9edfff_48%,#0a3474)] shadow-[0_0_40px_rgba(21,200,255,0.7)]" />
-              <div className="absolute left-1/2 top-14 h-9 w-9 -translate-x-1/2 rounded-full border-4 border-[#092e68] bg-[#15c8ff]/50" />
-              <div className="absolute bottom-6 left-0 h-20 w-9 skew-y-[-26deg] rounded-tl-[28px] bg-[#0b59b8]" />
-              <div className="absolute bottom-6 right-0 h-20 w-9 skew-y-[26deg] rounded-tr-[28px] bg-[#083f91]" />
-              <div className="absolute bottom-[-52px] left-1/2 h-28 w-10 -translate-x-1/2 rounded-full bg-[#2fe6ff] blur-md" />
+              <div className="absolute left-1/2 top-0 h-44 w-20 -translate-x-1/2 rounded-t-full rounded-b-[36px] border border-slate-200 bg-[linear-gradient(90deg,#f1f5f9,#ffffff_48%,#cbd5e1)] shadow-[0_4px_20px_rgba(37,99,235,0.15)]" />
+              <div className="absolute left-1/2 top-14 h-9 w-9 -translate-x-1/2 rounded-full border-4 border-slate-200 bg-blue-100 shadow-inner" />
+              <div className="absolute bottom-6 left-0 h-20 w-9 skew-y-[-26deg] rounded-tl-[28px] bg-[var(--primary)]" />
+              <div className="absolute bottom-6 right-0 h-20 w-9 skew-y-[26deg] rounded-tr-[28px] bg-blue-700" />
+              <div className="absolute bottom-[-52px] left-1/2 h-28 w-10 -translate-x-1/2 rounded-full bg-amber-400/60 blur-md animate-pulse" />
             </div>
           </div>
         </div>

@@ -47,15 +47,18 @@ const Badge = ({ status }) => (
 );
 
 const StatCard = ({ label, value, icon: Icon, color }) => (
-  <div className="bg-gray-800 border border-gray-700 rounded-xl p-5 flex items-center gap-4">
+  <div className="border rounded-xl p-5 flex items-center gap-4" style={{
+    borderColor: "var(--border)",
+    backgroundColor: "var(--surface)"
+  }}>
     <div className={`p-3 rounded-lg ${color}`}>
-      <Icon size={22} className="text-white" />
+      <Icon size={22} style={{ color: "#ffffff" }} />
     </div>
     <div>
-      <p className="text-2xl font-bold text-white">
-        {value ?? <span className="text-gray-500 text-lg">Loading...</span>}
+      <p className="text-2xl font-bold" style={{ color: "var(--text)" }}>
+        {value ?? <span style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>Loading...</span>}
       </p>
-      <p className="text-xs text-gray-400 mt-0.5">{label}</p>
+      <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>{label}</p>
     </div>
   </div>
 );
@@ -90,27 +93,33 @@ const Pagination = ({ page, totalPages, setPage, total }) => {
 
   return (
     <div className="flex items-center justify-between mt-4 px-1">
-      <p className="text-xs text-gray-500">
+      <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
         {from}–{to} of {total}
       </p>
       <div className="flex items-center gap-1">
         <button
           onClick={() => setPage(page - 1)}
           disabled={page === 1}
-          className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition"
+          className="p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition"
+          style={{ color: "var(--text-secondary)" }}
         >
           <ChevronLeft size={14} />
         </button>
         {pages.map((p, i) =>
           p === "…" ? (
-            <span key={`ellipsis-${i}`} className="px-1 text-xs text-gray-600">
+            <span key={`ellipsis-${i}`} className="px-1 text-xs" style={{ color: "var(--text-secondary)" }}>
               …
             </span>
           ) : (
             <button
               key={p}
               onClick={() => setPage(p)}
-              className={`w-7 h-7 text-xs rounded-lg transition ${p === page ? "bg-cyan-500 text-black font-semibold" : "text-gray-400 hover:text-white hover:bg-gray-700"}`}
+              className="w-7 h-7 text-xs rounded-lg transition"
+              style={{
+                backgroundColor: p === page ? "#0ea5e9" : "var(--bg-alt)",
+                color: p === page ? "#ffffff" : "var(--text-secondary)",
+                fontWeight: p === page ? "600" : "400"
+              }}
             >
               {p}
             </button>
@@ -119,7 +128,8 @@ const Pagination = ({ page, totalPages, setPage, total }) => {
         <button
           onClick={() => setPage(page + 1)}
           disabled={page === totalPages}
-          className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition"
+          className="p-1.5 rounded-lg hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition"
+          style={{ color: "var(--text-secondary)" }}
         >
           <ChevronRight size={14} />
         </button>
@@ -130,19 +140,29 @@ const Pagination = ({ page, totalPages, setPage, total }) => {
 
 // ─── Confirm Dialog ────────────────────────────────────────────────────────────
 const Confirm = ({ message, onConfirm, onCancel }) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-    <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 w-full max-w-sm mx-4 shadow-2xl">
-      <p className="text-white text-sm mb-5">{message}</p>
+  <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
+    <div className="border rounded-xl p-6 w-full max-w-sm mx-4 shadow-lg" style={{
+      backgroundColor: "var(--surface)",
+      borderColor: "var(--border)"
+    }}>
+      <p className="text-sm mb-5" style={{ color: "var(--text)" }}>{message}</p>
       <div className="flex gap-3 justify-end">
         <button
           onClick={onCancel}
-          className="px-4 py-2 text-sm text-gray-400 hover:text-white border border-gray-600 rounded-lg transition"
+          className="px-4 py-2 text-sm border rounded-lg transition"
+          style={{
+            borderColor: "var(--border)",
+            color: "var(--text-secondary)"
+          }}
         >
           Cancel
         </button>
         <button
           onClick={onConfirm}
-          className="px-4 py-2 text-sm bg-red-600 hover:bg-red-500 text-white rounded-lg transition"
+          className="px-4 py-2 text-sm text-white rounded-lg transition hover:opacity-90"
+          style={{
+            backgroundColor: "#ef4444"
+          }}
         >
           Delete
         </button>
@@ -198,22 +218,35 @@ const JobModal = ({ job, onClose, onSaved }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-      <div className="bg-gray-800 border border-gray-700 rounded-xl w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
-          <h3 className="text-white font-semibold">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
+      <div className="rounded-xl w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto" style={{
+        backgroundColor: "var(--surface)",
+        borderColor: "var(--border)",
+        border: "1px solid"
+      }}>
+        <div className="flex items-center justify-between px-6 py-4" style={{
+          borderBottom: "1px solid var(--border)",
+          color: "var(--text)"
+        }}>
+          <h3 className="font-semibold">
             {isEdit ? "Edit Job" : "New Job"}
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition"
+            className="hover:text-blue-600 transition"
+            style={{ color: "var(--text-secondary)" }}
           >
             <X size={18} />
           </button>
         </div>
         <form onSubmit={submit} className="p-6 space-y-4">
           {err && (
-            <div className="text-red-400 text-sm bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
+            <div className="text-sm rounded-lg px-3 py-2" style={{
+              borderColor: "rgba(239, 68, 68, 0.3)",
+              backgroundColor: "rgba(239, 68, 68, 0.1)",
+              color: "#ef4444",
+              border: "1px solid"
+            }}>
               {err}
             </div>
           )}
@@ -223,7 +256,7 @@ const JobModal = ({ job, onClose, onSaved }) => {
             ["Department", "department", "text", false],
           ].map(([label, key, type, req]) => (
             <div key={key}>
-              <label className="block text-xs text-gray-400 mb-1">
+              <label className="block text-xs mb-1" style={{ color: "var(--text-secondary)" }}>
                 {label}
               </label>
               <input
@@ -342,7 +375,11 @@ const StatusSelect = ({ current, options, onChange }) => {
             left: pos.left,
             zIndex: 9999,
           }}
-          className="bg-gray-800 border border-gray-700 rounded-lg shadow-xl overflow-hidden min-w-28"
+          className="rounded-lg shadow-md overflow-hidden min-w-28" style={{
+            backgroundColor: "var(--surface)",
+            borderColor: "var(--border)",
+            border: "1px solid"
+          }}
         >
           {options.map((o) => (
             <button
@@ -436,21 +473,28 @@ const UsersSection = () => {
           onCancel={() => setConfirm(null)}
         />
       )}
-      <h2 className="text-lg font-semibold text-white mb-5">
+      <h2 className="text-lg font-semibold mb-5" style={{ color: "var(--text)" }}>
         Users{" "}
-        <span className="text-gray-500 text-sm font-normal">
+        <span className="text-sm font-normal" style={{ color: "var(--text-secondary)" }}>
           ({users.length})
         </span>
       </h2>
-      <div className="overflow-x-auto rounded-xl border border-gray-700">
+      <div className="overflow-x-auto rounded-xl border" style={{
+        borderColor: "var(--border)",
+        backgroundColor: "var(--surface)"
+      }}>
         <table className="w-full text-sm">
-          <thead className="bg-gray-800 border-b border-gray-700">
+          <thead style={{
+            backgroundColor: "var(--bg-alt)",
+            borderBottom: "1px solid var(--border)"
+          }}>
             <tr>
               {["Name", "Email", "Role", "Active", "Joined", "Actions"].map(
                 (h) => (
                   <th
                     key={h}
-                    className="px-4 py-3 text-left text-xs font-medium text-gray-400 whitespace-nowrap"
+                    className="px-4 py-3 text-left text-xs font-medium whitespace-nowrap"
+                    style={{ color: "var(--text-secondary)" }}
                   >
                     {h}
                   </th>
@@ -458,16 +502,17 @@ const UsersSection = () => {
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700/50">
+          <tbody style={{ borderColor: "var(--border)" }} className="divide-y">
             {slice.map((u) => (
               <tr
                 key={u._id}
-                className="bg-gray-800/50 hover:bg-gray-800 transition"
+                className="hover:bg-slate-50 transition"
+                style={{ backgroundColor: "var(--surface)" }}
               >
-                <td className="px-4 py-4 text-white font-medium whitespace-nowrap">
+                <td className="px-4 py-4 font-medium whitespace-nowrap" style={{ color: "var(--text)" }}>
                   {u.name}
                 </td>
-                <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
+                <td className="px-4 py-4 whitespace-nowrap" style={{ color: "var(--text-secondary)" }}>
                   {u.email}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap">
@@ -654,7 +699,10 @@ const JobsSection = () => {
           {slice.map((j) => (
             <article
               key={j._id}
-              className="rounded-3xl border border-gray-700 bg-gray-900/80 p-5 shadow-lg shadow-black/20"
+              className="rounded-3xl border p-5 shadow-md" style={{
+                borderColor: "var(--border)",
+                backgroundColor: "var(--bg-alt)"
+              }}
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>

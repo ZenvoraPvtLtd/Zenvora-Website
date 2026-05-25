@@ -167,104 +167,83 @@ const Login = () => {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black">
-      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-blue-950/40 via-black to-cyan-950/20" />
+    <main className="relative min-h-screen overflow-hidden bg-[var(--bg-alt)]">
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-blue-50/30 via-[var(--bg)] to-cyan-50/20" />
 
       <section className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-8">
         <div className="grid w-full gap-8 lg:grid-cols-2 lg:gap-0">
           <div className="flex flex-col justify-center">
-            <div className="rounded-2xl border border-slate-800/50 bg-slate-950/60 p-8 shadow-2xl shadow-black/50 backdrop-blur-xl transition-all duration-500 hover:border-slate-700/70 sm:p-12">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-8 shadow-2xl shadow-slate-200/50 backdrop-blur-xl transition-all duration-500 hover:border-slate-300/80 sm:p-12">
               <div className="mb-8 flex items-center gap-3 animate-fadeIn">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-cyan-400 to-blue-600 shadow-lg shadow-cyan-500/30">
                   <ShieldCheck size={24} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-widest text-cyan-300">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-[var(--accent)]">
                     Secure Portal
                   </p>
-                  <h1 className="text-3xl font-black leading-tight text-white">Graduate Service</h1>
+                  <h1 className="text-3xl font-black leading-tight text-[var(--text)]">Graduate Service</h1>
                 </div>
               </div>
 
-              <div
-                className={`mb-6 rounded-lg px-4 py-3 text-xs font-semibold transition-all duration-300 ${
-                  apiStatus === "connected"
-                    ? "border border-emerald-600/30 bg-emerald-950/40 text-emerald-300"
-                    : apiStatus === "offline"
-                      ? "border border-amber-600/30 bg-amber-950/40 text-amber-300"
-                      : "border border-slate-700/30 bg-slate-900/40 text-slate-400"
-                }`}
-              >
-                <span className="flex items-center gap-2">
-                  <span
-                    className={`h-2 w-2 rounded-full ${
-                      apiStatus === "connected" ? "animate-pulse bg-emerald-400" : "bg-slate-500"
-                    }`}
-                  />
-                  {apiStatus === "connected" && "Backend connected"}
-                  {apiStatus === "offline" && `Backend offline: ${api.baseUrl}`}
-                  {apiStatus === "checking" && "Checking connection..."}
-                </span>
-              </div>
-
               {error && (
-                <div className="mb-6 rounded-lg border border-red-500/30 bg-red-950/40 px-4 py-3 text-sm text-red-300 animate-slideDown">
+                <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 animate-slideDown">
                   {error}
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="mb-6 space-y-5" noValidate>
                 <div className="group">
-                  <label className="mb-2 block text-sm font-semibold text-slate-300 transition-colors group-hover:text-cyan-300">
+                  <label className="mb-2 block text-sm font-semibold text-[var(--text)] transition-colors group-hover:text-[var(--primary)]">
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-hover:text-cyan-400" size={18} />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-hover:text-[var(--primary)]" size={18} />
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="your@email.com"
-                      className="w-full rounded-lg border border-slate-700 bg-slate-900/50 py-3 pl-12 pr-4 text-slate-100 outline-none transition-all duration-300 placeholder:text-slate-500 hover:border-slate-600 focus:border-cyan-500 focus:bg-slate-900/80 focus:ring-2 focus:ring-cyan-500/20"
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-3 pl-12 pr-4 text-[var(--text)] outline-none transition-all duration-300 placeholder:text-[var(--text-secondary)] hover:border-[var(--border-strong)] focus:border-[var(--primary)] focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--primary)]/20"
                       aria-invalid={Boolean(fieldErrors.email)}
                     />
                   </div>
-                  {fieldErrors.email && <p className="mt-2 text-xs font-medium text-red-400">{fieldErrors.email}</p>}
+                  {fieldErrors.email && <p className="mt-2 text-xs font-medium text-red-500">{fieldErrors.email}</p>}
                 </div>
 
                 <div className="group">
-                  <label className="mb-2 block text-sm font-semibold text-slate-300 transition-colors group-hover:text-cyan-300">
+                  <label className="mb-2 block text-sm font-semibold text-[var(--text)] transition-colors group-hover:text-[var(--primary)]">
                     Password
                   </label>
                   <div className="relative">
-                    <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-hover:text-cyan-400" size={18} />
+                    <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-hover:text-[var(--primary)]" size={18} />
                     <input
                       type={showPassword ? "text" : "password"}
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
                       placeholder="Password"
-                      className="w-full rounded-lg border border-slate-700 bg-slate-900/50 py-3 pl-12 pr-12 text-slate-100 outline-none transition-all duration-300 placeholder:text-slate-500 hover:border-slate-600 focus:border-cyan-500 focus:bg-slate-900/80 focus:ring-2 focus:ring-cyan-500/20"
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-3 pl-12 pr-12 text-[var(--text)] outline-none transition-all duration-300 placeholder:text-[var(--text-secondary)] hover:border-[var(--border-strong)] focus:border-[var(--primary)] focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--primary)]/20"
                       aria-invalid={Boolean(fieldErrors.password)}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((current) => !current)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-slate-400 transition-colors hover:text-cyan-400"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-slate-400 transition-colors hover:text-[var(--primary)]"
                       aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
-                  {fieldErrors.password && <p className="mt-2 text-xs font-medium text-red-400">{fieldErrors.password}</p>}
+                  {fieldErrors.password && <p className="mt-2 text-xs font-medium text-red-500">{fieldErrors.password}</p>}
                 </div>
 
                 <div className="group">
-                  <label className="mb-2 block text-sm font-semibold text-slate-300 transition-colors group-hover:text-cyan-300">
+                  <label className="mb-2 block text-sm font-semibold text-[var(--text)] transition-colors group-hover:text-[var(--primary)]">
                     Verification Code
                   </label>
-                  <div className="grid grid-cols-[1fr_120px] overflow-hidden rounded-lg border border-slate-700 transition-all duration-300 hover:border-slate-600 focus-within:border-cyan-500 focus-within:ring-2 focus-within:ring-cyan-500/20">
+                  <div className="grid grid-cols-[1fr_120px] overflow-hidden rounded-lg border border-[var(--border)] transition-all duration-300 hover:border-[var(--border-strong)] focus-within:border-[var(--primary)] focus-within:ring-2 focus-within:ring-[var(--primary)]/20">
                     <input
                       type="text"
                       value={verificationCode}
@@ -273,30 +252,30 @@ const Login = () => {
                         setFieldErrors((current) => ({ ...current, verificationCode: "" }));
                       }}
                       placeholder="Enter code"
-                      className="min-w-0 bg-slate-900/50 px-4 py-3 text-slate-100 outline-none placeholder:text-slate-500"
+                      className="min-w-0 bg-[var(--surface)] px-4 py-3 text-[var(--text)] outline-none placeholder:text-[var(--text-secondary)]"
                       aria-invalid={Boolean(fieldErrors.verificationCode)}
                     />
-                    <div className="flex items-center justify-center border-l border-slate-700 bg-slate-900/70 px-4 py-3">
-                      <span className="font-mono text-sm font-bold text-cyan-400">{captchaCode}</span>
+                    <div className="flex items-center justify-center border-l border-[var(--border)] bg-[var(--bg-alt)] px-4 py-3">
+                      <span className="font-mono text-sm font-bold text-[var(--accent)]">{captchaCode}</span>
                     </div>
                   </div>
-                  <p className="mt-2 text-xs text-slate-400">Leave blank or enter the shown code.</p>
+                  <p className="mt-2 text-xs text-[var(--text-secondary)]">Leave blank or enter the shown code.</p>
                   {fieldErrors.verificationCode && (
-                    <p className="mt-2 text-xs font-medium text-red-400">{fieldErrors.verificationCode}</p>
+                    <p className="mt-2 text-xs font-medium text-red-500">{fieldErrors.verificationCode}</p>
                   )}
                 </div>
 
                 <div className="flex items-center justify-between gap-4 text-sm">
-                  <label className="flex cursor-pointer items-center gap-2 text-slate-300 transition-colors hover:text-slate-100">
+                  <label className="flex cursor-pointer items-center gap-2 text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]">
                     <input
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="h-4 w-4 cursor-pointer rounded border-slate-600 bg-slate-900/50 text-cyan-500 focus:ring-cyan-500/50"
+                      className="h-4 w-4 cursor-pointer rounded border-[var(--border-strong)] bg-[var(--surface)] text-[var(--primary)] focus:ring-[var(--primary)]/50"
                     />
                     <span className="font-medium">Remember me</span>
                   </label>
-                  <Link to="/login" className="font-semibold text-cyan-400 transition-colors hover:text-cyan-300">
+                  <Link to="/login" className="font-semibold text-[var(--primary)] transition-colors hover:text-[var(--primary-hover)]">
                     Forgot Password?
                   </Link>
                 </div>
@@ -324,13 +303,13 @@ const Login = () => {
 
               <div className="mt-6 space-y-4">
                 <div className="relative flex items-center">
-                  <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-700 to-transparent" />
-                  <span className="px-3 text-xs font-semibold uppercase tracking-widest text-slate-400">Or continue with</span>
-                  <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-700 to-transparent" />
+                  <div className="h-px flex-1 bg-linear-to-r from-transparent via-[var(--border-strong)] to-transparent" />
+                  <span className="px-3 text-xs font-semibold uppercase tracking-widest text-[var(--text-secondary)]">Or continue with</span>
+                  <div className="h-px flex-1 bg-linear-to-r from-transparent via-[var(--border-strong)] to-transparent" />
                 </div>
 
                 <div className="flex flex-col gap-4">
-                  <div className="w-full flex justify-center overflow-hidden rounded-lg bg-slate-900/50 hover:bg-slate-800/80 border border-slate-700 transition duration-300 p-1">
+                  <div className="w-full flex justify-center">
                     <div className="w-full flex justify-center [&>div]:w-full">
                       <GoogleLogin
                         onSuccess={(credentialResponse) => {
@@ -348,26 +327,12 @@ const Login = () => {
                       />
                     </div>
                   </div>
-                  {/* Microsoft login button hidden */}
-                  {/* <button
-                    type="button"
-                    onClick={api.loginWithMicrosoft}
-                    className="flex items-center justify-center gap-2.5 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-3 text-sm font-semibold text-slate-100 transition-all duration-300 hover:border-slate-600 hover:bg-slate-800/80 cursor-pointer"
-                  >
-                    <span className="grid grid-cols-2 gap-0.5">
-                      <i className="block h-2 w-2 bg-red-500 rounded-2xs" />
-                      <i className="block h-2 w-2 bg-green-500 rounded-2xs" />
-                      <i className="block h-2 w-2 bg-blue-500 rounded-2xs" />
-                      <i className="block h-2 w-2 bg-yellow-400 rounded-2xs" />
-                    </span>
-                    Continue with Microsoft
-                  </button> */}
                 </div>
               </div>
 
-              <p className="mt-6 text-center text-sm text-slate-400">
+              <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
                 Don&apos;t have an account?{" "}
-                <Link to="/register" className="font-bold text-cyan-400 transition-colors hover:text-cyan-300">
+                <Link to="/register" className="font-bold text-[var(--primary)] transition-colors hover:text-[var(--primary-hover)]">
                   Create Account
                 </Link>
               </p>
@@ -375,7 +340,7 @@ const Login = () => {
           </div>
 
           <div className="relative hidden flex-col items-center justify-center lg:flex">
-            <div className="relative h-full max-h-screen w-full overflow-hidden rounded-2xl shadow-2xl shadow-black/50">
+            <div className="relative h-full max-h-screen w-full overflow-hidden rounded-2xl shadow-2xl shadow-slate-200/50">
               <img src="/login-illustration.jpg" alt="Graduate service illustration" className="h-full w-full object-cover" />
               <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
               <div className="absolute inset-0 bg-linear-to-r from-black/40 via-transparent to-transparent" />

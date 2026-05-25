@@ -110,7 +110,7 @@ const AdminLogin = () => {
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 shadow-lg" style={{
                   boxShadow: "0 0 24px rgba(34, 211, 238, 0.3)"
                 }}>
-                  <ShieldCheck size={24} className="text-white" />
+                  <ShieldCheck size={24} style={{ color: "#ffffff" }} />
                 </div>
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#06b6d4" }}>

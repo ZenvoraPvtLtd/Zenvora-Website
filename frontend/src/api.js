@@ -248,6 +248,7 @@ export const api = {
   getMe,
   loginWithGoogle,
   loginWithMicrosoft,
+  logout,
 
   // Contact
   sendContact,
