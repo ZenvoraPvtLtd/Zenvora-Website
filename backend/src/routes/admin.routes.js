@@ -4,6 +4,10 @@ const {
   getUsers,
   updateUser,
   deleteUser,
+  getAdmins,
+  createAdmin,
+  updateAdmin,
+  deleteAdmin,
 } = require("../controllers/admin.controller");
 
 const { protect, adminOnly } = require("../middleware/auth.middleware");
@@ -21,5 +25,14 @@ router.get("/users", getUsers);
 router.patch("/users/:id", updateUser);
 
 router.delete("/users/:id", deleteUser);
+
+// Admin Management Routes
+router.get("/admins", getAdmins);
+
+router.post("/admins", createAdmin);
+
+router.patch("/admins/:id", updateAdmin);
+
+router.delete("/admins/:id", deleteAdmin);
 
 module.exports = router;

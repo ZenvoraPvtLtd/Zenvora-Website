@@ -68,6 +68,27 @@ const login = async (formData) => {
   return res.data;
 };
 
+// Admin Login
+const adminLogin = async (formData) => {
+  const res = await axiosInstance.post("/auth/admin-login", formData);
+
+  return res.data;
+};
+
+// Forgot Password
+const forgotPassword = async (formData) => {
+  const res = await axiosInstance.post("/auth/forgot-password", formData);
+
+  return res.data;
+};
+
+// Reset Password
+const resetPassword = async (formData) => {
+  const res = await axiosInstance.post("/auth/reset-password", formData);
+
+  return res.data;
+};
+
 // Google Token Login
 const googleLogin = async (idToken) => {
   const res = await axiosInstance.post("/auth/google", { token: idToken });
@@ -198,6 +219,36 @@ const updateUser = async (id, body) => {
   return res.data;
 };
 
+// ================= ADMIN MANAGEMENT =================
+
+// Get all admins
+const getAdmins = async () => {
+  const res = await axiosInstance.get("/admin/admins");
+
+  return res.data;
+};
+
+// Create admin
+const createAdmin = async (body) => {
+  const res = await axiosInstance.post("/admin/admins", body);
+
+  return res.data;
+};
+
+// Update admin
+const updateAdmin = async (id, body) => {
+  const res = await axiosInstance.patch(`/admin/admins/${id}`, body);
+
+  return res.data;
+};
+
+// Delete admin
+const deleteAdmin = async (id) => {
+  const res = await axiosInstance.delete(`/admin/admins/${id}`);
+
+  return res.data;
+};
+
 // Create Job
 const createJob = async (body) => {
   const res = await axiosInstance.post("/careers/jobs", body);
@@ -244,6 +295,9 @@ export const api = {
   // Auth
   register,
   login,
+  adminLogin,
+  forgotPassword,
+  resetPassword,
   googleLogin,
   getMe,
   loginWithGoogle,
@@ -268,6 +322,10 @@ export const api = {
   getUsers,
   deleteUser,
   updateUser,
+  getAdmins,
+  createAdmin,
+  updateAdmin,
+  deleteAdmin,
 
   createJob,
   updateJob,

@@ -2,7 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const passport = require("../config/passport");
 
-const { register, login, getMe, oauthCallback, googleLogin } = require("../controllers/auth.controller");
+const { register, login, adminLogin, forgotPassword, resetPassword, getMe, oauthCallback, googleLogin } = require("../controllers/auth.controller");
 
 const { protect } = require("../middleware/auth.middleware");
 const validate = require("../middleware/validate.middleware");
@@ -33,6 +33,30 @@ router.post(
   [body("email").isEmail(), body("password").notEmpty()],
   validate,
   login,
+);
+
+// Admin Login
+router.post(
+  "/admin-login",
+  [body("email").isEmail(), body("password").notEmpty()],
+  validate,
+  adminLogin,
+);
+
+// Forgot Password
+router.post(
+  "/forgot-password",
+  [body("email").isEmail()],
+  validate,
+  forgotPassword,
+);
+
+// Reset Password
+router.post(
+  "/reset-password",
+  [body("token").notEmpty(), body("password").isLength({ min: 6 })],
+  validate,
+  resetPassword,
 );
 
 // Current User

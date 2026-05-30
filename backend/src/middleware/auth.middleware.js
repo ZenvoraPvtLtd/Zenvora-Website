@@ -55,6 +55,7 @@ const optionalAuth = async (req, _res, next) => {
 
 // Admin Only
 const adminOnly = (req, res, next) => {
+  console.log('adminOnly middleware - user role:', req.user?.role);
   if (req.user.role === "admin") {
     next();
   } else {
