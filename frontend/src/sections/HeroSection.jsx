@@ -1,68 +1,187 @@
-import { ArrowRight, Headphones } from "lucide-react";
+import { ArrowRight, Headphones, CheckCircle2, Cloud, Bot, Shield } from "lucide-react";
+
+const highlights = [
+  "Cloud & AI Solutions",
+  "Agile Delivery",
+  "Enterprise Security",
+];
 
 const HeroSection = () => {
   const handleScroll = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <section id="hero" className="relative border-b border-cyan-400/10 bg-[#020815] overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_35%,rgba(0,172,255,0.18),transparent_34%),linear-gradient(115deg,#020714_0%,#031328_54%,#020815_100%)]" />
-      <div className="absolute inset-0 opacity-50 bg-[linear-gradient(rgba(0,205,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,205,255,0.04)_1px,transparent_1px)] bg-[length:44px_44px]" />
+    <section
+      id="hero"
+      className="relative overflow-hidden"
+      style={{ minHeight: "600px" }}
+    >
+      {/* ── Background Video ── */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full"
+        style={{ objectFit: "cover", objectPosition: "center" }}
+      >
+        <source src="/vv.mp4" type="video/mp4" />
+      </video>
 
-      <div className="relative mx-auto grid min-h-[520px] max-w-7xl items-center gap-12 px-6 py-20 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:py-24">
-        <div className="max-w-2xl">
-          <h1 className="text-[40px] font-black leading-[1.08] tracking-tight text-white sm:text-6xl lg:text-[64px]">
-            <span className="block text-white">
-              Software Development
-            </span>
-            <span className="block bg-gradient-to-r from-[#15c8ff] via-[#4fdcff] to-[#8be8ff] bg-clip-text text-transparent">
-              Company & IT Solutions
+      {/* ── Dark blue overlay for readability ── */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(105deg, rgba(10,26,60,0.88) 0%, rgba(15,35,80,0.80) 45%, rgba(10,20,50,0.65) 100%)",
+        }}
+      />
+
+      {/* ── Subtle dot grid ── */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)",
+          backgroundSize: "36px 36px",
+        }}
+      />
+
+      {/* ── Main Content ── */}
+      <div className="relative z-10 mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:py-28">
+        <div className="max-w-3xl">
+
+          {/* Eyebrow badge */}
+          <div
+            className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest"
+            style={{
+              backgroundColor: "rgba(37,99,235,0.35)",
+              color: "#93c5fd",
+              border: "1px solid rgba(147,197,253,0.35)",
+            }}
+          >
+            <span
+              className="h-1.5 w-1.5 rounded-full animate-pulse"
+              style={{ backgroundColor: "#60a5fa" }}
+            />
+            Trusted by 50+ Businesses
+          </div>
+
+          {/* Headline */}
+          <h1
+            className="font-black leading-[1.07] tracking-tight text-white"
+            style={{ fontSize: "clamp(36px, 5vw, 64px)" }}
+          >
+            <span className="block">Software Development</span>
+            <span
+              style={{
+                background: "linear-gradient(135deg, #60a5fa 0%, #38bdf8 60%, #7dd3fc 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Company &amp; IT Solutions
             </span>
           </h1>
 
-          <p className="mt-7 text-xl font-semibold text-white sm:text-2xl">
+          <p
+            className="mt-6 text-lg font-semibold sm:text-xl"
+            style={{ color: "rgba(255,255,255,0.92)" }}
+          >
             Transforming Ideas into Innovative IT Solutions
           </p>
 
-          <p className="mt-7 max-w-xl text-base leading-8 text-slate-300">
+          <p
+            className="mt-4 max-w-xl text-base leading-relaxed"
+            style={{ color: "rgba(255,255,255,0.72)" }}
+          >
             We empower businesses with cutting-edge technology, scalable
-            solutions, and a passion for excellence.
+            solutions, and a passion for excellence — from Indore to the world.
           </p>
 
-          <div className="mt-9 flex flex-wrap gap-5">
+          {/* Highlights */}
+          <ul className="mt-6 flex flex-wrap gap-5">
+            {highlights.map((h) => (
+              <li key={h} className="flex items-center gap-2 text-sm font-medium" style={{ color: "rgba(255,255,255,0.88)" }}>
+                <CheckCircle2 size={16} style={{ color: "#60a5fa" }} />
+                {h}
+              </li>
+            ))}
+          </ul>
+
+          {/* CTA Buttons */}
+          <div className="mt-9 flex flex-wrap gap-4">
             <button
               onClick={() => handleScroll("services")}
-              className="inline-flex h-14 items-center gap-3 rounded-md bg-[#15c8ff] px-7 text-sm font-black text-[#02101c] shadow-[0_0_24px_rgba(21,200,255,0.24)] transition hover:bg-[#4ed8ff]"
+              className="inline-flex h-12 items-center gap-2 rounded-lg px-7 text-sm font-bold text-white transition-all hover:-translate-y-0.5"
+              style={{
+                background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
+                boxShadow: "0 4px 20px rgba(37,99,235,0.50)",
+              }}
             >
               Explore Services
-              <ArrowRight size={18} />
+              <ArrowRight size={17} />
             </button>
             <button
               onClick={() => handleScroll("contact")}
-              className="inline-flex h-14 items-center gap-3 rounded-md border border-[#1587da] px-7 text-sm font-bold text-white transition hover:border-[#15c8ff] hover:bg-[#15c8ff]/10 hover:text-[#15c8ff]"
+              className="inline-flex h-12 items-center gap-2 rounded-lg px-7 text-sm font-bold text-white transition-all hover:-translate-y-0.5"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.12)",
+                border: "1.5px solid rgba(255,255,255,0.35)",
+                backdropFilter: "blur(8px)",
+              }}
             >
+              <Headphones size={17} style={{ color: "#93c5fd" }} />
               Contact Us
-              <Headphones size={18} className="text-[#15c8ff]" />
             </button>
           </div>
         </div>
 
-        <div className="relative mx-auto flex h-[420px] w-full max-w-[590px] items-center justify-center lg:h-[460px]">
-          <div className="absolute bottom-6 h-20 w-[82%] rounded-full border border-[#15c8ff]/30 bg-[#15c8ff]/10 blur-sm shadow-[0_0_70px_rgba(21,200,255,0.45)]" />
-          <div className="absolute bottom-9 h-28 w-[88%] rounded-full border border-[#15c8ff]/35" />
-          <div className="absolute bottom-14 h-20 w-[70%] rounded-full border border-[#0f76ff]/60" />
-          <div className="absolute bottom-20 h-10 w-[36%] rounded-full bg-[#15c8ff] blur-md" />
-
-          <div className="planet relative h-72 w-72 rounded-full border border-[#69e3ff]/60 bg-[radial-gradient(circle_at_32%_25%,#79f0ff_0%,#127dff_22%,#052969_48%,#020b24_76%)] shadow-[0_0_58px_rgba(21,200,255,0.72)] sm:h-80 sm:w-80">
-            <div className="absolute inset-4 rounded-full bg-[radial-gradient(circle_at_26%_28%,rgba(255,255,255,0.65),transparent_9%),radial-gradient(circle_at_66%_58%,rgba(21,200,255,0.42),transparent_12%),linear-gradient(115deg,transparent_18%,rgba(255,255,255,0.09)_19%,transparent_21%,transparent_52%,rgba(255,255,255,0.08)_53%,transparent_56%)] opacity-80" />
-            <div className="absolute left-1/2 top-1/2 h-[118%] w-[150%] -translate-x-1/2 -translate-y-1/2 rotate-[-14deg] rounded-full border-2 border-[#15c8ff]/70" />
-            <div className="absolute left-1/2 top-1/2 h-[96%] w-[168%] -translate-x-1/2 -translate-y-1/2 rotate-[16deg] rounded-full border border-[#278dff]/70" />
-            <div className="absolute -right-2 top-14 h-5 w-5 rounded-full bg-white shadow-[0_0_30px_12px_rgba(21,200,255,0.8)]" />
-          </div>
+        {/* ── Bottom 3 frosted cards (design from reference) ── */}
+        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {[
+            {
+              Icon: Cloud,
+              title: "Cloud Architecture & Infrastructure",
+              desc: "Scalable AWS, Azure and GCP solutions engineered for reliability and performance.",
+              iconColor: "#60a5fa",
+            },
+            {
+              Icon: Bot,
+              title: "AI & Machine Learning",
+              desc: "Custom ML models, LLM integrations, and intelligent automation for modern businesses.",
+              iconColor: "#34d399",
+            },
+            {
+              Icon: Shield,
+              title: "Cybersecurity & Compliance",
+              desc: "Enterprise-grade security, penetration testing, and 24/7 threat monitoring.",
+              iconColor: "#f59e0b",
+            },
+          ].map((card) => (
+            <div
+              key={card.title}
+              className="rounded-xl p-5 transition-all duration-200 hover:-translate-y-1"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.10)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                backdropFilter: "blur(12px)",
+              }}
+            >
+              <div
+                className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg"
+                style={{ backgroundColor: "rgba(255,255,255,0.12)" }}
+              >
+                <card.Icon size={20} style={{ color: card.iconColor }} />
+              </div>
+              <h3 className="text-sm font-bold text-white leading-snug">{card.title}</h3>
+              <p className="mt-2 text-xs leading-5" style={{ color: "rgba(255,255,255,0.62)" }}>
+                {card.desc}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -9,7 +9,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${process.env.SERVER_URL}/api/auth/google/callback`,
+        callbackURL: `${process.env.SERVER_URL || "http://localhost:5000"}/api/auth/google/callback`,
       },
       async (_accessToken, _refreshToken, profile, done) => {
         try {
@@ -49,7 +49,7 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
       {
         clientID: process.env.MICROSOFT_CLIENT_ID,
         clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
-        callbackURL: `${process.env.SERVER_URL}/api/auth/microsoft/callback`,
+        callbackURL: `${process.env.SERVER_URL || "http://localhost:5000"}/api/auth/microsoft/callback`,
         scope: ["user.read"],
       },
       async (_accessToken, _refreshToken, profile, done) => {

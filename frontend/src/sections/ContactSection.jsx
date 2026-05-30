@@ -115,9 +115,7 @@ const ContactSection = ({ isPage = false }) => {
         navigator.clipboard.writeText(text);
         return true;
       }
-    } catch (err) {
-      // ignore
-    }
+    } catch (err) { /* ignore */ }
     try {
       const textArea = document.createElement("textarea");
       textArea.value = text;
@@ -132,14 +130,12 @@ const ContactSection = ({ isPage = false }) => {
       document.body.removeChild(textArea);
       return successful;
     } catch (err) {
-      console.error(err);
       return false;
     }
   };
 
   const validateForm = () => {
     const nextErrors = {};
-
     if (!formData.firstName.trim()) nextErrors.firstName = "First name is required.";
     if (!formData.lastName.trim()) nextErrors.lastName = "Last name is required.";
     if (!/^\S+@\S+\.\S+$/.test(formData.email)) nextErrors.email = "Enter a valid email address.";
@@ -151,7 +147,6 @@ const ContactSection = ({ isPage = false }) => {
     if (formData.message.trim().length < 12) {
       nextErrors.message = "Message should be at least 12 characters.";
     }
-
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -168,7 +163,6 @@ const ContactSection = ({ isPage = false }) => {
       showToast("error", "Please fix the highlighted fields.");
       return;
     }
-
     setLoading(true);
     try {
       await api.sendContact({
@@ -178,14 +172,10 @@ const ContactSection = ({ isPage = false }) => {
         email: formData.email.trim(),
         message: formData.message.trim(),
       });
-
       setFormData(initialForm);
       showToast("success", "Message sent successfully. We will contact you soon.");
     } catch (err) {
-      showToast(
-        "error",
-        err.response?.data?.message || `Could not connect to backend at ${api.baseUrl}.`,
-      );
+      showToast("error", err.response?.data?.message || `Could not connect to backend at ${api.baseUrl}.`);
     } finally {
       setLoading(false);
     }
@@ -193,7 +183,6 @@ const ContactSection = ({ isPage = false }) => {
 
   const sendChatMessage = () => {
     if (!chatInput.trim()) return;
-
     setChatMessages((current) => [
       ...current,
       { from: "user", text: chatInput.trim() },
@@ -203,45 +192,68 @@ const ContactSection = ({ isPage = false }) => {
   };
 
   const inputClass = (name) =>
-    `w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/15 dark:bg-gray-950 dark:text-white ${errors[name] ? "border-red-400" : "border-slate-200 dark:border-gray-800"
+    `w-full rounded-lg border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 ${
+      errors[name] ? "border-red-400" : "border-slate-200"
     }`;
 
   return (
-    <div id="contact" className="min-h-screen bg-slate-50 text-slate-950 dark:bg-black dark:text-white w-full">
-      {/* ================= BREADCRUMB SECTION ================= */}
-      {isPage && (
-        <section className="relative overflow-hidden border-b border-cyan-400/10 bg-[#020815] py-24">
-          <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 right-1/4 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
-          <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:60px_60px]" />
+    <div id="contact" className="min-h-screen w-full" style={{ backgroundColor: "#f8fafc", color: "#0f172a" }}>
 
+      {/* ── BREADCRUMB ── */}
+      {isPage && (
+        <section
+          className="relative overflow-hidden py-24"
+          style={{
+            background: "linear-gradient(135deg, #f0f7ff 0%, #fafbff 60%, #f0f4ff 100%)",
+            borderBottom: "1px solid #e2e8f0",
+          }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none opacity-40"
+            style={{
+              backgroundImage: "radial-gradient(circle, #94a3b8 1px, transparent 1px)",
+              backgroundSize: "32px 32px",
+            }}
+          />
           <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-            <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-4 py-2 rounded-full mb-6">
+            <span
+              className="inline-block text-xs font-semibold uppercase tracking-[0.22em] rounded-full px-4 py-1.5 mb-6"
+              style={{ backgroundColor: "#eff6ff", color: "#2563eb", border: "1px solid #bfdbfe" }}
+            >
               Company
             </span>
-            <h1 className="mb-5 text-5xl font-black md:text-6xl text-white">
+            <h1 className="mb-5 text-5xl font-black md:text-6xl" style={{ color: "#0f172a" }}>
               Contact{" "}
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              <span
+                style={{
+                  background: "linear-gradient(135deg, #2563eb, #0ea5e9)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
                 Us
               </span>
             </h1>
-            <div className="flex items-center justify-center gap-3 text-sm md:text-base text-gray-400">
-              <Link to="/" className="font-medium text-cyan-400 transition hover:text-cyan-300">
+            <div className="flex items-center justify-center gap-3 text-sm md:text-base">
+              <Link to="/" className="font-medium transition-colors" style={{ color: "#2563eb" }}>
                 Home
               </Link>
-              <span className="text-gray-600">/</span>
-              <span className="text-gray-400">Contact</span>
+              <span style={{ color: "#94a3b8" }}>/</span>
+              <span style={{ color: "#64748b" }}>Contact</span>
             </div>
           </div>
         </section>
       )}
 
+      {/* ── TOAST ── */}
       {toast && (
         <div
-          className={`fixed right-4 top-20 z-50 flex max-w-sm items-center gap-3 rounded-lg border px-4 py-3 text-sm shadow-2xl ${toast.type === "success"
+          className={`fixed right-4 top-20 z-50 flex max-w-sm items-center gap-3 rounded-lg border px-4 py-3 text-sm shadow-2xl ${
+            toast.type === "success"
               ? "border-emerald-300 bg-emerald-50 text-emerald-800"
               : "border-red-300 bg-red-50 text-red-800"
-            }`}
+          }`}
           role="status"
         >
           {toast.type === "success" ? <CheckCircle2 size={18} /> : <X size={18} />}
@@ -249,28 +261,41 @@ const ContactSection = ({ isPage = false }) => {
         </div>
       )}
 
-      {/* ================= HERO INTRO ================= */}
-      <section className="relative overflow-hidden bg-black px-4 py-20 sm:px-6 lg:px-8">
-        <div className="absolute inset-0 opacity-30 pointer-events-none">
-          <div className="absolute left-10 top-20 h-56 w-56 rounded-full bg-cyan-500 blur-3xl" />
-          <div className="absolute right-10 top-12 h-64 w-64 rounded-full bg-blue-600 blur-3xl" />
-        </div>
+      {/* ── HERO INTRO ── */}
+      <section
+        className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8"
+        style={{
+          background: "linear-gradient(135deg, #f0f7ff 0%, #fafbff 50%, #f0f4ff 100%)",
+          borderBottom: "1px solid #e2e8f0",
+        }}
+      >
+        <div
+          className="absolute inset-0 pointer-events-none opacity-40"
+          style={{
+            backgroundImage: "radial-gradient(circle, #94a3b8 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-200">
+            <p
+              className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold"
+              style={{ backgroundColor: "#eff6ff", color: "#2563eb", border: "1px solid #bfdbfe" }}
+            >
               <Headphones size={16} />
               Quick response team
             </p>
-            <h2 className="max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h2 className="max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl" style={{ color: "#0f172a" }}>
               Get in touch with Zenvora
             </h2>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+            <p className="mt-6 max-w-2xl text-lg leading-8" style={{ color: "#64748b" }}>
               Tell us about your project, support need, or partnership idea. We will connect you with the right department.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
                 href="#contact-form"
-                className="inline-flex items-center gap-2 rounded-lg bg-cyan-400 px-5 py-3 text-sm font-bold text-black transition hover:bg-cyan-300"
+                className="inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-bold text-white transition"
+                style={{ backgroundColor: "#2563eb" }}
               >
                 Send a message
                 <ArrowRight size={17} />
@@ -279,15 +304,19 @@ const ContactSection = ({ isPage = false }) => {
                 href="https://wa.me/916232161263"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-5 py-3 text-sm font-bold text-white transition hover:border-cyan-300 hover:text-cyan-200"
+                className="inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-bold transition"
+                style={{ backgroundColor: "#ffffff", color: "#334155", border: "1px solid #e2e8f0" }}
               >
-                <MessageCircle size={17} />
+                <MessageCircle size={17} style={{ color: "#2563eb" }} />
                 WhatsApp
               </a>
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/10 bg-white/5 p-5 shadow-2xl shadow-cyan-950/30 backdrop-blur">
+          <div
+            className="rounded-2xl p-5 shadow-sm"
+            style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+          >
             <div className="grid gap-4 sm:grid-cols-2">
               {[
                 ["Average reply", "Under 24 hours"],
@@ -295,9 +324,13 @@ const ContactSection = ({ isPage = false }) => {
                 ["Support", "Email, phone, chat"],
                 ["Backend", "Contact API ready"],
               ].map(([label, value]) => (
-                <div key={label} className="rounded-lg border border-white/10 bg-black/30 p-5">
-                  <p className="text-sm text-slate-400">{label}</p>
-                  <p className="mt-2 text-xl font-bold text-white">{value}</p>
+                <div
+                  key={label}
+                  className="rounded-xl p-5"
+                  style={{ backgroundColor: "#f8fafc", border: "1px solid #e2e8f0" }}
+                >
+                  <p className="text-sm" style={{ color: "#64748b" }}>{label}</p>
+                  <p className="mt-2 text-lg font-bold" style={{ color: "#0f172a" }}>{value}</p>
                 </div>
               ))}
             </div>
@@ -305,108 +338,92 @@ const ContactSection = ({ isPage = false }) => {
         </div>
       </section>
 
-      {/* ================= OPTIONS & FORM ================= */}
-      <section className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[0.78fr_1.22fr] lg:px-8 bg-slate-50 dark:bg-black">
+      {/* ── OPTIONS & FORM ── */}
+      <section
+        className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[0.78fr_1.22fr] lg:px-8"
+        style={{ backgroundColor: "#f8fafc" }}
+      >
+        {/* Sidebar */}
         <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
-            <h3 className="text-xl font-bold">Contact options</h3>
-            <div className="mt-5 space-y-4">
-              {/* <a 
-                href="mailto:hr@zenvorainfo.com" 
-                onClick={() => {
-                  safeCopyToClipboard("hr@zenvorainfo.com");
-                  showToast("success", "Email copied to clipboard!");
-                }}
-                className="group flex gap-3 rounded-lg p-3 transition hover:bg-cyan-50 dark:hover:bg-gray-900"
+          {/* Contact options */}
+          <div
+            className="rounded-xl p-6 shadow-sm"
+            style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+          >
+            <h3 className="text-xl font-bold" style={{ color: "#0f172a" }}>Contact options</h3>
+            <div className="mt-5 space-y-2">
+              <a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=hr@zenvorainfo.com&su=Contact%20Inquiry"
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => { safeCopyToClipboard("hr@zenvorainfo.com"); showToast("success", "Email copied to clipboard!"); }}
+                className="group flex gap-3 rounded-lg p-3 transition"
+                style={{ backgroundColor: "transparent" }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#f0f9ff"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
               >
-                <Mail className="mt-0.5 text-cyan-500" size={20} />
+                <Mail className="mt-0.5 shrink-0" size={20} style={{ color: "#2563eb" }} />
                 <span>
-                  <span className="block text-sm font-bold">Email</span>
-                  <span className="text-sm text-slate-500 group-hover:text-cyan-600 dark:text-slate-400">hr@zenvorainfo.com</span>
-                </span>
-              </a> */}
-
-
-
-<a
-  href="https://mail.google.com/mail/?view=cm&fs=1&to=hr@zenvorainfo.com&cc=ps2855074@gmail.com&su=Contact%20Inquiry"
-  target="_blank"
-  rel="noreferrer"
-  onClick={() => {
-    safeCopyToClipboard("hr@zenvorainfo.com");
-    showToast("success", "Email copied to clipboard!");
-  }}
-  className="group flex gap-3 rounded-lg p-3 transition hover:bg-cyan-50 dark:hover:bg-gray-900"
->
-  <Mail className="mt-0.5 text-cyan-500" size={20} />
-
-  <span>
-    <span className="block text-sm font-bold">
-      Email
-    </span>
-
-    <span className="text-sm text-slate-500 group-hover:text-cyan-600 dark:text-slate-400">
-      hr@zenvorainfo.com
-    </span>
-  </span>
-</a>
-
-
-
-
-
-
-
-              <a 
-                href="tel:+919755125038" 
-                onClick={() => {
-                  safeCopyToClipboard("9755125038");
-                  showToast("success", "Phone number copied to clipboard!");
-                }}
-                className="group flex gap-3 rounded-lg p-3 transition hover:bg-cyan-50 dark:hover:bg-gray-900"
-              >
-                <Phone className="mt-0.5 text-cyan-500" size={20} />
-                <span>
-                  <span className="block text-sm font-bold">Phone</span>
-                  <span className="text-sm text-slate-500 group-hover:text-cyan-600 dark:text-slate-400">9755125038</span>
+                  <span className="block text-sm font-bold" style={{ color: "#0f172a" }}>Email</span>
+                  <span className="text-sm" style={{ color: "#64748b" }}>hr@zenvorainfo.com</span>
                 </span>
               </a>
-              <a 
-                href="https://wa.me/916232161263" 
-                target="_blank" 
-                rel="noreferrer" 
-                onClick={() => {
-                  safeCopyToClipboard("6232161263");
-                  showToast("success", "WhatsApp number copied to clipboard!");
-                }}
-                className="group flex gap-3 rounded-lg p-3 transition hover:bg-cyan-50 dark:hover:bg-gray-900"
+              <a
+                href="tel:+919755125038"
+                onClick={() => { safeCopyToClipboard("9755125038"); showToast("success", "Phone number copied to clipboard!"); }}
+                className="group flex gap-3 rounded-lg p-3 transition"
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#f0f9ff"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
               >
-                <MessageCircle className="mt-0.5 text-cyan-500" size={20} />
+                <Phone className="mt-0.5 shrink-0" size={20} style={{ color: "#2563eb" }} />
                 <span>
-                  <span className="block text-sm font-bold">WhatsApp</span>
-                  <span className="text-sm text-slate-500 group-hover:text-cyan-600 dark:text-slate-400">Chat with our team</span>
+                  <span className="block text-sm font-bold" style={{ color: "#0f172a" }}>Phone</span>
+                  <span className="text-sm" style={{ color: "#64748b" }}>9755125038</span>
+                </span>
+              </a>
+              <a
+                href="https://wa.me/916232161263"
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => { safeCopyToClipboard("6232161263"); showToast("success", "WhatsApp number copied to clipboard!"); }}
+                className="group flex gap-3 rounded-lg p-3 transition"
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#f0f9ff"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+              >
+                <MessageCircle className="mt-0.5 shrink-0" size={20} style={{ color: "#2563eb" }} />
+                <span>
+                  <span className="block text-sm font-bold" style={{ color: "#0f172a" }}>WhatsApp</span>
+                  <span className="text-sm" style={{ color: "#64748b" }}>Chat with our team</span>
                 </span>
               </a>
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 shadow-sm dark:border-gray-700 dark:bg-slate-950">
-            <h3 className="flex items-center gap-2 text-xl font-bold">
-              <Clock className="text-cyan-500" size={20} />
+          {/* Business hours */}
+          <div
+            className="rounded-xl p-6 shadow-sm"
+            style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+          >
+            <h3 className="flex items-center gap-2 text-xl font-bold" style={{ color: "#0f172a" }}>
+              <Clock size={20} style={{ color: "#2563eb" }} />
               Business hours
             </h3>
             <div className="mt-5 space-y-3">
               {businessHours.map(([day, time]) => (
                 <div key={day} className="flex items-center justify-between gap-3 text-sm">
-                  <span className="text-slate-500 dark:text-slate-400">{day}</span>
-                  <span className="font-semibold">{time}</span>
+                  <span style={{ color: "#64748b" }}>{day}</span>
+                  <span className="font-semibold" style={{ color: "#0f172a" }}>{time}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
-            <h3 className="text-xl font-bold">Follow us</h3>
+          {/* Social */}
+          <div
+            className="rounded-xl p-6 shadow-sm"
+            style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+          >
+            <h3 className="text-xl font-bold" style={{ color: "#0f172a" }}>Follow us</h3>
             <div className="mt-5 flex gap-3">
               {[
                 [FaLinkedinIn, "LinkedIn", "https://www.linkedin.com/company/zenvorapvtltd/"],
@@ -419,7 +436,18 @@ const ContactSection = ({ isPage = false }) => {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={label}
-                  className="grid h-10 w-10 place-items-center rounded-lg border border-slate-200 text-slate-600 transition hover:border-cyan-300 hover:bg-cyan-50 hover:text-cyan-600 dark:border-gray-800 dark:text-slate-300 dark:hover:bg-gray-900"
+                  className="grid h-10 w-10 place-items-center rounded-lg transition"
+                  style={{ border: "1px solid #e2e8f0", color: "#475569" }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "#eff6ff";
+                    e.currentTarget.style.borderColor = "#bfdbfe";
+                    e.currentTarget.style.color = "#2563eb";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.borderColor = "#e2e8f0";
+                    e.currentTarget.style.color = "#475569";
+                  }}
                 >
                   <Icon size={18} />
                 </a>
@@ -428,15 +456,26 @@ const ContactSection = ({ isPage = false }) => {
           </div>
         </aside>
 
+        {/* Main content */}
         <div className="space-y-8">
-          <section id="contact-form" className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950 sm:p-8">
+          {/* Contact Form */}
+          <section
+            id="contact-form"
+            className="rounded-xl p-6 shadow-sm sm:p-8"
+            style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+          >
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-600">Contact us</p>
-                <h3 className="mt-2 text-3xl font-bold">Send a message</h3>
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{responseNote}</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.16em]" style={{ color: "#2563eb" }}>
+                  Contact us
+                </p>
+                <h3 className="mt-2 text-3xl font-bold" style={{ color: "#0f172a" }}>Send a message</h3>
+                <p className="mt-2 text-sm" style={{ color: "#64748b" }}>{responseNote}</p>
               </div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
+              <span
+                className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-bold"
+                style={{ backgroundColor: "#f0fdf4", color: "#15803d", border: "1px solid #bbf7d0" }}
+              >
                 <ShieldCheck size={14} />
                 Backend ready
               </span>
@@ -444,31 +483,31 @@ const ContactSection = ({ isPage = false }) => {
 
             <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2" noValidate>
               <label>
-                <span className="mb-1.5 block text-sm font-semibold">First name *</span>
+                <span className="mb-1.5 block text-sm font-semibold" style={{ color: "#374151" }}>First name *</span>
                 <input name="firstName" value={formData.firstName} onChange={handleChange} className={inputClass("firstName")} placeholder="First name" />
                 {errors.firstName && <span className="mt-1 block text-xs text-red-500">{errors.firstName}</span>}
               </label>
               <label>
-                <span className="mb-1.5 block text-sm font-semibold">Last name *</span>
+                <span className="mb-1.5 block text-sm font-semibold" style={{ color: "#374151" }}>Last name *</span>
                 <input name="lastName" value={formData.lastName} onChange={handleChange} className={inputClass("lastName")} placeholder="Last name" />
                 {errors.lastName && <span className="mt-1 block text-xs text-red-500">{errors.lastName}</span>}
               </label>
               <label>
-                <span className="mb-1.5 block text-sm font-semibold">Email *</span>
+                <span className="mb-1.5 block text-sm font-semibold" style={{ color: "#374151" }}>Email *</span>
                 <input name="email" type="email" value={formData.email} onChange={handleChange} className={inputClass("email")} placeholder="you@company.com" />
                 {errors.email && <span className="mt-1 block text-xs text-red-500">{errors.email}</span>}
               </label>
               <label>
-                <span className="mb-1.5 block text-sm font-semibold">Phone</span>
+                <span className="mb-1.5 block text-sm font-semibold" style={{ color: "#374151" }}>Phone</span>
                 <input name="phone" value={formData.phone} onChange={handleChange} className={inputClass("phone")} placeholder="+91 98765 43210" />
                 {errors.phone && <span className="mt-1 block text-xs text-red-500">{errors.phone}</span>}
               </label>
               <label>
-                <span className="mb-1.5 block text-sm font-semibold">Company</span>
+                <span className="mb-1.5 block text-sm font-semibold" style={{ color: "#374151" }}>Company</span>
                 <input name="company" value={formData.company} onChange={handleChange} className={inputClass("company")} placeholder="Company name" />
               </label>
               <label>
-                <span className="mb-1.5 block text-sm font-semibold">Inquiry type *</span>
+                <span className="mb-1.5 block text-sm font-semibold" style={{ color: "#374151" }}>Inquiry type *</span>
                 <select name="inquiryType" value={formData.inquiryType} onChange={handleChange} className={inputClass("inquiryType")}>
                   <option value="">Select a value</option>
                   <option>New project</option>
@@ -479,7 +518,7 @@ const ContactSection = ({ isPage = false }) => {
                 {errors.inquiryType && <span className="mt-1 block text-xs text-red-500">{errors.inquiryType}</span>}
               </label>
               <label>
-                <span className="mb-1.5 block text-sm font-semibold">Service *</span>
+                <span className="mb-1.5 block text-sm font-semibold" style={{ color: "#374151" }}>Service *</span>
                 <select name="service" value={formData.service} onChange={handleChange} className={inputClass("service")}>
                   <option value="">Select service</option>
                   {services.map((service) => <option key={service}>{service}</option>)}
@@ -487,23 +526,34 @@ const ContactSection = ({ isPage = false }) => {
                 {errors.service && <span className="mt-1 block text-xs text-red-500">{errors.service}</span>}
               </label>
               <label>
-                <span className="mb-1.5 block text-sm font-semibold">Department</span>
+                <span className="mb-1.5 block text-sm font-semibold" style={{ color: "#374151" }}>Department</span>
                 <select name="department" value={formData.department} onChange={handleChange} className={inputClass("department")}>
                   {departments.map((dept) => <option key={dept.name}>{dept.name}</option>)}
                 </select>
               </label>
               <label className="sm:col-span-2">
-                <span className="mb-1.5 block text-sm font-semibold">Message *</span>
+                <span className="mb-1.5 block text-sm font-semibold" style={{ color: "#374151" }}>Message *</span>
                 <textarea name="message" rows="5" value={formData.message} onChange={handleChange} className={`${inputClass("message")} resize-none`} placeholder="Tell us about your goals, timeline, and requirements." />
                 {errors.message && <span className="mt-1 block text-xs text-red-500">{errors.message}</span>}
               </label>
               <div className="sm:col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <select name="preferredContact" value={formData.preferredContact} onChange={handleChange} className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm outline-none dark:border-gray-800 dark:bg-gray-950 dark:text-white">
+                <select
+                  name="preferredContact"
+                  value={formData.preferredContact}
+                  onChange={handleChange}
+                  className="rounded-lg border px-4 py-3 text-sm outline-none"
+                  style={{ borderColor: "#e2e8f0", backgroundColor: "#ffffff", color: "#0f172a" }}
+                >
                   <option>Email</option>
                   <option>Phone</option>
                   <option>WhatsApp</option>
                 </select>
-                <button type="submit" disabled={loading} className="inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-500 px-6 py-3 text-sm font-bold text-black transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-60"
+                  style={{ backgroundColor: "#2563eb" }}
+                >
                   {loading ? "Sending..." : "Send message"}
                   <Send size={16} />
                 </button>
@@ -511,29 +561,40 @@ const ContactSection = ({ isPage = false }) => {
             </form>
           </section>
 
+          {/* Department cards */}
           <section className="grid gap-4 md:grid-cols-3">
             {departments.map((dept) => (
-              <article key={dept.name} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-cyan-300 hover:shadow-lg dark:border-gray-800 dark:bg-gray-950">
-                <BriefcaseBusiness className="text-cyan-500" size={24} />
-                <h4 className="mt-4 text-lg font-bold">{dept.name}</h4>
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{dept.description}</p>
-                <a 
-                  className="mt-4 block text-sm font-semibold text-cyan-600 hover:text-cyan-500 transition" 
+              <article
+                key={dept.name}
+                className="rounded-xl p-6 shadow-sm transition"
+                style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "#2563eb";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(37,99,235,0.10)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "#e2e8f0";
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <BriefcaseBusiness size={24} style={{ color: "#2563eb" }} />
+                <h4 className="mt-4 text-lg font-bold" style={{ color: "#0f172a" }}>{dept.name}</h4>
+                <p className="mt-2 text-sm" style={{ color: "#64748b" }}>{dept.description}</p>
+                <a
+                  className="mt-4 block text-sm font-semibold transition"
+                  style={{ color: "#2563eb" }}
                   href={`mailto:${dept.email}`}
-                  onClick={() => {
-                    safeCopyToClipboard(dept.email);
-                    showToast("success", `${dept.name} email copied to clipboard!`);
-                  }}
+                  onClick={() => { safeCopyToClipboard(dept.email); showToast("success", `${dept.name} email copied to clipboard!`); }}
                 >
                   {dept.email}
                 </a>
-                <a 
-                  className="mt-1 block text-sm text-slate-500 dark:text-slate-400 hover:text-cyan-500 transition" 
+                <a
+                  className="mt-1 block text-sm transition"
+                  style={{ color: "#64748b" }}
                   href={`tel:+91${dept.phone}`}
-                  onClick={() => {
-                    safeCopyToClipboard(dept.phone);
-                    showToast("success", `${dept.name} phone copied to clipboard!`);
-                  }}
+                  onClick={() => { safeCopyToClipboard(dept.phone); showToast("success", `${dept.name} phone copied to clipboard!`); }}
                 >
                   {dept.phone}
                 </a>
@@ -541,15 +602,19 @@ const ContactSection = ({ isPage = false }) => {
             ))}
           </section>
 
-          <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-950">
+          {/* Map */}
+          <section
+            className="overflow-hidden rounded-xl shadow-sm"
+            style={{ border: "1px solid #e2e8f0", backgroundColor: "#ffffff" }}
+          >
             <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
               <div className="p-6 sm:p-8">
-                <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-600">
+                <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em]" style={{ color: "#2563eb" }}>
                   <MapPin size={16} />
                   Visit us
                 </p>
-                <h3 className="mt-3 text-2xl font-bold">Indore office</h3>
-                <p className="mt-3 text-slate-500 dark:text-slate-400">
+                <h3 className="mt-3 text-2xl font-bold" style={{ color: "#0f172a" }}>Indore office</h3>
+                <p className="mt-3" style={{ color: "#64748b" }}>
                   206, Sagun Arcade, Vijay Nagar, Indore, Madhya Pradesh.
                 </p>
               </div>
@@ -563,9 +628,13 @@ const ContactSection = ({ isPage = false }) => {
             </div>
           </section>
 
-          <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950 sm:p-8">
-            <h3 className="text-2xl font-bold">Frequently asked questions</h3>
-            <div className="mt-5 divide-y divide-slate-200 dark:divide-gray-800">
+          {/* FAQ */}
+          <section
+            className="rounded-xl p-6 shadow-sm sm:p-8"
+            style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+          >
+            <h3 className="text-2xl font-bold" style={{ color: "#0f172a" }}>Frequently asked questions</h3>
+            <div className="mt-5 divide-y" style={{ borderColor: "#e2e8f0" }}>
               {faqs.map((faq, index) => (
                 <button
                   key={faq.question}
@@ -574,11 +643,17 @@ const ContactSection = ({ isPage = false }) => {
                   className="w-full py-4 text-left"
                 >
                   <span className="flex items-center justify-between gap-4">
-                    <span className="font-semibold">{faq.question}</span>
-                    <ChevronDown className={`shrink-0 transition ${openFaq === index ? "rotate-180 text-cyan-500" : "text-slate-400"}`} size={18} />
+                    <span className="font-semibold" style={{ color: "#0f172a" }}>{faq.question}</span>
+                    <ChevronDown
+                      className={`shrink-0 transition ${openFaq === index ? "rotate-180" : ""}`}
+                      size={18}
+                      style={{ color: openFaq === index ? "#2563eb" : "#94a3b8" }}
+                    />
                   </span>
                   {openFaq === index && (
-                    <span className="mt-3 block text-sm leading-6 text-slate-500 dark:text-slate-400">{faq.answer}</span>
+                    <span className="mt-3 block text-sm leading-6" style={{ color: "#64748b" }}>
+                      {faq.answer}
+                    </span>
                   )}
                 </button>
               ))}
@@ -587,32 +662,71 @@ const ContactSection = ({ isPage = false }) => {
         </div>
       </section>
 
-      {/* ================= CHAT WINDOW ================= */}
+      {/* ── CHAT WIDGET ── */}
       <div className="fixed bottom-5 right-5 z-40">
         {chatOpen && (
-          <div className="mb-3 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-slate-800 bg-slate-950 shadow-2xl dark:border-gray-700 dark:bg-slate-950">
-            <div className="flex items-center justify-between bg-slate-900 px-4 py-3 text-white">
-              <span className="font-bold">Live chat</span>
-              <button type="button" onClick={() => setChatOpen(false)} aria-label="Close chat">
+          <div
+            className="mb-3 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl shadow-2xl"
+            style={{ border: "1px solid #e2e8f0", backgroundColor: "#ffffff" }}
+          >
+            <div
+              className="flex items-center justify-between px-4 py-3"
+              style={{ backgroundColor: "#2563eb" }}
+            >
+              <span className="font-bold text-white text-sm">Live chat</span>
+              <button type="button" onClick={() => setChatOpen(false)} aria-label="Close chat" className="text-white/80 hover:text-white">
                 <X size={18} />
               </button>
             </div>
-            <div className="max-h-64 space-y-3 overflow-auto p-4">
+            <div className="max-h-64 space-y-3 overflow-auto p-4" style={{ backgroundColor: "#f8fafc" }}>
               {chatMessages.map((message, index) => (
-                <div key={`${message.from}-${index}`} className={`rounded-lg px-3 py-2 text-sm ${message.from === "user" ? "ml-8 bg-cyan-500 text-black" : "mr-8 bg-slate-800 text-slate-200"}`}>
+                <div
+                  key={`${message.from}-${index}`}
+                  className={`rounded-lg px-3 py-2 text-sm ${
+                    message.from === "user"
+                      ? "ml-8 text-white"
+                      : "mr-8"
+                  }`}
+                  style={
+                    message.from === "user"
+                      ? { backgroundColor: "#2563eb" }
+                      : { backgroundColor: "#ffffff", border: "1px solid #e2e8f0", color: "#334155" }
+                  }
+                >
                   {message.text}
                 </div>
               ))}
             </div>
-            <div className="flex gap-2 border-t border-slate-800 p-3 dark:border-gray-800">
-              <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendChatMessage()} className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none" placeholder="Type a message" />
-              <button type="button" onClick={sendChatMessage} className="rounded-lg bg-cyan-500 px-3 py-2 text-black">
+            <div
+              className="flex gap-2 border-t p-3"
+              style={{ borderColor: "#e2e8f0", backgroundColor: "#ffffff" }}
+            >
+              <input
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendChatMessage()}
+                className="min-w-0 flex-1 rounded-lg border px-3 py-2 text-sm outline-none"
+                style={{ borderColor: "#e2e8f0", color: "#0f172a", backgroundColor: "#f8fafc" }}
+                placeholder="Type a message"
+              />
+              <button
+                type="button"
+                onClick={sendChatMessage}
+                className="rounded-lg px-3 py-2 text-white"
+                style={{ backgroundColor: "#2563eb" }}
+              >
                 <Send size={16} />
               </button>
             </div>
           </div>
         )}
-        <button type="button" onClick={() => setChatOpen(!chatOpen)} className="grid h-14 w-14 place-items-center rounded-full bg-cyan-400 text-black shadow-2xl shadow-cyan-500/30 transition hover:scale-105" aria-label="Open live chat">
+        <button
+          type="button"
+          onClick={() => setChatOpen(!chatOpen)}
+          className="grid h-14 w-14 place-items-center rounded-full text-white shadow-2xl transition hover:scale-105"
+          style={{ backgroundColor: "#2563eb", boxShadow: "0 8px 30px rgba(37,99,235,0.4)" }}
+          aria-label="Open live chat"
+        >
           <MessageCircle size={24} />
         </button>
       </div>

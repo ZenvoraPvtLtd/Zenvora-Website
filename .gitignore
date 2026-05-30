@@ -7,3 +7,7 @@ build
 __pycache__/
 *.py[cod]
 chatbot-backend/rag_index/
+
+# Large video files (tracked via Git LFS instead)
+*.mov
+*.avi

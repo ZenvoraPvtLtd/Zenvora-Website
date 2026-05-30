@@ -22,33 +22,31 @@ const Dashboard     = lazy(() => import("./pages/Dashboard"));
 const OAuthCallback = lazy(() => import("./pages/OAuthCallback"));
 
 const App = () => {
-  const [appLoading, setAppLoading] = useState(true);
-  const [theme, setTheme] = useState("dark");
+  const [loading, setLoading] = useState(() => {
+    try {
+      return !sessionStorage.getItem("appLoaded");
+    } catch {
+      return true;
+    }
+  });
 
-  // Show branded Z-logo loader for 2.5 seconds on first load
+  // Show branded Z-logo loader for 2.0 seconds on first load
   useEffect(() => {
-    const storedTheme = window.localStorage.getItem("siteTheme");
-    const initialTheme = storedTheme === "light" ? "light" : "dark";
-    setTheme(initialTheme);
-    document.documentElement.dataset.theme = initialTheme;
+    if (!loading) return;
 
     const timer = setTimeout(() => {
-      setAppLoading(false);
-      try { sessionStorage.setItem('appLoaded', '1'); } catch (e) { /* ignore */ }
-    }, 2500);
+      try {
+        sessionStorage.setItem("appLoaded", "1");
+      } catch {
+        /* ignore */
+      }
+      setLoading(false);
+    }, 2000);
+
     return () => clearTimeout(timer);
-  }, []);
+  }, [loading]);
 
-  const toggleTheme = () => {
-    setTheme((currentTheme) => {
-      const nextTheme = currentTheme === "dark" ? "light" : "dark";
-      window.localStorage.setItem("siteTheme", nextTheme);
-      document.documentElement.dataset.theme = nextTheme;
-      return nextTheme;
-    });
-  };
-
-  if (appLoading) {
+  if (loading) {
     return <Loader />;
   }
 
@@ -56,7 +54,7 @@ const App = () => {
     <Router>
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--bg)", color: "var(--text)" }}>
         <ScrollToTop />
-        <Navbar theme={theme} toggleTheme={toggleTheme} />
+        <Navbar />
         <Suspense fallback={<div style={{ background: "var(--bg)", minHeight: "100vh" }} />}>
           <Routes>
             <Route path="/"             element={<Home />} />

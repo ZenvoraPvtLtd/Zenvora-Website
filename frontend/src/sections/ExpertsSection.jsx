@@ -146,13 +146,17 @@ const ExpertModal = ({ expert, onClose, lightMode }) => {
   if (!expert) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-8 backdrop-blur">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 backdrop-blur" style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}>
       <motion.div
         initial={{ opacity: 0, scale: 0.94, y: 24 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.94 }}
-        className={`max-h-[90vh] w-full max-w-4xl overflow-auto rounded-3xl border p-6 shadow-2xl ${lightMode ? "border-sky-100 bg-white text-slate-950" : "border-white/10 bg-slate-950 text-white"
-          }`}
+        className="max-h-[90vh] w-full max-w-4xl overflow-auto rounded-3xl border p-6 shadow-2xl"
+        style={{
+          borderColor: "var(--border)",
+          backgroundColor: "var(--surface)",
+          color: "var(--text)"
+        }}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -220,7 +224,7 @@ const ExpertModal = ({ expert, onClose, lightMode }) => {
 };
 
 const ExpertsSection = ({ isPage = false }) => {
-  const [lightMode, setLightMode] = useState(false);
+  const [lightMode, setLightMode] = useState(true);
   const [activeTeam, setActiveTeam] = useState("All");
   const [search, setSearch] = useState("");
   const [skillFilter, setSkillFilter] = useState("All");
@@ -246,35 +250,46 @@ const ExpertsSection = ({ isPage = false }) => {
     });
   }, [activeTeam, experienceFilter, search, skillFilter]);
 
-  const pageClass = lightMode
-    ? "bg-slate-50 text-slate-950"
-    : "bg-black text-white";
+  const pageClass = "bg-white text-slate-950";
 
   return (
     <div id="experts" className={`w-full overflow-hidden transition ${pageClass}`}>
       {/* ================= BREADCRUMB SECTION ================= */}
       {isPage && (
-        <section className="relative bg-gray-900 border-b border-gray-800 overflow-hidden py-24">
+        <section className="relative border-b overflow-hidden py-24" style={{
+          backgroundColor: "var(--surface)",
+          borderColor: "var(--border)"
+        }}>
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-          <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:60px_60px]" />
+          <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#94a3b8_1px,transparent_1px),linear-gradient(to_bottom,#94a3b8_1px,transparent_1px)] bg-[size:60px_60px]" />
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-4 py-2 rounded-full mb-6">
+            <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] px-4 py-2 rounded-full mb-6" style={{
+              backgroundColor: "rgba(14, 165, 233, 0.1)",
+              borderColor: "rgba(14, 165, 233, 0.3)",
+              border: "1px solid",
+              color: "#0ea5e9"
+            }}>
               Company
             </span>
-            <h1 className="text-5xl md:text-6xl font-black mb-5">
+            <h1 className="text-5xl md:text-6xl font-black mb-5" style={{
+              background: "linear-gradient(to right, #0ea5e9, #2563eb)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text"
+            }}>
               Our{" "}
-              <span className="bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              <span>
                 Experts
               </span>
             </h1>
             <div className="flex items-center justify-center gap-3 text-sm md:text-base">
-              <Link to="/" className="text-cyan-400 hover:text-cyan-300 transition font-medium">
+              <Link to="/" className="hover:text-blue-600 transition font-medium" style={{ color: "#0ea5e9" }}>
                 Home
               </Link>
-              <span className="text-gray-600">/</span>
-              <span className="text-gray-400">Our Experts</span>
+              <span style={{ color: "var(--text-secondary)" }}>/</span>
+              <span style={{ color: "var(--text-secondary)" }}>Our Experts</span>
             </div>
           </div>
         </section>
@@ -380,7 +395,7 @@ const ExpertsSection = ({ isPage = false }) => {
                   key={team}
                   type="button"
                   onClick={() => setActiveTeam(team)}
-                  className={`rounded-full px-4 py-2 text-sm font-bold transition ${activeTeam === team ? "bg-cyan-400 text-black" : lightMode ? "bg-white text-slate-600" : "bg-white/10 text-slate-300"
+                  className={`rounded-full px-4 py-2 text-sm font-bold transition ${activeTeam === team ? "bg-cyan-400 text-black" : "bg-slate-100 text-slate-600"
                     }`}
                 >
                   {team}
@@ -389,23 +404,39 @@ const ExpertsSection = ({ isPage = false }) => {
             </div>
           </div>
 
-          <div className={`mb-8 grid gap-3 rounded-3xl border p-4 lg:grid-cols-[1fr_220px_180px] ${lightMode ? "border-sky-100 bg-white" : "border-white/10 bg-white/[0.06]"}`}>
+          <div className="mb-8 grid gap-3 rounded-3xl border p-4 lg:grid-cols-[1fr_220px_180px]" style={{
+            borderColor: "var(--border)",
+            backgroundColor: "var(--bg-alt)"
+          }}>
             <label className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400" size={18} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2" size={18} style={{ color: "#0ea5e9" }} />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by expert, role, or skill"
-                className={`w-full rounded-2xl border py-3 pl-11 pr-4 text-sm outline-none ${lightMode ? "border-slate-200 bg-slate-50" : "border-white/10 bg-black/40"}`}
+                className="w-full rounded-2xl border py-3 pl-11 pr-4 text-sm outline-none"
+                style={{
+                  borderColor: "var(--border)",
+                  backgroundColor: "var(--surface)",
+                  color: "var(--text)"
+                }}
               />
             </label>
             <label className="relative">
-              <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-cyan-400" size={18} />
-              <select value={skillFilter} onChange={(e) => setSkillFilter(e.target.value)} className={`w-full rounded-2xl border py-3 pl-11 pr-4 text-sm outline-none ${lightMode ? "border-slate-200 bg-slate-50" : "border-white/10 bg-black/40"}`}>
+              <Filter className="absolute left-4 top-1/2 -translate-y-1/2" size={18} style={{ color: "#0ea5e9" }} />
+              <select value={skillFilter} onChange={(e) => setSkillFilter(e.target.value)} className="w-full rounded-2xl border py-3 pl-11 pr-4 text-sm outline-none" style={{
+                borderColor: "var(--border)",
+                backgroundColor: "var(--surface)",
+                color: "var(--text)"
+              }}>
                 {allSkills.map((skill) => <option key={skill}>{skill}</option>)}
               </select>
             </label>
-            <select value={experienceFilter} onChange={(e) => setExperienceFilter(e.target.value)} className={`rounded-2xl border px-4 py-3 text-sm outline-none ${lightMode ? "border-slate-200 bg-slate-50" : "border-white/10 bg-black/40"}`}>
+            <select value={experienceFilter} onChange={(e) => setExperienceFilter(e.target.value)} className="rounded-2xl border px-4 py-3 text-sm outline-none" style={{
+              borderColor: "var(--border)",
+              backgroundColor: "var(--surface)",
+              color: "var(--text)"
+            }}>
               {experienceOptions.map((option) => <option key={option}>{option}</option>)}
             </select>
           </div>
@@ -478,10 +509,15 @@ const ExpertsSection = ({ isPage = false }) => {
           >
             {testimonials.map((item) => (
               <SwiperSlide key={item.name}>
-                <div className={`rounded-3xl border p-8 text-center ${lightMode ? "border-sky-100 bg-white shadow-xl shadow-sky-100" : "border-white/10 bg-white/[0.06]"}`}>
-                  <p className="mx-auto max-w-3xl text-xl font-semibold leading-8">"{item.quote}"</p>
+                <div className="rounded-3xl border p-8 text-center shadow-md" style={{
+                  borderColor: "var(--border)",
+                  backgroundColor: "var(--surface)"
+                }}>
+                  <p className="mx-auto max-w-3xl text-xl font-semibold leading-8" style={{ color: "var(--text)" }}>
+                    "{item.quote}"
+                  </p>
                   <p className="mt-5 font-bold text-cyan-400">{item.name}</p>
-                  <p className={lightMode ? "text-slate-500" : "text-slate-400"}>{item.role}</p>
+                  <p style={{ color: "var(--text-secondary)" }}>{item.role}</p>
                 </div>
               </SwiperSlide>
             ))}
@@ -500,7 +536,9 @@ const ExpertsSection = ({ isPage = false }) => {
                   Share your goals and we will match you with the right expert for architecture, AI, cloud, security, or product design.
                 </p>
               </div>
-              <Link to="/contact" className="rounded-full bg-black px-7 py-4 text-center text-sm font-bold text-white transition hover:bg-slate-900">
+              <Link to="/contact" className="rounded-full px-7 py-4 text-center text-sm font-bold text-white transition hover:opacity-90" style={{
+                backgroundColor: "#0ea5e9"
+              }}>
                 Schedule now
               </Link>
             </div>

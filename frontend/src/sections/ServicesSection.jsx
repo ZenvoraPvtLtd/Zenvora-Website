@@ -14,7 +14,7 @@ import {
   Shield,
   Target,
   UsersRound,
-  BriefcaseBusiness
+  BriefcaseBusiness,
 } from "lucide-react";
 
 const servicesList = [
@@ -24,7 +24,8 @@ const servicesList = [
     description:
       "Design, migrate, and optimize cloud infrastructure on AWS, Azure, and GCP for scalable, secure, and cost-efficient systems.",
     tags: ["AWS", "Azure", "GCP", "Kubernetes"],
-    color: "from-[#0a4cc4] to-[#158cff]",
+    iconBg: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%)",
+    accentColor: "#2563eb",
   },
   {
     icon: Bot,
@@ -32,7 +33,8 @@ const servicesList = [
     description:
       "Build intelligent systems with custom ML models, NLP pipelines, computer vision, and generative AI integrations.",
     tags: ["LLM", "Python", "MLOps"],
-    color: "from-[#6122b9] to-[#1a89ff]",
+    iconBg: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)",
+    accentColor: "#7c3aed",
   },
   {
     icon: Monitor,
@@ -40,7 +42,8 @@ const servicesList = [
     description:
       "Full-cycle web and mobile application development using React, Node.js, Python, and modern framework best practices.",
     tags: ["React", "Node.js", "Python"],
-    color: "from-[#213a74] to-[#208eff]",
+    iconBg: "linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%)",
+    accentColor: "#0ea5e9",
   },
   {
     icon: Shield,
@@ -48,7 +51,8 @@ const servicesList = [
     description:
       "Comprehensive security assessments, penetration testing, compliance auditing, and 24/7 threat monitoring solutions.",
     tags: ["Pen Testing", "SOC", "SIEM"],
-    color: "from-[#0a4cc4] to-[#18b5ff]",
+    iconBg: "linear-gradient(135deg, #0f766e 0%, #10b981 100%)",
+    accentColor: "#0f766e",
   },
   {
     icon: BarChart3,
@@ -56,7 +60,8 @@ const servicesList = [
     description:
       "Build and scale data pipelines, warehouses, and analytics platforms to turn raw data into strategic insights.",
     tags: ["Spark", "Kafka", "Snowflake"],
-    color: "from-[#22306e] to-[#18d4ff]",
+    iconBg: "linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 100%)",
+    accentColor: "#0ea5e9",
   },
   {
     icon: Settings,
@@ -64,15 +69,16 @@ const servicesList = [
     description:
       "Automate delivery with CI/CD pipelines, container orchestration, and scalable infrastructure platforms.",
     tags: ["Kubernetes", "Docker", "Helm"],
-    color: "from-[#273c91] to-[#6da1ff]",
+    iconBg: "linear-gradient(135deg, #4f46e5 0%, #818cf8 100%)",
+    accentColor: "#4f46e5",
   },
 ];
 
 const stats = [
-  { icon: BriefcaseBusiness, text: "50+ Projects" },
-  { icon: CheckCircle2, text: "98% Satisfaction" },
-  { icon: UsersRound, text: "Expert Team" },
-  { icon: Headphones, text: "24/7 Support" },
+  { icon: BriefcaseBusiness, text: "50+ Projects", color: "#2563eb" },
+  { icon: CheckCircle2, text: "98% Satisfaction", color: "#10b981" },
+  { icon: UsersRound, text: "Expert Team", color: "#7c3aed" },
+  { icon: Headphones, text: "24/7 Support", color: "#0ea5e9" },
 ];
 
 const processSteps = [
@@ -81,72 +87,124 @@ const processSteps = [
     step: "01",
     title: "Discovery",
     desc: "We understand your goals, users, market, and technical landscape.",
-    color: "text-[#1bbcff]",
+    color: "#2563eb",
+    bg: "#eff6ff",
   },
   {
     icon: Target,
     step: "02",
     title: "Strategy",
     desc: "We design a tailored roadmap aligned to your business outcomes.",
-    color: "text-[#9b59ff]",
+    color: "#7c3aed",
+    bg: "#f5f3ff",
   },
   {
     icon: Code2,
     step: "03",
     title: "Build",
     desc: "Our engineers execute with speed, precision, and quality.",
-    color: "text-[#19e0a2]",
+    color: "#0f766e",
+    bg: "#f0fdf4",
   },
   {
     icon: Rocket,
     step: "04",
     title: "Launch",
     desc: "We deploy, monitor, and iterate to ensure long-term success.",
-    color: "text-[#ff921c]",
+    color: "#ea580c",
+    bg: "#fff7ed",
   },
 ];
 
+/* ΓöÇΓöÇ Badge ΓöÇΓöÇ */
+const Badge = ({ children }) => (
+  <p
+    className="text-xs font-black uppercase tracking-[0.18em] mb-2"
+    style={{ color: "#2563eb" }}
+  >
+    {children}
+  </p>
+);
+
 const ServicesSection = ({ isPage = false }) => {
   return (
-    <div id="services" className="bg-[#020815] text-white w-full">
-      {/* ================= BREADCRUMB SECTION ================= */}
-      {isPage && (
-        <section className="relative bg-gray-900 border-b border-gray-800 overflow-hidden py-24">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-          <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:60px_60px]" />
+    <div id="services" className="w-full" style={{ backgroundColor: "var(--bg)" }}>
 
+      {/* ΓöÇΓöÇ BREADCRUMB ΓöÇΓöÇ */}
+      {isPage && (
+        <section
+          className="relative overflow-hidden py-24"
+          style={{
+            background: "linear-gradient(135deg, #f0f7ff 0%, #fafbff 60%, #f0f4ff 100%)",
+            borderBottom: "1px solid #e2e8f0",
+          }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none opacity-40"
+            style={{
+              backgroundImage: "radial-gradient(circle, #94a3b8 1px, transparent 1px)",
+              backgroundSize: "32px 32px",
+            }}
+          />
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span className="inline-block text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400 bg-cyan-400/10 border border-cyan-400/20 px-4 py-2 rounded-full mb-6">
-              Company
+            <span
+              className="inline-block text-xs font-semibold uppercase tracking-[0.22em] rounded-full px-4 py-1.5 mb-6"
+              style={{ backgroundColor: "#eff6ff", color: "#2563eb", border: "1px solid #bfdbfe" }}
+            >
+              What We Offer
             </span>
-            <h1 className="text-5xl md:text-6xl font-black mb-5">
+            <h1 className="text-5xl md:text-6xl font-black mb-5" style={{ color: "#0f172a" }}>
               Our{" "}
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              <span
+                style={{
+                  background: "linear-gradient(135deg, #2563eb, #0ea5e9)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
                 Services
               </span>
             </h1>
             <div className="flex items-center justify-center gap-3 text-sm md:text-base">
-              <Link to="/" className="text-cyan-400 hover:text-cyan-300 transition font-medium">
+              <Link to="/" className="font-medium transition-colors" style={{ color: "#2563eb" }}>
                 Home
               </Link>
-              <span className="text-gray-600">/</span>
-              <span className="text-gray-400">Services</span>
+              <span style={{ color: "#94a3b8" }}>/</span>
+              <span style={{ color: "#64748b" }}>Services</span>
             </div>
           </div>
         </section>
       )}
 
-      {/* ================= SERVICES LIST ================= */}
-      <section className="border-b border-cyan-400/10 bg-[radial-gradient(circle_at_center,rgba(4,37,78,0.72),transparent_62%),#020815] py-20">
-        <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <SectionTitle
-            eyebrow="What We Do"
-            title="Core Capabilities"
-            subtitle="Deep expertise across every layer of the modern technology stack."
-          />
+      {/* ΓöÇΓöÇ STATS BAR ΓöÇΓöÇ */}
+      <div style={{ backgroundColor: "#ffffff", borderBottom: "1px solid #e2e8f0" }}>
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 py-5">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+            {stats.map(({ icon: Icon, text, color }) => (
+              <div key={text} className="flex items-center gap-2.5">
+                <Icon size={18} style={{ color }} />
+                <span className="text-sm font-semibold" style={{ color: "#334155" }}>{text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-          <div className="mx-auto mt-12 grid max-w-[1030px] gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {/* ΓöÇΓöÇ SERVICES GRID ΓöÇΓöÇ */}
+      <section className="py-20" style={{ backgroundColor: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+        <div className="mx-auto max-w-7xl px-6 sm:px-8">
+          <div className="text-center mb-14">
+            <Badge>What We Do</Badge>
+            <h2 className="text-3xl sm:text-4xl font-black" style={{ color: "#0f172a" }}>
+              Core Capabilities
+            </h2>
+            <p className="mt-3 mx-auto max-w-2xl text-base" style={{ color: "#64748b" }}>
+              Deep expertise across every layer of the modern technology stack.
+            </p>
+          </div>
+
+          <div className="mx-auto mt-10 grid max-w-[1060px] gap-6 md:grid-cols-2 lg:grid-cols-3">
             {servicesList.map((service) => (
               <ServiceCard key={service.title} {...service} />
             ))}
@@ -154,45 +212,66 @@ const ServicesSection = ({ isPage = false }) => {
         </div>
       </section>
 
-      {/* ================= PROCESS ================= */}
-      <section className="border-b border-cyan-400/10 bg-[#020815] py-20">
+      {/* ΓöÇΓöÇ PROCESS ΓöÇΓöÇ */}
+      <section className="py-20" style={{ backgroundColor: "#ffffff", borderBottom: "1px solid #e2e8f0" }}>
         <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <SectionTitle
-            eyebrow="Our Process"
-            title="How We Work"
-            subtitle="A proven delivery framework that turns ideas into reliable, scalable products."
-          />
+          <div className="text-center mb-14">
+            <Badge>Our Process</Badge>
+            <h2 className="text-3xl sm:text-4xl font-black" style={{ color: "#0f172a" }}>
+              How We Work
+            </h2>
+            <p className="mt-3 mx-auto max-w-2xl text-base" style={{ color: "#64748b" }}>
+              A proven delivery framework that turns ideas into reliable, scalable products.
+            </p>
+          </div>
 
-          <div className="mx-auto mt-12 grid max-w-[1100px] gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {processSteps.map((item) => (
-              <ProcessCard key={item.title} item={item} />
+          <div className="mx-auto mt-10 grid max-w-[1100px] gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {processSteps.map((item, index) => (
+              <ProcessCard
+                key={item.title}
+                item={item}
+                showArrow={index < processSteps.length - 1}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ================= CTA ================= */}
+      {/* ΓöÇΓöÇ CTA (home preview only) ΓöÇΓöÇ */}
       {!isPage && (
-        <section className="relative overflow-hidden bg-[radial-gradient(circle_at_50%_125%,rgba(0,104,255,0.55),transparent_42%),#020815] px-6 py-20 text-center sm:px-8">
-          <div className="services-grid absolute inset-x-0 bottom-0 h-40 opacity-70" />
+        <section
+          className="relative overflow-hidden px-6 py-20 text-center sm:px-8"
+          style={{
+            background: "linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #0ea5e9 100%)",
+          }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none opacity-10"
+            style={{
+              backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)",
+              backgroundSize: "32px 32px",
+            }}
+          />
           <div className="relative mx-auto max-w-4xl">
-            <h2 className="text-3xl font-black tracking-normal sm:text-4xl">
+            <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
               Ready to Build Something Remarkable?
             </h2>
-            <p className="mt-4 text-base text-slate-300">
+            <p className="mt-4 text-base" style={{ color: "rgba(255,255,255,0.85)" }}>
               Talk to our team and discover how we can accelerate your digital transformation.
             </p>
-            <div className="mt-8 flex flex-col justify-center gap-5 sm:flex-row">
+            <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
               <Link
                 to="/contact"
-                className="inline-flex h-12 items-center justify-center gap-3 rounded-md bg-[#168cff] px-8 text-sm font-black text-white shadow-[0_0_24px_rgba(22,140,255,0.35)] transition hover:bg-[#39bfff]"
+                className="inline-flex h-12 items-center justify-center gap-3 rounded-lg px-8 text-sm font-bold transition-all"
+                style={{ backgroundColor: "#ffffff", color: "#1d4ed8" }}
               >
                 Get in Touch
                 <ArrowRight size={17} />
               </Link>
               <Link
                 to="/about"
-                className="inline-flex h-12 items-center justify-center rounded-md border border-[#15c8ff] px-8 text-sm font-black text-white transition hover:bg-[#15c8ff]/10 hover:text-[#15c8ff]"
+                className="inline-flex h-12 items-center justify-center rounded-lg border px-8 text-sm font-bold text-white transition-all"
+                style={{ borderColor: "rgba(255,255,255,0.4)" }}
               >
                 Learn About Us
               </Link>
@@ -204,38 +283,57 @@ const ServicesSection = ({ isPage = false }) => {
   );
 };
 
-function SectionTitle({ eyebrow, title, subtitle }) {
+function ServiceCard({ icon: Icon, title, description, tags, iconBg, accentColor }) {
   return (
-    <div className="text-center">
-      <p className="text-xs font-black uppercase tracking-[0.12em] text-[#15c8ff]">
-        {eyebrow}
-      </p>
-      <h2 className="mt-2 text-3xl font-black tracking-normal text-white sm:text-4xl">
-        {title}
-      </h2>
-      <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-300">
-        {subtitle}
-      </p>
-    </div>
-  );
-}
+    <article
+      className="group relative overflow-hidden rounded-xl p-6 transition-all duration-300"
+      style={{
+        backgroundColor: "#ffffff",
+        border: "1px solid #e2e8f0",
+        boxShadow: "0 2px 12px rgba(15,23,42,0.06)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = accentColor;
+        e.currentTarget.style.boxShadow = `0 8px 32px rgba(37,99,235,0.12)`;
+        e.currentTarget.style.transform = "translateY(-3px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "#e2e8f0";
+        e.currentTarget.style.boxShadow = "0 2px 12px rgba(15,23,42,0.06)";
+        e.currentTarget.style.transform = "translateY(0)";
+      }}
+    >
+      {/* Top accent line */}
+      <div
+        className="absolute top-0 left-0 h-0.5 w-16 rounded-full"
+        style={{ background: iconBg }}
+      />
 
-function ServiceCard({ icon: Icon, title, description, tags, color }) {
-  return (
-    <article className="group relative min-h-[170px] overflow-hidden rounded-lg border border-[#1161a8]/70 bg-[linear-gradient(145deg,rgba(7,23,45,0.94),rgba(2,11,25,0.96))] p-7 shadow-[0_0_40px_rgba(0,0,0,0.16)] transition hover:-translate-y-1 hover:border-[#15c8ff]">
-      <div className="absolute left-0 top-0 h-px w-20 bg-[#15c8ff]" />
-      <div className="flex gap-6">
-        <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${color} shadow-[0_0_0_8px_rgba(21,140,255,0.12)]`}>
-          <Icon size={29} className="text-white" />
+      <div className="flex gap-5">
+        <div
+          className="flex h-13 w-13 shrink-0 items-center justify-center rounded-xl"
+          style={{
+            background: iconBg,
+            width: "52px",
+            height: "52px",
+            boxShadow: `0 4px 16px ${accentColor}33`,
+          }}
+        >
+          <Icon size={24} style={{ color: "#ffffff" }} />
         </div>
-        <div>
-          <h3 className="text-xl font-black text-[#159bff]">{title}</h3>
-          <p className="mt-4 text-sm leading-7 text-slate-300">{description}</p>
+        <div className="flex-1">
+          <h3 className="text-lg font-bold" style={{ color: "#0f172a" }}>{title}</h3>
+          <p className="mt-3 text-sm leading-relaxed" style={{ color: "#64748b" }}>{description}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded border border-[#245287] bg-[#0d203c] px-3 py-1.5 text-xs font-bold text-slate-200"
+                className="rounded-md px-2.5 py-1 text-xs font-semibold"
+                style={{
+                  backgroundColor: "#f1f5f9",
+                  color: "#475569",
+                  border: "1px solid #e2e8f0",
+                }}
               >
                 {tag}
               </span>
@@ -252,20 +350,43 @@ function ProcessCard({ item, showArrow }) {
 
   return (
     <div className="relative">
-      <article className="min-h-[96px] rounded-lg border border-[#16345b] bg-[linear-gradient(145deg,rgba(8,24,48,0.95),rgba(3,12,27,0.95))] px-5 py-4">
-        <span className="absolute left-4 top-3 text-lg font-black text-slate-600">
+      <article
+        className="rounded-xl p-5 transition-all duration-300"
+        style={{
+          backgroundColor: "#ffffff",
+          border: "1px solid #e2e8f0",
+          boxShadow: "0 2px 10px rgba(15,23,42,0.05)",
+        }}
+      >
+        <span
+          className="absolute left-5 top-4 text-2xl font-black"
+          style={{ color: "#e2e8f0" }}
+        >
           {item.step}
         </span>
-        <div className="flex items-center gap-5 pl-2">
-          <div className={`mt-3 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#10274d] ${item.color}`}>
-            <Icon size={28} />
+        <div className="flex items-center gap-4 pt-2">
+          <div
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+            style={{ backgroundColor: item.bg }}
+          >
+            <Icon size={22} style={{ color: item.color }} />
           </div>
           <div>
-            <h3 className="text-base font-black text-white">{item.title}</h3>
-            <p className="mt-2 text-xs leading-5 text-slate-300">{item.desc}</p>
+            <h3 className="text-base font-bold" style={{ color: "#0f172a" }}>{item.title}</h3>
+            <p className="mt-1.5 text-xs leading-5" style={{ color: "#64748b" }}>{item.desc}</p>
           </div>
         </div>
       </article>
+
+      {showArrow && (
+        <div
+          className="pointer-events-none absolute right-[-28px] top-1/2 hidden -translate-y-1/2 items-center gap-0.5 lg:flex"
+          style={{ color: "#2563eb" }}
+        >
+          <span className="text-xl font-black leading-none" style={{ color: "#cbd5e1" }}>···</span>
+          <ArrowRight size={18} strokeWidth={2.5} />
+        </div>
+      )}
     </div>
   );
 }
