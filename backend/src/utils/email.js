@@ -146,21 +146,16 @@ const verifyEmailConfig = async () => {
 };
 
 // Send Password Reset Email
-const sendPasswordResetEmail = async (user, resetLink) => {
+const sendPasswordResetEmail = async (user, resetLink, options = {}) => {
   try {
-
-
-
-      console.log("SMTP USER:", process.env.SMTP_USER);
-    console.log("SMTP PASS:", process.env.SMTP_PASS);
-    console.log("SMTP PASS LENGTH:", process.env.SMTP_PASS?.length);
     const recipientEmail = typeof user === "string" ? user : user.email;
     const recipientName = typeof user === "string" ? "there" : user.name;
+    const portalName = options.isAdmin ? "Zenvora Admin Portal" : "Zenvora account";
 
     const mailOptions = {
       from: process.env.MAIL_FROM || process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
       to: recipientEmail,
-      subject: "Password Reset Request - Zenvora Admin Portal",
+      subject: `Password Reset Request - ${portalName}`,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
@@ -168,12 +163,12 @@ const sendPasswordResetEmail = async (user, resetLink) => {
 
             <p>Dear <strong>${recipientName}</strong>,</p>
 
-            <p>We received a request to reset your Zenvora Admin Portal password. If you did not request this, please ignore this email.</p>
+            <p>We received a request to reset your ${portalName} password. If you did not request this, please ignore this email.</p>
 
             <p>To reset your password, click the button below. This link will expire in 1 hour.</p>
 
             <p style="text-align: center; margin: 30px 0;">
-              <a href="${resetLink}" style="display: inline-block; padding: 12px 30px; background-color: #0891b2; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">
+              <a href="${resetLink}" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 12px 30px; background-color: #0891b2; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">
                 Reset Password
               </a>
             </p>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, Link } from "react-router-dom";
 import { Eye, EyeOff, KeyRound, ShieldCheck, ArrowRight } from "lucide-react";
 import { api } from "../api";
 
@@ -15,7 +15,8 @@ const AdminResetPassword = () => {
   const [apiStatus, setApiStatus] = useState("checking");
 
   const navigate = useNavigate();
-  const token = searchParams.get("token");
+  const { token: routeToken } = useParams();
+  const token = searchParams.get("token") || routeToken;
 
   useEffect(() => {
     let mounted = true;
@@ -44,6 +45,8 @@ const AdminResetPassword = () => {
       nextErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
       nextErrors.password = "Password must be at least 6 characters";
+    } else if (!/[A-Za-z]/.test(formData.password) || !/[0-9]/.test(formData.password)) {
+      nextErrors.password = "Use letters and numbers for a stronger password";
     }
 
     if (!formData.confirmPassword) {
@@ -65,8 +68,6 @@ const AdminResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Reset password submitted");
-
     if (!token) {
       setError("Invalid reset link");
       return;
@@ -80,12 +81,11 @@ const AdminResetPassword = () => {
     setError("");
 
     try {
-      console.log("Calling resetPassword API...");
       await api.resetPassword({
         token,
         password: formData.password,
       });
-      console.log("Success - Password reset");
+      setFormData({ password: "", confirmPassword: "" });
       setSuccess(true);
 
       // Redirect to login after 2 seconds
@@ -93,7 +93,6 @@ const AdminResetPassword = () => {
         navigate("/admin-login");
       }, 2000);
     } catch (err) {
-      console.error("Reset password error:", err);
       const message =
         err.response?.data?.message ||
         (!err.response && `Cannot connect to backend at ${api.baseUrl}. Please start the backend server.`) ||

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, Link } from "react-router-dom";
 import { Eye, EyeOff, KeyRound, ShieldCheck, ArrowRight } from "lucide-react";
 import { api } from "../api";
 
@@ -15,7 +15,8 @@ const ResetPassword = () => {
   const [apiStatus, setApiStatus] = useState("checking");
 
   const navigate = useNavigate();
-  const token = searchParams.get("token");
+  const { token: routeToken } = useParams();
+  const token = searchParams.get("token") || routeToken;
 
   useEffect(() => {
     let mounted = true;
@@ -44,6 +45,8 @@ const ResetPassword = () => {
       nextErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
       nextErrors.password = "Password must be at least 6 characters";
+    } else if (!/[A-Za-z]/.test(formData.password) || !/[0-9]/.test(formData.password)) {
+      nextErrors.password = "Use letters and numbers for a stronger password";
     }
 
     if (!formData.confirmPassword) {
@@ -83,6 +86,7 @@ const ResetPassword = () => {
         token,
         password: formData.password,
       });
+      setFormData({ password: "", confirmPassword: "" });
       setSuccess(true);
 
       setTimeout(() => {

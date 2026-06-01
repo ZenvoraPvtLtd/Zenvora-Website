@@ -73,10 +73,12 @@ const App = () => {
             <Route path="/register"     element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/admin-login"  element={<AdminLogin />} />
             <Route path="/admin/login"  element={<AdminLogin />} />
             <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
             <Route path="/admin/reset-password" element={<AdminResetPassword />} />
+            <Route path="/admin/reset-password/:token" element={<AdminResetPassword />} />
             <Route
               path="/admin"
               element={

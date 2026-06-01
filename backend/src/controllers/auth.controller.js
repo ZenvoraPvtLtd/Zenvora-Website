@@ -17,6 +17,10 @@ const generateToken = (id) => {
   );
 };
 
+const getClientUrl = () => {
+  return (process.env.CLIENT_URL || "http://localhost:3000").replace(/\/+$/, "");
+};
+
 // ================= REGISTER =================
 
 const register = async (req, res) => {
@@ -271,7 +275,7 @@ const oauthCallback = async (req, res) => {
   try {
     const user = req.user;
     const token = generateToken(user._id);
-    const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
+    const clientUrl = getClientUrl();
 
     // Send login notification for OAuth
     sendLoginNotification(user).catch((err) => {
@@ -288,7 +292,7 @@ const oauthCallback = async (req, res) => {
 
     res.redirect(`${clientUrl}/login?${params.toString()}`);
   } catch (error) {
-    const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
+    const clientUrl = getClientUrl();
     res.redirect(`${clientUrl}/login?error=oauth_failed`);
   }
 };
@@ -420,11 +424,13 @@ const forgotPassword = async (req, res) => {
     }
 
     // Create reset link
-    const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
+    const clientUrl = getClientUrl();
     const resetPath = req.body.isAdmin ? "/admin/reset-password" : "/reset-password";
-    const resetLink = `${clientUrl}${resetPath}?token=${resetToken}`;
+    const resetLink = `${clientUrl}${resetPath}/${encodeURIComponent(resetToken)}`;
 
-    const emailSent = await sendPasswordResetEmail(user || normalizedEmail, resetLink);
+    const emailSent = await sendPasswordResetEmail(user || normalizedEmail, resetLink, {
+      isAdmin: Boolean(req.body.isAdmin),
+    });
 
     console.log("emailSent =", emailSent);
     if (!emailSent) {
