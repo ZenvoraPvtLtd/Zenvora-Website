@@ -2,10 +2,13 @@ const nodemailer = require("nodemailer");
 
 // Create transporter
 const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || "gmail",
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined,
+  secure: process.env.SMTP_SECURE === "true",
+  service: process.env.SMTP_HOST ? undefined : process.env.EMAIL_SERVICE || "gmail",
   auth: {
-    user: process.env.EMAIL_USER || "ps2855074@gmail.com",
-    pass: process.env.EMAIL_PASS || process.env.EMAIL_PASSWORD,
+    user: process.env.SMTP_USER || process.env.EMAIL_USER || "ps2855074@gmail.com",
+    pass: process.env.SMTP_PASS || process.env.EMAIL_PASS || process.env.EMAIL_PASSWORD,
   },
 });
 
@@ -13,7 +16,7 @@ const transporter = nodemailer.createTransport({
 const sendWelcomeEmail = async (user) => {
   try {
     const mailOptions = {
-      from: process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
+      from: process.env.MAIL_FROM || process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
       to: [user.email, process.env.ADMIN_EMAIL || "ps2855074@gmail.com"],
       subject: "Welcome to Zenvora Graduate Services",
       html: `
@@ -73,7 +76,7 @@ const sendLoginNotification = async (user) => {
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
+      from: process.env.MAIL_FROM || process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
       to: "ps2855074@gmail.com",
       subject: `🔔 Login Alert: ${user.name} logged in to Zenvora`,
       html: `
@@ -142,9 +145,77 @@ const verifyEmailConfig = async () => {
   }
 };
 
+// Send Password Reset Email
+const sendPasswordResetEmail = async (user, resetLink) => {
+  try {
+
+
+
+      console.log("SMTP USER:", process.env.SMTP_USER);
+    console.log("SMTP PASS:", process.env.SMTP_PASS);
+    console.log("SMTP PASS LENGTH:", process.env.SMTP_PASS?.length);
+    const recipientEmail = typeof user === "string" ? user : user.email;
+    const recipientName = typeof user === "string" ? "there" : user.name;
+
+    const mailOptions = {
+      from: process.env.MAIL_FROM || process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
+      to: recipientEmail,
+      subject: "Password Reset Request - Zenvora Admin Portal",
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+          <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+            <h1 style="color: #0891b2; text-align: center;">Password Reset Request</h1>
+
+            <p>Dear <strong>${recipientName}</strong>,</p>
+
+            <p>We received a request to reset your Zenvora Admin Portal password. If you did not request this, please ignore this email.</p>
+
+            <p>To reset your password, click the button below. This link will expire in 1 hour.</p>
+
+            <p style="text-align: center; margin: 30px 0;">
+              <a href="${resetLink}" style="display: inline-block; padding: 12px 30px; background-color: #0891b2; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                Reset Password
+              </a>
+            </p>
+
+            <p style="font-size: 12px; color: #666; text-align: center; margin-top: 20px;">
+              Or copy and paste this link in your browser:<br/>
+              <code style="background-color: #f3f4f6; padding: 5px 10px; border-radius: 3px; display: inline-block; word-break: break-all; margin-top: 10px;">
+                ${resetLink}
+              </code>
+            </p>
+
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+
+            <p style="font-size: 12px; color: #666; text-align: center;">
+              This password reset link will expire in 1 hour.
+            </p>
+
+            <p style="font-size: 12px; color: #666; text-align: center;">
+              If you did not request a password reset, please contact us immediately at ${process.env.ADMIN_EMAIL || "ps2855074@gmail.com"}
+            </p>
+
+            <p style="font-size: 12px; color: #666; text-align: center;">
+              © 2026 Zenvora Infotech. All rights reserved.
+            </p>
+          </div>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`Password reset email sent to ${recipientEmail}`);
+    return true;
+  } catch (error) {
+    console.error("Password reset email error:", error);
+    return false;
+  }
+};
+
 module.exports = {
   transporter,
   sendWelcomeEmail,
   sendLoginNotification,
+  sendPasswordResetEmail,
   verifyEmailConfig,
 };

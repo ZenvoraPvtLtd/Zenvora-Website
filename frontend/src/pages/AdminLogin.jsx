@@ -60,20 +60,22 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    console.log("Form submitted");
+    console.log("Form data:", formData);
+    
+    if (!validateForm()) {
+      console.log("Validation failed");
+      return;
+    }
 
+    console.log("Validation passed, calling API...");
     setLoading(true);
     setError("");
 
     try {
-      const data = await api.login(formData);
-      
-      // Check if user has admin role
-      if (data.user?.role !== "admin") {
-        setError("Access denied. Only administrators can login here.");
-        setLoading(false);
-        return;
-      }
+      console.log("Calling adminLogin with:", formData);
+      const data = await api.adminLogin(formData);
+      console.log("Login response:", data);
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
@@ -81,6 +83,7 @@ const AdminLogin = () => {
       navigate("/admin");
       window.location.reload();
     } catch (err) {
+      console.error("Login error:", err);
       const message =
         err.response?.data?.message ||
         (!err.response && `Cannot connect to backend at ${api.baseUrl}. Please start the backend server.`) ||
@@ -236,12 +239,14 @@ const AdminLogin = () => {
                 </button>
               </form>
 
-              <p className="mt-6 text-center text-sm" style={{ color: "var(--muted)" }}>
-                Not an admin?{" "}
-                <Link to="/login" className="font-bold transition-colors" style={{ color: "#06b6d4" }}>
-                  User Login
-                </Link>
-              </p>
+              <div className="mt-6 flex flex-col gap-4">
+                <p className="text-center text-sm" style={{ color: "var(--muted)" }}>
+                  Need help signing in?{" "}
+                  <Link to="/admin/forgot-password" className="font-bold transition-colors hover:underline" style={{ color: "#06b6d4" }}>
+                    Forgot Password?
+                  </Link>
+                </p>
+              </div>
             </div>
           </div>
 

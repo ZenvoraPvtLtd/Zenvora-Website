@@ -275,7 +275,7 @@ const Login = () => {
                     />
                     <span className="font-medium">Remember me</span>
                   </label>
-                  <Link to="/login" className="font-semibold text-[var(--primary)] transition-colors hover:text-[var(--primary-hover)]">
+                  <Link to="/forgot-password" className="font-semibold text-[var(--primary)] transition-colors hover:text-[var(--primary-hover)]">
                     Forgot Password?
                   </Link>
                 </div>
@@ -340,15 +340,11 @@ const Login = () => {
           </div>
 
           <div className="relative hidden flex-col items-center justify-center lg:flex">
-            <div className="relative flex h-full max-h-screen w-full flex-col overflow-hidden rounded-2xl bg-white shadow-2xl shadow-slate-200/50">
-              <div className="flex min-h-0 flex-1 items-center justify-center p-8">
-                <img
-                  src="/login-workspace-illustration.svg"
-                  alt="Graduate service illustration"
-                  className="h-full max-h-[620px] w-full object-contain"
-                />
-              </div>
-              <div className="bg-linear-to-r from-slate-950 to-slate-800 p-8 text-white">
+            <div className="relative h-full max-h-screen w-full overflow-hidden rounded-2xl shadow-2xl shadow-slate-200/50">
+              <img src="/login-illustration.jpg" alt="Graduate service illustration" className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-r from-black/40 via-transparent to-transparent" />
+              <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
                 <h2 className="mb-3 text-4xl font-black leading-tight">Secure Login</h2>
                 <p className="mb-4 text-lg font-light leading-relaxed text-slate-200">
                   Access your Zenvora Graduate Services account with enhanced security and seamless authentication.

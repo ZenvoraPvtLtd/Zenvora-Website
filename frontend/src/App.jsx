@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Loader from "./components/Loader";
 import Chatbot from "./components/Chatbot";
 import ScrollToTop from "./components/ScrollToTop";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Lazy load all pages for optimal bundle size
 const Home          = lazy(() => import("./pages/Home"));
@@ -16,7 +17,11 @@ const Careers       = lazy(() => import("./pages/Careers"));
 const Contact       = lazy(() => import("./pages/Contact"));
 const Login         = lazy(() => import("./pages/Login"));
 const Register      = lazy(() => import("./pages/Register"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const AdminLogin    = lazy(() => import("./pages/AdminLogin"));
+const AdminForgotPassword = lazy(() => import("./pages/AdminForgotPassword"));
+const AdminResetPassword = lazy(() => import("./pages/AdminResetPassword"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const Dashboard     = lazy(() => import("./pages/Dashboard"));
 const OAuthCallback = lazy(() => import("./pages/OAuthCallback"));
@@ -55,8 +60,9 @@ const App = () => {
       <div className="min-h-screen flex flex-col" style={{ backgroundColor: "var(--bg)", color: "var(--text)" }}>
         <ScrollToTop />
         <Navbar />
-        <Suspense fallback={<div style={{ background: "var(--bg)", minHeight: "100vh" }} />}>
-          <Routes>
+        <ErrorBoundary>
+          <Suspense fallback={<div style={{ background: "var(--bg)", minHeight: "100vh" }} />}>
+            <Routes>
             <Route path="/"             element={<Home />} />
             <Route path="/about"        element={<About />} />
             <Route path="/experts"      element={<Experts />} />
@@ -65,7 +71,12 @@ const App = () => {
             <Route path="/contact"      element={<Contact />} />
             <Route path="/login"        element={<Login />} />
             <Route path="/register"     element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/admin-login"  element={<AdminLogin />} />
+            <Route path="/admin/login"  element={<AdminLogin />} />
+            <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
+            <Route path="/admin/reset-password" element={<AdminResetPassword />} />
             <Route
               path="/admin"
               element={
@@ -83,8 +94,9 @@ const App = () => {
               }
             />
             <Route path="/auth/callback" element={<OAuthCallback />} />
-          </Routes>
-        </Suspense>
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
         <Chatbot />
         <Footer />
       </div>

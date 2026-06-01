@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import {
+  ArrowRight,
   Rocket,
   Target,
   Handshake,
@@ -12,7 +13,6 @@ import {
   Compass,
   Sparkles,
   Star,
-  ArrowRight,
 } from "lucide-react";
 
 const stats = [
@@ -112,7 +112,7 @@ const Badge = ({ children }) => (
   </span>
 );
 
-const AboutSection = ({ isPage = false }) => {
+const AboutSection = ({ isPage = false, showCTA = true }) => {
   return (
     <div id="about" className="w-full" style={{ backgroundColor: "var(--bg)" }}>
 
@@ -418,18 +418,20 @@ const AboutSection = ({ isPage = false }) => {
       </section>
 
       {/* ── CTA (home preview only) ── */}
-      {!isPage && (
+      {!isPage && showCTA && (
         <section
-          className="relative overflow-hidden border-y border-[var(--border)] py-24"
+          className="py-24"
           style={{
-            background:
-              "linear-gradient(135deg, #ffffff 0%, #f8fbff 45%, #eef6ff 100%)",
+            background: "linear-gradient(135deg, #1e40af 0%, #1d4ed8 50%, #2563eb 100%)",
           }}
         >
-          <div className="pointer-events-none absolute left-1/2 top-0 h-40 w-[42rem] -translate-x-1/2 rounded-full bg-blue-100/70 blur-3xl" />
-          <div className="relative mx-auto max-w-3xl px-6 text-center sm:px-8">
-            <p className="mb-3 text-xs font-black uppercase tracking-[0.14em] text-[var(--primary)]">
-              Start a Conversation
+          <div className="max-w-3xl mx-auto px-6 sm:px-8 text-center">
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+              Want to Work With Us?
+            </h2>
+            <p className="mb-8 text-lg" style={{ color: "rgba(255,255,255,0.8)" }}>
+              Whether you have a project in mind or just want to explore possibilities,
+              we're ready to listen.
             </p>
             <h2 className="mb-4 text-3xl font-black text-[var(--text)] md:text-4xl">
               Want to Work With Us?
@@ -441,7 +443,12 @@ const AboutSection = ({ isPage = false }) => {
             <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Link
                 to="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--primary)] px-8 py-3 text-[0] font-bold text-white shadow-lg shadow-blue-500/20 transition-all hover:-translate-y-0.5 hover:bg-[var(--primary-hover)] hover:shadow-blue-500/30"
+                className="rounded-lg px-8 py-3 font-bold text-sm transition-all"
+                style={{
+                  backgroundColor: "#ffffff",
+                  color: "#1d4ed8",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+                }}
               >
                 <span className="text-sm">Get in Touch</span>
                 <ArrowRight size={16} />
@@ -449,7 +456,8 @@ const AboutSection = ({ isPage = false }) => {
               </Link>
               <Link
                 to="/services"
-                className="inline-flex items-center justify-center rounded-lg border border-[var(--tag-border)] bg-white px-8 py-3 text-sm font-semibold text-[var(--primary)] shadow-sm transition-all hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--primary-light)]"
+                className="rounded-lg border px-8 py-3 font-semibold text-sm text-white transition-all"
+                style={{ borderColor: "rgba(255,255,255,0.4)" }}
               >
                 Explore Our Services
               </Link>

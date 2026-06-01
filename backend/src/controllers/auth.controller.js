@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
-const { sendWelcomeEmail, sendLoginNotification } = require("../utils/email");
+const { sendWelcomeEmail, sendLoginNotification, sendPasswordResetEmail } = require("../utils/email");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const crypto = require("crypto");
 
 // ================= GENERATE TOKEN =================
 
@@ -85,6 +86,9 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const normalizedEmail = email.trim().toLowerCase();
+    console.log('Login attempt for email:', email);
+    console.log('Normalized email:', normalizedEmail);
 
     // Validate input
     if (!email || !password) {
@@ -93,8 +97,6 @@ const login = async (req, res) => {
         message: "Email and password are required",
       });
     }
-
-    const normalizedEmail = email.trim().toLowerCase();
 
     // Find User
     const user = await User.findOne({
@@ -110,6 +112,14 @@ const login = async (req, res) => {
     }
 
     // Check Password
+    const bcrypt = require("bcryptjs");
+    // If password stored in plain text (legacy), rehash it before comparison
+    if (user.password && !user.password.startsWith("$2a$")) {
+      const hashed = await bcrypt.hash(user.password, 10);
+      user.password = hashed;
+      await user.save();
+    }
+
     const isMatch = await user.comparePassword(password);
 
     if (!isMatch) {
@@ -152,6 +162,96 @@ const login = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message || "Login failed",
+    });
+  }
+};
+
+// ================= ADMIN LOGIN =================
+
+const adminLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required",
+      });
+    }
+
+    // Find User
+    const user = await User.findOne({
+      email: normalizedEmail,
+    }).select("+password");
+
+    // Check User
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    // Check if admin
+    if (user.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Only administrators can login here.",
+      });
+    }
+
+    // Check Password
+    const bcrypt = require("bcryptjs");
+    if (user.password && !user.password.startsWith("$2a$")) {
+      const hashed = await bcrypt.hash(user.password, 10);
+      user.password = hashed;
+      await user.save();
+    }
+
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    // Check Active
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Account is deactivated. Please contact support.",
+      });
+    }
+
+    // Generate Token
+    const token = generateToken(user._id);
+
+    // Send login notification asynchronously
+    sendLoginNotification(user).catch((err) => {
+      console.error("Failed to send login notification:", err);
+    });
+
+    res.json({
+      success: true,
+      message: "Admin login successful",
+      token,
+      user: {
+        id: user._id,
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Admin login failed",
     });
   }
 };
@@ -289,9 +389,127 @@ const googleLogin = async (req, res) => {
   }
 };
 
+// ================= FORGOT PASSWORD =================
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Validate input
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Find account if it exists. We still send a link to the entered email.
+    const user = await User.findOne({ email: normalizedEmail });
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenHash = crypto.createHash("sha256").update(resetToken).digest("hex");
+
+    if (user) {
+      // Set reset token and expiry (1 hour from now)
+      user.resetToken = resetTokenHash;
+      user.resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour
+      await user.save();
+    }
+
+    // Create reset link
+    const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
+    const resetPath = req.body.isAdmin ? "/admin/reset-password" : "/reset-password";
+    const resetLink = `${clientUrl}${resetPath}?token=${resetToken}`;
+
+    const emailSent = await sendPasswordResetEmail(user || normalizedEmail, resetLink);
+
+    console.log("emailSent =", emailSent);
+    if (!emailSent) {
+      if (process.env.NODE_ENV !== "production") {
+        console.log("Password reset link for development:", resetLink);
+
+        return res.json({
+          success: true,
+          message: "Email is not configured, so use this development reset link.",
+          resetLink,
+        });
+      }
+
+      return res.status(500).json({
+        success: false,
+        message: "Email is not configured correctly. Check backend .env SMTP/EMAIL settings.",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Password reset link sent to your email",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to process forgot password request",
+    });
+  }
+};
+
+// ================= RESET PASSWORD =================
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    // Validate input
+    if (!token || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Token and password are required",
+      });
+    }
+
+    // Hash the token
+    const resetTokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+    // Find user with valid reset token
+    const user = await User.findOne({
+      resetToken: resetTokenHash,
+      resetTokenExpiry: { $gt: new Date() },
+    }).select("+resetToken +resetTokenExpiry");
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired reset token",
+      });
+    }
+
+    // Update password
+    user.password = password;
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Password reset successfully. You can now login with your new password.",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to reset password",
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
+  adminLogin,
+  forgotPassword,
+  resetPassword,
   getMe,
   oauthCallback,
   googleLogin,

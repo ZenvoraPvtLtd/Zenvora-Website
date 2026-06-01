@@ -30,10 +30,10 @@ const Home = () => {
       <HeroSection />
 
       {/* 2. About Preview Section (Rich company introduction, values, team context) */}
-      <AboutSection isPage={false} />
+      <AboutSection isPage={false} showCTA={false} />
 
       {/* 3. Services Preview Section (Capabilities showcase and structured workflow) */}
-      <ServicesSection isPage={false} />
+      <ServicesSection isPage={false} showCTA={false} />
 
       {/* 4. Home Dedicated Rocket CTA Banner */}
       <section className="bg-[var(--bg)] px-6 py-20 sm:px-8 border-t border-[var(--border)]">
