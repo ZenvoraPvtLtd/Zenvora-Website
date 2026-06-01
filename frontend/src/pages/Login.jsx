@@ -275,7 +275,7 @@ const Login = () => {
                     />
                     <span className="font-medium">Remember me</span>
                   </label>
-                  <Link to="/login" className="font-semibold text-[var(--primary)] transition-colors hover:text-[var(--primary-hover)]">
+                  <Link to="/forgot-password" className="font-semibold text-[var(--primary)] transition-colors hover:text-[var(--primary-hover)]">
                     Forgot Password?
                   </Link>
                 </div>

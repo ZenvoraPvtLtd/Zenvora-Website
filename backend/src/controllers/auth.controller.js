@@ -421,10 +421,12 @@ const forgotPassword = async (req, res) => {
 
     // Create reset link
     const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
-    const resetLink = `${clientUrl}/admin/reset-password?token=${resetToken}`;
+    const resetPath = req.body.isAdmin ? "/admin/reset-password" : "/reset-password";
+    const resetLink = `${clientUrl}${resetPath}?token=${resetToken}`;
 
     const emailSent = await sendPasswordResetEmail(user || normalizedEmail, resetLink);
 
+    console.log("emailSent =", emailSent);
     if (!emailSent) {
       if (process.env.NODE_ENV !== "production") {
         console.log("Password reset link for development:", resetLink);

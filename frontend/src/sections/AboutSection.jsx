@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import {
+  ArrowRight,
   Rocket,
   Target,
   Handshake,
@@ -11,7 +12,7 @@ import {
   Palette,
   Compass,
   Sparkles,
-  ArrowRight,
+  // ArrowRight,
 } from "lucide-react";
 
 const stats = [
@@ -111,7 +112,7 @@ const Badge = ({ children }) => (
   </span>
 );
 
-const AboutSection = ({ isPage = false }) => {
+const AboutSection = ({ isPage = false, showCTA = true }) => {
   return (
     <div id="about" className="w-full" style={{ backgroundColor: "var(--bg)" }}>
 
@@ -417,7 +418,7 @@ const AboutSection = ({ isPage = false }) => {
       </section>
 
       {/* ── CTA (home preview only) ── */}
-      {!isPage && (
+      {!isPage && showCTA && (
         <section
           className="relative overflow-hidden border-y border-[var(--border)] py-24"
           style={{

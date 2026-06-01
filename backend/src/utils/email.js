@@ -148,6 +148,12 @@ const verifyEmailConfig = async () => {
 // Send Password Reset Email
 const sendPasswordResetEmail = async (user, resetLink) => {
   try {
+
+
+
+      console.log("SMTP USER:", process.env.SMTP_USER);
+    console.log("SMTP PASS:", process.env.SMTP_PASS);
+    console.log("SMTP PASS LENGTH:", process.env.SMTP_PASS?.length);
     const recipientEmail = typeof user === "string" ? user : user.email;
     const recipientName = typeof user === "string" ? "there" : user.name;
 

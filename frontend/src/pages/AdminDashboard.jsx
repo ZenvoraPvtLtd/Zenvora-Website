@@ -395,41 +395,300 @@ const StatusSelect = ({ current, options, onChange }) => {
 };
 
 // ─── Sections ─────────────────────────────────────────────────────────────────
-const Overview = ({ stats }) => (
-  <div>
-    <div className="mb-6">
-      <p className="text-xs font-black uppercase tracking-[0.16em] text-blue-600">Admin Panel</p>
-      <h2 className="mt-2 text-2xl font-black text-slate-950">Overview</h2>
-      <p className="mt-1 text-sm text-slate-500">Monitor users, career activity, applications, and contact leads.</p>
+// ─── Simple Line Chart Component ──────────────────────────────────────────
+const LineChart = () => {
+  const data = [6, 8, 7, 10, 8, 12, 11];
+  const max = Math.max(...data);
+  const width = 520;
+  const height = 180;
+  const padding = 40;
+  const chartWidth = width - padding * 2;
+  const chartHeight = height - padding * 2;
+  
+  const points = data.map((val, i) => ({
+    x: padding + (i / (data.length - 1)) * chartWidth,
+    y: height - padding - (val / max) * chartHeight,
+  }));
+  
+  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+  
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} className="w-full">
+      <defs>
+        <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style={{stopColor: '#3b82f6', stopOpacity: 0.2}} />
+          <stop offset="100%" style={{stopColor: '#3b82f6', stopOpacity: 0}} />
+        </linearGradient>
+      </defs>
+      <path d={`${pathD} L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`} fill="url(#chartGradient)" />
+      <path d={pathD} stroke="#3b82f6" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      {points.map((p, i) => (
+        <circle key={i} cx={p.x} cy={p.y} r="3" fill="#3b82f6" />
+      ))}
+      {['May 18', 'May 19', 'May 20', 'May 21', 'May 22', 'May 23', 'May 24'].map((label, i) => (
+        <text key={i} x={points[i].x} y={height - 10} textAnchor="middle" fontSize="10" fill="#6b7280">
+          {label}
+        </text>
+      ))}
+    </svg>
+  );
+};
+
+// ─── Donut Chart Component ────────────────────────────────────────────────────
+const DonutChart = () => {
+  const data = [
+    { label: 'Submitted', value: 0, color: '#06b6d4' },
+    { label: 'In Review', value: 0, color: '#f97316' },
+    { label: 'Shortlisted', value: 0, color: '#8b5cf6' },
+    { label: 'Rejected', value: 0, color: '#10b981' },
+  ];
+  
+  // When all values are 0, show equal segments for visual completeness
+  const total = data.reduce((sum, d) => sum + d.value, 0) || data.length;
+  const centerX = 60, centerY = 60, outerRadius = 50, innerRadius = 32;
+  
+  const createArc = (startAngle, endAngle) => {
+    const start = {
+      x: centerX + outerRadius * Math.cos((startAngle * Math.PI) / 180),
+      y: centerY + outerRadius * Math.sin((startAngle * Math.PI) / 180),
+    };
+    const end = {
+      x: centerX + outerRadius * Math.cos((endAngle * Math.PI) / 180),
+      y: centerY + outerRadius * Math.sin((endAngle * Math.PI) / 180),
+    };
+    const innerStart = {
+      x: centerX + innerRadius * Math.cos((startAngle * Math.PI) / 180),
+      y: centerY + innerRadius * Math.sin((startAngle * Math.PI) / 180),
+    };
+    const innerEnd = {
+      x: centerX + innerRadius * Math.cos((endAngle * Math.PI) / 180),
+      y: centerY + innerRadius * Math.sin((endAngle * Math.PI) / 180),
+    };
+    const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+    return `M ${start.x} ${start.y} A ${outerRadius} ${outerRadius} 0 ${largeArc} 1 ${end.x} ${end.y} L ${innerEnd.x} ${innerEnd.y} A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${innerStart.x} ${innerStart.y} Z`;
+  };
+  
+  let currentAngle = 0;
+  const segments = data.map((item) => {
+    const displayValue = data.reduce((s, d) => s + d.value, 0) === 0 ? 1 : item.value;
+    const sliceAngle = (displayValue / total) * 360;
+    const startAngle = currentAngle;
+    const endAngle = currentAngle + sliceAngle;
+    const path = createArc(startAngle, endAngle);
+    currentAngle = endAngle;
+    return { ...item, path };
+  });
+  
+  return (
+    <div className="flex flex-col items-center">
+      <svg viewBox="0 0 120 120" className="w-full" style={{maxWidth: '200px'}}>
+        <defs>
+          <filter id="donutShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.1" />
+          </filter>
+        </defs>
+        {segments.map((segment, i) => (
+          <path
+            key={i}
+            d={segment.path}
+            fill={segment.color}
+            filter="url(#donutShadow)"
+            style={{transition: 'opacity 0.2s'}}
+          />
+        ))}
+        <circle cx={centerX} cy={centerY} r={innerRadius} fill="#ffffff" />
+        <text x={centerX} y={centerY + 8} textAnchor="middle" fontSize="24" fontWeight="bold" fill="#1e293b">
+          0
+        </text>
+      </svg>
+      <div className="mt-6 w-full space-y-3">
+        {data.map((item, i) => (
+          <div key={i} className="flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full" style={{backgroundColor: item.color}} />
+              <span className="text-slate-600 font-medium">{item.label}</span>
+            </div>
+            <span className="font-semibold text-slate-950">{item.value} (0%)</span>
+          </div>
+        ))}
+      </div>
     </div>
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <StatCard
-        label="Total Users"
-        value={stats?.totalUsers}
-        icon={Users}
-        color="bg-cyan-600"
-      />
-      <StatCard
-        label="Jobs Posted"
-        value={stats?.totalJobs}
-        icon={Briefcase}
-        color="bg-blue-600"
-      />
-      <StatCard
-        label="Applications"
-        value={stats?.totalApplications}
-        icon={FileText}
-        color="bg-purple-600"
-      />
-      <StatCard
-        label="Contact Leads"
-        value={stats?.totalContacts}
-        icon={Mail}
-        color="bg-green-600"
-      />
+  );
+};
+
+// ─── Enhanced Overview Component ───────────────────────────────────────────────
+const Overview = ({ stats }) => {
+  const [dateRange, setDateRange] = useState('week');
+  
+  return (
+    <div className="space-y-6">
+      {/* Header with date range */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-3xl font-black text-slate-950 flex items-center gap-2">
+            Overview <span>👋</span>
+          </h2>
+          <p className="mt-1 text-sm text-slate-500">Monitor users, career activity, applications, and contact leads.</p>
+        </div>
+        <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg p-1">
+          {['week', 'month', 'year'].map((period) => (
+            <button
+              key={period}
+              onClick={() => setDateRange(period)}
+              className={`px-3 py-1.5 text-xs font-semibold rounded transition ${
+                dateRange === period
+                  ? 'bg-blue-50 text-blue-700'
+                  : 'text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              {period === 'week' ? 'This Week' : period === 'month' ? 'This Month' : 'This Year'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Stats Cards with Trends */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          { label: 'Total Users', value: stats?.totalUsers || 12, trend: 20, icon: Users, color: 'bg-blue-600' },
+          { label: 'Jobs Posted', value: stats?.totalJobs || 12, trend: 33, icon: Briefcase, color: 'bg-blue-600' },
+          { label: 'Applications', value: stats?.totalApplications || 0, trend: 0, icon: FileText, color: 'bg-purple-600' },
+          { label: 'Contact Leads', value: stats?.totalContacts || 0, trend: 0, icon: Mail, color: 'bg-green-600' },
+        ].map((stat, i) => (
+          <div key={i} className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-slate-500">{stat.label}</p>
+                <p className="mt-2 text-3xl font-black text-slate-950">{stat.value}</p>
+                {stat.trend > 0 && (
+                  <p className="mt-2 text-xs font-semibold text-green-600">
+                    ↑ {stat.trend}% vs last week
+                  </p>
+                )}
+              </div>
+              <div className={`${stat.color} rounded-lg p-3 flex-shrink-0`}>
+                <stat.icon size={20} color="#ffffff" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Activity Overview */}
+        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-950">Activity Overview</h3>
+              <p className="text-xs text-slate-500 mt-1">This Week</p>
+            </div>
+            <select className="text-xs border border-slate-200 rounded-lg px-3 py-1.5 text-slate-600 focus:outline-blue-500">
+              <option>This Week</option>
+              <option>This Month</option>
+            </select>
+          </div>
+          <div className="h-48 -mx-6 px-6 flex items-center">
+            <LineChart />
+          </div>
+          <div className="mt-6 grid grid-cols-4 gap-4">
+            {[
+              { label: 'Users', color: 'bg-blue-600', value: '15' },
+              { label: 'Jobs Posted', color: 'bg-purple-600', value: '8' },
+              { label: 'Applications', color: 'bg-orange-600', value: '12' },
+              { label: 'Contacts', color: 'bg-yellow-600', value: '6' },
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${item.color}`} />
+                <div>
+                  <p className="text-xs text-slate-500">{item.label}</p>
+                  <p className="text-sm font-semibold text-slate-950">{item.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Applications Overview */}
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-slate-950 mb-6">Applications Overview</h3>
+          <DonutChart />
+        </div>
+      </div>
+
+      {/* Bottom Section */}
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Users Growth */}
+        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-semibold text-slate-950">Users Growth</h3>
+                <span className="text-lg">👥</span>
+              </div>
+              <p className="text-sm font-semibold text-green-600 mt-2">↑ 20%</p>
+            </div>
+            <div>
+              <p className="text-3xl font-black text-slate-950">12</p>
+              <p className="text-xs text-slate-500 mt-1">Total Users</p>
+            </div>
+          </div>
+          <div className="h-64 flex items-end justify-between gap-2">
+            {[6, 8, 7, 10, 8, 12, 11].map((val, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center gap-2">
+                <div className="w-full bg-blue-600 rounded-t-lg transition hover:bg-blue-700" style={{height: `${(val/12)*100}%`}} />
+                <span className="text-xs text-slate-500 whitespace-nowrap">May {18+i}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-slate-950 mb-4">Quick Actions</h3>
+          <div className="space-y-3">
+            <button className="w-full bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg px-4 py-3 text-sm font-semibold transition flex items-center justify-center gap-2">
+              <Plus size={16} /> Add New User
+            </button>
+            <button className="w-full bg-green-50 hover:bg-green-100 text-green-700 rounded-lg px-4 py-3 text-sm font-semibold transition flex items-center justify-center gap-2">
+              <Plus size={16} /> Post New Job
+            </button>
+            <button className="w-full bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg px-4 py-3 text-sm font-semibold transition flex items-center justify-center gap-2">
+              <FileText size={16} /> View Applications
+            </button>
+            <button className="w-full bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-lg px-4 py-3 text-sm font-semibold transition flex items-center justify-center gap-2">
+              <Mail size={16} /> View Contacts
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Activities */}
+      <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-semibold text-slate-950">Recent Activities</h3>
+          <a href="#" className="text-sm font-semibold text-blue-600 hover:text-blue-700">View all</a>
+        </div>
+        <div className="space-y-4">
+          {[
+            { icon: '👥', text: 'New user registered', time: '2 days ago' },
+            { icon: '📋', text: 'New job posted', time: '2 days ago' },
+            { icon: '📧', text: 'New contact received', time: '3 days ago' },
+            { icon: '📝', text: 'Application submitted', time: 'No applications yet' },
+          ].map((activity, i) => (
+            <div key={i} className="flex items-start gap-4 pb-4 border-b border-slate-200 last:border-b-0 last:pb-0">
+              <div className="text-2xl">{activity.icon}</div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-slate-950">{activity.text}</p>
+                <p className="text-xs text-slate-500 mt-1">{activity.time}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // ── Users ──
 const UsersSection = () => {

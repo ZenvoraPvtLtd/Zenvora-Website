@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, Mail, ShieldCheck } from "lucide-react";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { Eye, EyeOff, KeyRound, ShieldCheck, ArrowRight } from "lucide-react";
 import { api } from "../api";
 
-const AdminForgotPassword = () => {
-  const [email, setEmail] = useState("");
+const ResetPassword = () => {
+  const [searchParams] = useSearchParams();
+  const [formData, setFormData] = useState({ password: "", confirmPassword: "" });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [resetLink, setResetLink] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [apiStatus, setApiStatus] = useState("checking");
 
   const navigate = useNavigate();
+  const token = searchParams.get("token");
 
   useEffect(() => {
     let mounted = true;
@@ -25,32 +28,50 @@ const AdminForgotPassword = () => {
         if (mounted) setApiStatus("offline");
       });
 
+    if (!token) {
+      setError("Invalid reset link. Please request a new one.");
+    }
+
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [token]);
 
-  const validateEmail = () => {
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setError("Please enter a valid email address");
-      return false;
+  const validateForm = () => {
+    const nextErrors = {};
+
+    if (!formData.password) {
+      nextErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      nextErrors.password = "Password must be at least 6 characters";
     }
-    return true;
+
+    if (!formData.confirmPassword) {
+      nextErrors.confirmPassword = "Please confirm your password";
+    } else if (formData.password !== formData.confirmPassword) {
+      nextErrors.confirmPassword = "Passwords do not match";
+    }
+
+    setFieldErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
   };
 
   const handleChange = (e) => {
-    setEmail(e.target.value);
+    const { name, value } = e.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+    setFieldErrors((current) => ({ ...current, [name]: "" }));
     setError("");
-    setSuccessMessage("");
-    setResetLink("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Forgot password submitted");
-    console.log("Email:", email);
 
-    if (!validateEmail()) {
+    if (!token) {
+      setError("Invalid reset link");
+      return;
+    }
+
+    if (!validateForm()) {
       return;
     }
 
@@ -58,27 +79,21 @@ const AdminForgotPassword = () => {
     setError("");
 
     try {
-      console.log("Calling forgotPassword API...");
-      const data = await api.forgotPassword({ email, isAdmin: true });
-      console.log("Success - Email sent");
+      await api.resetPassword({
+        token,
+        password: formData.password,
+      });
       setSuccess(true);
-      setSuccessMessage(data.message || "Reset link sent to your email! Redirecting to login...");
-      setResetLink(data.resetLink || "");
-      setEmail("");
 
-      if (!data.resetLink) {
-        // Redirect to login after 3 seconds when email delivery succeeds.
-        setTimeout(() => {
-          navigate("/admin-login");
-        }, 3000);
-      }
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (err) {
-      console.error("Forgot password error:", err);
       const message =
         err.response?.data?.message ||
         (!err.response && `Cannot connect to backend at ${api.baseUrl}. Please start the backend server.`) ||
         err.message ||
-        "Failed to send reset email";
+        "Failed to reset password";
       setError(message);
     } finally {
       setLoading(false);
@@ -106,9 +121,9 @@ const AdminForgotPassword = () => {
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#06b6d4" }}>
-                  Admin Portal
+                  Password Recovery
                 </p>
-                <h1 className="text-2xl font-black leading-tight" style={{ color: "var(--text)" }}>Reset Password</h1>
+                <h1 className="text-2xl font-black leading-tight" style={{ color: "var(--text)" }}>Create New Password</h1>
               </div>
             </div>
 
@@ -149,38 +164,30 @@ const AdminForgotPassword = () => {
                 backgroundColor: "rgba(16, 185, 129, 0.1)",
                 color: "#10b981"
               }}>
-                <p>{successMessage}</p>
-                {resetLink && (
-                  <a
-                    href={resetLink}
-                    className="mt-3 block break-all font-bold underline"
-                    style={{ color: "#06b6d4" }}
-                  >
-                    Open reset link
-                  </a>
-                )}
+                Password reset successfully! Redirecting to login...
               </div>
             )}
 
             {!success && (
               <>
                 <p className="mb-6 text-sm text-center" style={{ color: "var(--muted)" }}>
-                  Enter your email address and we'll send you a link to reset your password.
+                  Enter your new password below.
                 </p>
 
                 <form onSubmit={handleSubmit} className="mb-6 space-y-5" noValidate>
                   <div className="group">
                     <label className="mb-2 block text-sm font-semibold transition-colors group-hover:text-cyan-300" style={{ color: "var(--muted)" }}>
-                      Email Address
+                      New Password
                     </label>
                     <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 transition-colors group-hover:text-cyan-400" size={18} style={{ color: "var(--muted)" }} />
+                      <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 transition-colors group-hover:text-cyan-400" size={18} style={{ color: "var(--muted)" }} />
                       <input
-                        type="email"
-                        value={email}
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
                         onChange={handleChange}
-                        placeholder="admin@example.com"
-                        className="w-full rounded-lg border py-3 pl-12 pr-4 outline-none transition-all duration-300"
+                        placeholder="New password"
+                        className="w-full rounded-lg border py-3 pl-12 pr-12 outline-none transition-all duration-300"
                         style={{
                           backgroundColor: "var(--surface)",
                           borderColor: "var(--border)",
@@ -188,12 +195,53 @@ const AdminForgotPassword = () => {
                           "--tw-ring-color": "rgba(6, 182, 212, 0.2)"
                         }}
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2"
+                        style={{ color: "var(--muted)" }}
+                      >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
                     </div>
+                    {fieldErrors.password && <p className="mt-2 text-xs font-medium" style={{ color: "#ef4444" }}>{fieldErrors.password}</p>}
+                  </div>
+
+                  <div className="group">
+                    <label className="mb-2 block text-sm font-semibold transition-colors group-hover:text-cyan-300" style={{ color: "var(--muted)" }}>
+                      Confirm Password
+                    </label>
+                    <div className="relative">
+                      <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 transition-colors group-hover:text-cyan-400" size={18} style={{ color: "var(--muted)" }} />
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="Confirm password"
+                        className="w-full rounded-lg border py-3 pl-12 pr-12 outline-none transition-all duration-300"
+                        style={{
+                          backgroundColor: "var(--surface)",
+                          borderColor: "var(--border)",
+                          color: "var(--text)",
+                          "--tw-ring-color": "rgba(6, 182, 212, 0.2)"
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2"
+                        style={{ color: "var(--muted)" }}
+                      >
+                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                    {fieldErrors.confirmPassword && <p className="mt-2 text-xs font-medium" style={{ color: "#ef4444" }}>{fieldErrors.confirmPassword}</p>}
                   </div>
 
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || !token}
                     className="w-full rounded-lg py-3 font-bold transition-all duration-300 disabled:opacity-50"
                     style={{
                       background: "linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)",
@@ -202,7 +250,7 @@ const AdminForgotPassword = () => {
                     }}
                   >
                     <span className="flex items-center justify-center gap-2">
-                      {loading ? "Sending..." : "Send Reset Link"}
+                      {loading ? "Resetting..." : "Reset Password"}
                       {!loading && <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />}
                     </span>
                   </button>
@@ -212,7 +260,7 @@ const AdminForgotPassword = () => {
 
             <div className="border-t pt-6" style={{ borderColor: "var(--border)" }}>
               <p className="text-center text-sm" style={{ color: "var(--muted)" }}>
-                <Link to="/admin-login" className="font-bold transition-colors" style={{ color: "#06b6d4" }}>
+                <Link to="/login" className="font-bold transition-colors" style={{ color: "#06b6d4" }}>
                   Back to Login
                 </Link>
               </p>
@@ -224,4 +272,4 @@ const AdminForgotPassword = () => {
   );
 };
 
-export default AdminForgotPassword;
+export default ResetPassword;

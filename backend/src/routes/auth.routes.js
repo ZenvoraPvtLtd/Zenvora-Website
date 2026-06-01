@@ -46,7 +46,7 @@ router.post(
 // Forgot Password
 router.post(
   "/forgot-password",
-  [body("email").isEmail()],
+  [body("email").isEmail(), body("isAdmin").optional().isBoolean()],
   validate,
   forgotPassword,
 );

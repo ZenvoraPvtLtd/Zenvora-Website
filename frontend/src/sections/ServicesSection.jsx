@@ -126,7 +126,7 @@ const Badge = ({ children }) => (
   </p>
 );
 
-const ServicesSection = ({ isPage = false }) => {
+const ServicesSection = ({ isPage = false, showCTA = true }) => {
   return (
     <div id="services" className="w-full" style={{ backgroundColor: "var(--bg)" }}>
 
@@ -238,7 +238,7 @@ const ServicesSection = ({ isPage = false }) => {
       </section>
 
       {/* ΓöÇΓöÇ CTA (home preview only) ΓöÇΓöÇ */}
-      {!isPage && (
+      {!isPage && showCTA && (
         <section
           className="relative overflow-hidden px-6 py-20 text-center sm:px-8"
           style={{

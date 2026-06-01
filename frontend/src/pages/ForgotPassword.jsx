@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Mail, ShieldCheck } from "lucide-react";
 import { api } from "../api";
 
-const AdminForgotPassword = () => {
+const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -31,7 +31,7 @@ const AdminForgotPassword = () => {
   }, []);
 
   const validateEmail = () => {
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError("Please enter a valid email address");
       return false;
     }
@@ -47,8 +47,6 @@ const AdminForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Forgot password submitted");
-    console.log("Email:", email);
 
     if (!validateEmail()) {
       return;
@@ -58,22 +56,18 @@ const AdminForgotPassword = () => {
     setError("");
 
     try {
-      console.log("Calling forgotPassword API...");
-      const data = await api.forgotPassword({ email, isAdmin: true });
-      console.log("Success - Email sent");
+      const data = await api.forgotPassword({ email });
       setSuccess(true);
       setSuccessMessage(data.message || "Reset link sent to your email! Redirecting to login...");
       setResetLink(data.resetLink || "");
       setEmail("");
 
       if (!data.resetLink) {
-        // Redirect to login after 3 seconds when email delivery succeeds.
         setTimeout(() => {
-          navigate("/admin-login");
+          navigate("/login");
         }, 3000);
       }
     } catch (err) {
-      console.error("Forgot password error:", err);
       const message =
         err.response?.data?.message ||
         (!err.response && `Cannot connect to backend at ${api.baseUrl}. Please start the backend server.`) ||
@@ -106,7 +100,7 @@ const AdminForgotPassword = () => {
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#06b6d4" }}>
-                  Admin Portal
+                  Password Recovery
                 </p>
                 <h1 className="text-2xl font-black leading-tight" style={{ color: "var(--text)" }}>Reset Password</h1>
               </div>
@@ -179,7 +173,7 @@ const AdminForgotPassword = () => {
                         type="email"
                         value={email}
                         onChange={handleChange}
-                        placeholder="admin@example.com"
+                        placeholder="your@email.com"
                         className="w-full rounded-lg border py-3 pl-12 pr-4 outline-none transition-all duration-300"
                         style={{
                           backgroundColor: "var(--surface)",
@@ -212,7 +206,7 @@ const AdminForgotPassword = () => {
 
             <div className="border-t pt-6" style={{ borderColor: "var(--border)" }}>
               <p className="text-center text-sm" style={{ color: "var(--muted)" }}>
-                <Link to="/admin-login" className="font-bold transition-colors" style={{ color: "#06b6d4" }}>
+                <Link to="/login" className="font-bold transition-colors" style={{ color: "#06b6d4" }}>
                   Back to Login
                 </Link>
               </p>
@@ -224,4 +218,4 @@ const AdminForgotPassword = () => {
   );
 };
 
-export default AdminForgotPassword;
+export default ForgotPassword;
