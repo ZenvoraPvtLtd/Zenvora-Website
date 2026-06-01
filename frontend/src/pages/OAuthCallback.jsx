@@ -28,7 +28,7 @@ const OAuthCallback = () => {
     const destination = user.role === "admin" ? "/admin" : "/";
     navigate(destination);
     window.location.reload();
-  }, []);
+  }, [navigate, searchParams]);
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">

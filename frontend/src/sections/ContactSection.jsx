@@ -115,7 +115,9 @@ const ContactSection = ({ isPage = false }) => {
         navigator.clipboard.writeText(text);
         return true;
       }
-    } catch (err) { /* ignore */ }
+    } catch {
+      /* ignore clipboard permission errors */
+    }
     try {
       const textArea = document.createElement("textarea");
       textArea.value = text;
@@ -129,7 +131,7 @@ const ContactSection = ({ isPage = false }) => {
       const successful = document.execCommand("copy");
       document.body.removeChild(textArea);
       return successful;
-    } catch (err) {
+    } catch {
       return false;
     }
   };

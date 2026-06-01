@@ -28,7 +28,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
-  const [apiStatus, setApiStatus] = useState("checking");
+  const [, setApiStatus] = useState("checking");
   const [loading, setLoading] = useState(false);
 
   const [searchParams] = useSearchParams();
@@ -340,13 +340,17 @@ const Login = () => {
           </div>
 
           <div className="relative hidden flex-col items-center justify-center lg:flex">
-            <div className="relative h-full max-h-screen w-full overflow-hidden rounded-2xl shadow-2xl shadow-slate-200/50">
-              <img src="/login-illustration.jpg" alt="Graduate service illustration" className="h-full w-full object-cover" />
-              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
-              <div className="absolute inset-0 bg-linear-to-r from-black/40 via-transparent to-transparent" />
+            <div className="relative h-full max-h-screen w-full overflow-hidden rounded-2xl shadow-2xl shadow-slate-200/50 transition-all duration-500">
+              <img 
+                src="/login-light.svg" 
+                alt="Graduate service illustration" 
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-r from-black/30 via-transparent to-transparent" />
               <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
-                <h2 className="mb-3 text-4xl font-black leading-tight">Secure Login</h2>
-                <p className="mb-4 text-lg font-light leading-relaxed text-slate-200">
+                <h2 className="mb-3 text-4xl font-black leading-tight">Secure Access</h2>
+                <p className="mb-4 text-lg font-light leading-relaxed text-slate-100">
                   Access your Zenvora Graduate Services account with enhanced security and seamless authentication.
                 </p>
                 <div className="flex flex-wrap items-center gap-3 text-sm">

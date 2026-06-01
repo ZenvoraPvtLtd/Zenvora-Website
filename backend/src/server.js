@@ -1,4 +1,7 @@
-require("dotenv").config();
+const path = require("path");
+const net = require("net");
+
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const express = require("express");
 const cors = require("cors");
@@ -15,9 +18,6 @@ const careerRoutes = require("./routes/career.routes");
 const adminRoutes = require("./routes/admin.routes");
 
 const app = express();
-
-// Database
-connectDB();
 
 // Verify Email Configuration
 // verifyEmailConfig();
@@ -89,9 +89,55 @@ app.use((err, req, res, next) => {
 // Server
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV}`);
-  console.log(`CORS Origin: ${process.env.CORS_ORIGIN}`);
-  console.log(`Client URL: ${process.env.CLIENT_URL}`);
-});
+const ensurePortAvailable = (port) =>
+  new Promise((resolve, reject) => {
+    const tester = net.createServer();
+
+    tester.once("error", (error) => {
+      reject(error);
+    });
+
+    tester.once("listening", () => {
+      tester.close(resolve);
+    });
+
+    tester.listen(port);
+  });
+
+const startServer = async () => {
+  try {
+    await ensurePortAvailable(PORT);
+    await connectDB();
+
+    const server = app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV}`);
+      console.log(`CORS Origin: ${process.env.CORS_ORIGIN}`);
+      console.log(`Client URL: ${process.env.CLIENT_URL}`);
+    });
+
+    server.on("error", (error) => {
+      if (error.code === "EADDRINUSE") {
+        console.error(
+          `Port ${PORT} is already in use. Stop the existing backend process or set a different PORT in backend/.env.`,
+        );
+        process.exit(1);
+      }
+
+      console.error(`Server failed to start: ${error.message}`);
+      process.exit(1);
+    });
+  } catch (error) {
+    if (error.code === "EADDRINUSE") {
+      console.error(
+        `Port ${PORT} is already in use. Stop the existing backend process or set a different PORT in backend/.env.`,
+      );
+      process.exit(1);
+    }
+
+    console.error(error.message);
+    process.exit(1);
+  }
+};
+
+startServer();

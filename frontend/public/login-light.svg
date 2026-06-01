@@ -1,0 +1,224 @@
+<svg viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8eef7;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f0f5fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e6f0fa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a90e2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="lockGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5eb3f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2b7ee4;stop-opacity:1" />
+    </linearGradient>
+    <filter id="softShadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.12" flood-color="#1a3a7a"/>
+    </filter>
+    <filter id="deepShadow">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-opacity="0.15" flood-color="#1a3a7a"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="900" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative dots -->
+  <circle cx="80" cy="120" r="6" fill="#4a90e2" opacity="0.08"/>
+  <circle cx="750" cy="200" r="5" fill="#2b7ee4" opacity="0.1"/>
+  <circle cx="120" cy="600" r="4" fill="#5eb3f6" opacity="0.07"/>
+  <circle cx="700" cy="700" r="5" fill="#4a90e2" opacity="0.08"/>
+  
+  <!-- Main illustration group -->
+  <g transform="translate(400, 280)">
+    
+    <!-- Laptop Computer -->
+    <g filter="url(#deepShadow)">
+      <!-- Laptop base/stand -->
+      <ellipse cx="0" cy="110" rx="110" ry="20" fill="#c9d5e8" opacity="0.8"/>
+      
+      <!-- Laptop body -->
+      <path d="M -95,0 L 95,0 Q 100,5 100,12 L 100,100 Q 100,105 95,105 L -95,105 Q -100,105 -100,100 L -100,12 Q -100,5 -95,0 Z" 
+            fill="#f5f7fc" stroke="#a8c5e0" stroke-width="2.5"/>
+      
+      <!-- Laptop screen bezel -->
+      <rect x="-88" y="8" width="176" height="85" rx="8" fill="#e8f0f8" stroke="#9cbde0" stroke-width="1.5"/>
+      
+      <!-- Laptop keyboard area -->
+      <g transform="translate(-85, 95)">
+        <rect width="170" height="12" rx="2" fill="#d4dfe8" stroke="#a8c5e0" stroke-width="1"/>
+        <!-- Keyboard keys pattern -->
+        <g opacity="0.4">
+          <rect x="5" y="2" width="8" height="8" rx="1" fill="#a8c5e0"/>
+          <rect x="20" y="2" width="8" height="8" rx="1" fill="#a8c5e0"/>
+          <rect x="35" y="2" width="8" height="8" rx="1" fill="#a8c5e0"/>
+          <rect x="50" y="2" width="8" height="8" rx="1" fill="#a8c5e0"/>
+          <rect x="65" y="2" width="8" height="8" rx="1" fill="#a8c5e0"/>
+          <rect x="80" y="2" width="8" height="8" rx="1" fill="#a8c5e0"/>
+          <rect x="95" y="2" width="8" height="8" rx="1" fill="#a8c5e0"/>
+          <rect x="110" y="2" width="8" height="8" rx="1" fill="#a8c5e0"/>
+          <rect x="125" y="2" width="8" height="8" rx="1" fill="#a8c5e0"/>
+          <rect x="140" y="2" width="8" height="8" rx="1" fill="#a8c5e0"/>
+        </g>
+      </g>
+      
+      <!-- Screen content -->
+      <g transform="translate(-80, 20)">
+        <!-- Screen background -->
+        <rect width="160" height="70" rx="6" fill="#ffffff"/>
+        
+        <!-- Shield badge on screen -->
+        <g transform="translate(80, 22)">
+          <!-- Shield shape -->
+          <path d="M -28,-18 L -28,10 Q 0,32 0,38 Q 0,32 28,10 L 28,-18 Z" 
+                fill="url(#shieldGrad)" stroke="#1a3a7a" stroke-width="1.5"/>
+          <!-- Checkmark -->
+          <path d="M -10,8 L -2,18 L 16,-4" stroke="#ffffff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        
+        <!-- Screen text placeholder -->
+        <rect x="10" y="35" width="50" height="6" rx="2" fill="#e0e8f0"/>
+        <rect x="10" y="48" width="35" height="4" rx="1" fill="#d0dce8"/>
+      </g>
+    </g>
+    
+    <!-- Plant Pot - Left side -->
+    <g transform="translate(-130, 50)" filter="url(#softShadow)">
+      <!-- Pot base shadow -->
+      <ellipse cx="0" cy="75" rx="32" ry="8" fill="#000" opacity="0.08"/>
+      
+      <!-- Pot body -->
+      <path d="M -32,65 L -28,75 L 28,75 L 32,65 Z" fill="#d4dfe8" stroke="#9cbde0" stroke-width="2"/>
+      <ellipse cx="0" cy="65" rx="32" ry="10" fill="#e0eaf5" stroke="#9cbde0" stroke-width="2"/>
+      
+      <!-- Soil -->
+      <ellipse cx="0" cy="67" rx="30" ry="8" fill="#c9d5e8"/>
+      
+      <!-- Plant stems and leaves -->
+      <!-- Left stem -->
+      <path d="M -10,65 Q -15,40 -12,15" stroke="#4a90e2" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Center stem -->
+      <path d="M 0,65 Q -2,35 0,8" stroke="#2b7ee4" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- Right stem -->
+      <path d="M 10,65 Q 18,40 15,15" stroke="#4a90e2" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      
+      <!-- Left leaves -->
+      <g transform="translate(-12, 20)">
+        <ellipse cx="0" cy="0" rx="14" ry="7" fill="#4a90e2" transform="rotate(-40)" opacity="0.9"/>
+        <ellipse cx="0" cy="0" rx="12" ry="6" fill="#5eb3f6" transform="rotate(-30)"/>
+      </g>
+      
+      <!-- Center leaves -->
+      <g transform="translate(0, 8)">
+        <ellipse cx="0" cy="0" rx="16" ry="8" fill="#2b7ee4" transform="rotate(5)"/>
+        <ellipse cx="0" cy="0" rx="14" ry="7" fill="#3d84da" transform="rotate(15)"/>
+      </g>
+      
+      <!-- Right leaves -->
+      <g transform="translate(12, 20)">
+        <ellipse cx="0" cy="0" rx="14" ry="7" fill="#4a90e2" transform="rotate(40)" opacity="0.9"/>
+        <ellipse cx="0" cy="0" rx="12" ry="6" fill="#5eb3f6" transform="rotate(30)"/>
+      </g>
+    </g>
+    
+    <!-- Smartphone - Right side -->
+    <g transform="translate(120, 30)" filter="url(#softShadow)">
+      <!-- Phone shadow -->
+      <ellipse cx="0" cy="88" rx="28" ry="8" fill="#000" opacity="0.08"/>
+      
+      <!-- Phone body -->
+      <rect x="-22" y="0" width="44" height="85" rx="7" fill="#f5f7fc" stroke="#a8c5e0" stroke-width="2"/>
+      
+      <!-- Phone screen -->
+      <rect x="-20" y="4" width="40" height="73" rx="5" fill="#f0f5fb" stroke="#c9d5e8" stroke-width="1"/>
+      
+      <!-- Phone notch -->
+      <rect x="-8" y="4" width="16" height="8" rx="4" fill="#2b2d35"/>
+      
+      <!-- App icon on phone -->
+      <g transform="translate(0, 25)">
+        <rect x="-8" y="0" width="16" height="16" rx="2" fill="#e8f0f8"/>
+        <text x="0" y="12" text-anchor="middle" font-size="10" fill="#4a90e2" font-weight="bold">📱</text>
+      </g>
+      
+      <!-- Home button -->
+      <circle cx="0" cy="80" r="3.5" fill="#9cbde0"/>
+    </g>
+    
+    <!-- Lock Icon - Bottom right -->
+    <g transform="translate(85, 80)" filter="url(#softShadow)">
+      <!-- Circle background -->
+      <circle cx="0" cy="0" r="40" fill="#e8f4fd" stroke="#9cbde0" stroke-width="2.5"/>
+      
+      <!-- Lock body -->
+      <rect x="-15" y="6" width="30" height="26" rx="3" fill="url(#lockGrad)" stroke="#1a3a7a" stroke-width="1.5"/>
+      
+      <!-- Lock shackle -->
+      <path d="M -12,6 Q -12,-12 0,-15 Q 12,-12 12,6" fill="none" stroke="url(#lockGrad)" stroke-width="3" stroke-linecap="round"/>
+      
+      <!-- Keyhole -->
+      <circle cx="0" cy="14" r="3" fill="#ffffff"/>
+      <path d="M 0,18 L 0,24" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+    </g>
+  </g>
+  
+  <!-- Text Section -->
+  <g transform="translate(400, 650)">
+    <!-- Main heading -->
+    <text x="0" y="0" text-anchor="middle" font-size="42" font-weight="700" fill="#1a3a7a" font-family="Arial, Helvetica, sans-serif">
+      Secure Access
+    </text>
+    
+    <!-- Subtitle -->
+    <text x="0" y="40" text-anchor="middle" font-size="16" fill="#5a6b7f" font-family="Arial, Helvetica, sans-serif" font-weight="400">
+      Access your Graduate Service Portal with enhanced
+    </text>
+    <text x="0" y="60" text-anchor="middle" font-size="16" fill="#5a6b7f" font-family="Arial, Helvetica, sans-serif" font-weight="400">
+      security and seamless authentication.
+    </text>
+    
+    <!-- Feature badges -->
+    <g transform="translate(-140, 110)">
+      <!-- Feature 1 - Multi-Factor -->
+      <g>
+        <circle cx="0" cy="0" r="18" fill="#e8f4fd" stroke="#9cbde0" stroke-width="1.5"/>
+        <text x="0" y="6" text-anchor="middle" font-size="11" fill="#4a90e2" font-weight="bold">🔐</text>
+      </g>
+      <text x="0" y="32" text-anchor="middle" font-size="13" font-weight="600" fill="#1a3a7a" font-family="Arial, sans-serif">
+        Multi-Factor
+      </text>
+      <text x="0" y="48" text-anchor="middle" font-size="12" fill="#5a6b7f" font-family="Arial, sans-serif">
+        Authentication
+      </text>
+    </g>
+    
+    <g transform="translate(0, 110)">
+      <!-- Feature 2 - Real-time -->
+      <g>
+        <circle cx="0" cy="0" r="18" fill="#e8f4fd" stroke="#9cbde0" stroke-width="1.5"/>
+        <text x="0" y="6" text-anchor="middle" font-size="11" fill="#4a90e2" font-weight="bold">✓</text>
+      </g>
+      <text x="0" y="32" text-anchor="middle" font-size="13" font-weight="600" fill="#1a3a7a" font-family="Arial, sans-serif">
+        Real-time
+      </text>
+      <text x="0" y="48" text-anchor="middle" font-size="12" fill="#5a6b7f" font-family="Arial, sans-serif">
+        Protection
+      </text>
+    </g>
+    
+    <g transform="translate(140, 110)">
+      <!-- Feature 3 - Secure -->
+      <g>
+        <circle cx="0" cy="0" r="18" fill="#e8f4fd" stroke="#9cbde0" stroke-width="1.5"/>
+        <text x="0" y="6" text-anchor="middle" font-size="11" fill="#4a90e2" font-weight="bold">👤</text>
+      </g>
+      <text x="0" y="32" text-anchor="middle" font-size="13" font-weight="600" fill="#1a3a7a" font-family="Arial, sans-serif">
+        Secure
+      </text>
+      <text x="0" y="48" text-anchor="middle" font-size="12" fill="#5a6b7f" font-family="Arial, sans-serif">
+        Sessions
+      </text>
+    </g>
+  </g>
+</svg>

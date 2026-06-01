@@ -18,7 +18,7 @@ const Footer = () => {
             </div>
             <p className="text-sm leading-relaxed" style={{ color: "#64748b" }}>
               Leading IT solutions provider transforming ideas into innovative,
-              scalable technology — from Indore to the world.
+              scalable technology from Indore to the world.
             </p>
             <div className="mt-6 flex gap-3">
               {[

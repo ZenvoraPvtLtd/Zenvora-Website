@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { Fragment, useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -29,36 +29,35 @@ const getUser = () => {
 };
 
 const STATUS_COLORS = {
-  new: "bg-blue-500/10 text-blue-400 border-blue-500/30",
-  open: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
-  pending: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
-  reviewed: "bg-purple-500/10 text-purple-400 border-purple-500/30",
-  accepted: "bg-green-500/10 text-green-400 border-green-500/30",
-  rejected: "bg-red-500/10 text-red-400 border-red-500/30",
-  closed: "bg-gray-500/10 text-gray-400 border-gray-500/30",
+  admin: "bg-blue-50 text-blue-700 border-blue-200",
+  user: "bg-slate-50 text-slate-700 border-slate-200",
+  new: "bg-sky-50 text-sky-700 border-sky-200",
+  open: "bg-cyan-50 text-cyan-700 border-cyan-200",
+  pending: "bg-amber-50 text-amber-700 border-amber-200",
+  reviewed: "bg-violet-50 text-violet-700 border-violet-200",
+  accepted: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  rejected: "bg-red-50 text-red-700 border-red-200",
+  closed: "bg-slate-100 text-slate-600 border-slate-200",
 };
 
 const Badge = ({ status }) => (
   <span
-    className={`text-xs px-2 py-0.5 rounded-full border font-medium capitalize ${STATUS_COLORS[status] ?? "bg-gray-700 text-gray-300 border-gray-600"}`}
+    className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold capitalize ${STATUS_COLORS[status] ?? "bg-slate-50 text-slate-700 border-slate-200"}`}
   >
     {status}
   </span>
 );
 
 const StatCard = ({ label, value, icon: Icon, color }) => (
-  <div className="border rounded-xl p-5 flex items-center gap-4" style={{
-    borderColor: "var(--border)",
-    backgroundColor: "var(--surface)"
-  }}>
-    <div className={`p-3 rounded-lg ${color}`}>
+  <div className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-200/60">
+    <div className={`grid h-12 w-12 place-items-center rounded-xl ${color}`}>
       <Icon size={22} style={{ color: "#ffffff" }} />
     </div>
     <div>
-      <p className="text-2xl font-bold" style={{ color: "var(--text)" }}>
-        {value ?? <span style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>Loading...</span>}
+      <p className="text-3xl font-black leading-none text-slate-950">
+        {value ?? <span className="text-sm font-semibold text-slate-400">Loading...</span>}
       </p>
-      <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>{label}</p>
+      <p className="mt-2 text-sm font-medium text-slate-500">{label}</p>
     </div>
   </div>
 );
@@ -86,15 +85,15 @@ const Pagination = ({ page, totalPages, setPage, total }) => {
   for (let i = 1; i <= totalPages; i++) {
     if (i === 1 || i === totalPages || (i >= page - 1 && i <= page + 1)) {
       pages.push(i);
-    } else if (pages[pages.length - 1] !== "…") {
-      pages.push("…");
+    } else if (pages[pages.length - 1] !== "...") {
+      pages.push("...");
     }
   }
 
   return (
     <div className="flex items-center justify-between mt-4 px-1">
       <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
-        {from}–{to} of {total}
+        {from}-{to} of {total}
       </p>
       <div className="flex items-center gap-1">
         <button
@@ -106,9 +105,9 @@ const Pagination = ({ page, totalPages, setPage, total }) => {
           <ChevronLeft size={14} />
         </button>
         {pages.map((p, i) =>
-          p === "…" ? (
+          p === "..." ? (
             <span key={`ellipsis-${i}`} className="px-1 text-xs" style={{ color: "var(--text-secondary)" }}>
-              …
+              ...
             </span>
           ) : (
             <button
@@ -264,16 +263,16 @@ const JobModal = ({ job, onClose, onSaved }) => {
                 value={form[key]}
                 onChange={(e) => set(key, e.target.value)}
                 required={req}
-                className="w-full px-3 py-2 text-sm bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-gray-500"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
               />
             </div>
           ))}
           <div>
-            <label className="block text-xs text-gray-400 mb-1">Type</label>
+            <label className="mb-1 block text-xs text-slate-500">Type</label>
             <select
               value={form.type}
               onChange={(e) => set("type", e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
             >
               {[
                 "Full-time",
@@ -287,7 +286,7 @@ const JobModal = ({ job, onClose, onSaved }) => {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-gray-400 mb-1">
+            <label className="mb-1 block text-xs text-slate-500">
               Description
             </label>
             <textarea
@@ -295,7 +294,7 @@ const JobModal = ({ job, onClose, onSaved }) => {
               onChange={(e) => set("description", e.target.value)}
               required
               rows={3}
-              className="w-full px-3 py-2 text-sm bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
+              className="w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -304,9 +303,9 @@ const JobModal = ({ job, onClose, onSaved }) => {
               id="active"
               checked={form.isActive}
               onChange={(e) => set("isActive", e.target.checked)}
-              className="accent-cyan-500"
+              className="accent-blue-600"
             />
-            <label htmlFor="active" className="text-xs text-gray-300">
+            <label htmlFor="active" className="text-xs text-slate-600">
               Active (visible to applicants)
             </label>
           </div>
@@ -314,16 +313,16 @@ const JobModal = ({ job, onClose, onSaved }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2 text-sm border border-gray-600 text-gray-400 hover:text-white rounded-lg transition"
+              className="flex-1 rounded-lg border border-slate-200 py-2 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-2 text-sm bg-cyan-500 hover:bg-cyan-400 text-black font-semibold rounded-lg transition disabled:opacity-60"
+              className="flex-1 rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-60"
             >
-              {saving ? "Saving…" : isEdit ? "Update" : "Create"}
+              {saving ? "Saving..." : isEdit ? "Update" : "Create"}
             </button>
           </div>
         </form>
@@ -361,7 +360,7 @@ const StatusSelect = ({ current, options, onChange }) => {
       <button
         ref={btnRef}
         onClick={toggle}
-        className="flex items-center gap-1 text-xs border border-gray-600 px-2 py-1 rounded-lg text-gray-300 hover:border-cyan-500 transition whitespace-nowrap"
+        className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 transition hover:border-blue-300 hover:text-blue-700 whitespace-nowrap"
       >
         <span className="capitalize">{current}</span>
         <ChevronDown size={12} />
@@ -375,11 +374,7 @@ const StatusSelect = ({ current, options, onChange }) => {
             left: pos.left,
             zIndex: 9999,
           }}
-          className="rounded-lg shadow-md overflow-hidden min-w-28" style={{
-            backgroundColor: "var(--surface)",
-            borderColor: "var(--border)",
-            border: "1px solid"
-          }}
+          className="min-w-28 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl shadow-slate-200/70"
         >
           {options.map((o) => (
             <button
@@ -388,7 +383,7 @@ const StatusSelect = ({ current, options, onChange }) => {
                 onChange(o);
                 setOpen(false);
               }}
-              className={`w-full text-left px-3 py-1.5 text-xs capitalize hover:bg-gray-700 transition ${o === current ? "text-cyan-400" : "text-gray-300"}`}
+              className={`w-full px-3 py-2 text-left text-xs font-medium capitalize transition hover:bg-blue-50 ${o === current ? "text-blue-700" : "text-slate-600"}`}
             >
               {o}
             </button>
@@ -402,8 +397,12 @@ const StatusSelect = ({ current, options, onChange }) => {
 // ─── Sections ─────────────────────────────────────────────────────────────────
 const Overview = ({ stats }) => (
   <div>
-    <h2 className="text-lg font-semibold text-white mb-5">Overview</h2>
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="mb-6">
+      <p className="text-xs font-black uppercase tracking-[0.16em] text-blue-600">Admin Panel</p>
+      <h2 className="mt-2 text-2xl font-black text-slate-950">Overview</h2>
+      <p className="mt-1 text-sm text-slate-500">Monitor users, career activity, applications, and contact leads.</p>
+    </div>
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <StatCard
         label="Total Users"
         value={stats?.totalUsers}
@@ -462,7 +461,7 @@ const UsersSection = () => {
     load();
   };
 
-  if (loading) return <p className="text-gray-500 text-sm">Loading…</p>;
+  if (loading) return <p className="text-sm text-slate-500">Loading...</p>;
 
   return (
     <div>
@@ -525,14 +524,14 @@ const UsersSection = () => {
                     <X size={14} className="text-red-400" />
                   )}
                 </td>
-                <td className="px-4 py-4 text-gray-500 whitespace-nowrap">
+                <td className="px-4 py-4 text-slate-500 whitespace-nowrap">
                   {new Date(u.createdAt).toLocaleDateString()}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap">
                   {currentUser?._id !== u._id && (
                     <button
                       onClick={() => setConfirm(u)}
-                      className="text-red-400 hover:text-red-300 transition p-1"
+                      className="p-1 text-red-500 transition hover:text-red-700"
                     >
                       <Trash2 size={15} />
                     </button>
@@ -543,7 +542,7 @@ const UsersSection = () => {
           </tbody>
         </table>
         {!users.length && (
-          <p className="text-center text-gray-500 py-8 text-sm">
+          <p className="py-8 text-center text-sm text-slate-500">
             No users found.
           </p>
         )}
@@ -590,7 +589,7 @@ const JobsSection = () => {
     load();
   };
 
-  if (loading) return <p className="text-gray-500 text-sm">Loading…</p>;
+  if (loading) return <p className="text-sm text-slate-500">Loading...</p>;
 
   return (
     <div>
@@ -613,23 +612,23 @@ const JobsSection = () => {
         />
       )}
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className="text-lg font-semibold text-slate-950">
           Jobs{" "}
-          <span className="text-gray-500 text-sm font-normal">
+          <span className="text-sm font-normal text-slate-500">
             ({jobs.length})
           </span>
         </h2>
         <button
           onClick={() => setModal("new")}
-          className="flex items-center gap-1.5 text-sm bg-cyan-500 hover:bg-cyan-400 text-black font-semibold px-4 py-2 rounded-lg transition"
+          className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-blue-200 transition hover:bg-blue-700"
         >
           <Plus size={15} /> New Job
         </button>
       </div>
       <div className="space-y-4">
-        <div className="hidden lg:block overflow-x-auto rounded-xl border border-gray-700">
+        <div className="hidden overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm lg:block">
           <table className="w-full text-sm">
-            <thead className="bg-gray-800 border-b border-gray-700">
+            <thead className="border-b border-slate-200 bg-slate-50">
               <tr>
                 {[
                   "Title",
@@ -642,32 +641,32 @@ const JobsSection = () => {
                 ].map((h) => (
                   <th
                     key={h}
-                    className="px-4 py-3 text-left text-xs font-medium text-gray-400 whitespace-nowrap"
+                    className="px-4 py-3 text-left text-xs font-semibold text-slate-500 whitespace-nowrap"
                   >
                     {h}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-700/50">
+            <tbody className="divide-y divide-slate-100">
               {slice.map((j) => (
                 <tr
                   key={j._id}
-                  className="bg-gray-800/50 hover:bg-gray-800 transition"
+                  className="bg-white transition hover:bg-blue-50/40"
                 >
-                  <td className="px-4 py-4 text-white font-medium whitespace-nowrap">
+                  <td className="px-4 py-4 font-semibold text-slate-950 whitespace-nowrap">
                     {j.title}
                   </td>
-                  <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
-                    {j.department || "—"}
+                  <td className="px-4 py-4 text-slate-500 whitespace-nowrap">
+                    {j.department || "-"}
                   </td>
-                  <td className="px-4 py-4 text-gray-400 max-w-[180px] truncate" title={(j.requirements || []).join(", ")}>
-                    {(j.requirements || []).join(", ") || "—"}
+                  <td className="px-4 py-4 text-slate-500 max-w-[180px] truncate" title={(j.requirements || []).join(", ")}>
+                    {(j.requirements || []).join(", ") || "-"}
                   </td>
-                  <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
+                  <td className="px-4 py-4 text-slate-500 whitespace-nowrap">
                     {j.location}
                   </td>
-                  <td className="px-4 py-4 text-gray-400 whitespace-nowrap">
+                  <td className="px-4 py-4 text-slate-500 whitespace-nowrap">
                     {j.type}
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
@@ -677,13 +676,13 @@ const JobsSection = () => {
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => setModal(j)}
-                        className="text-cyan-400 hover:text-cyan-300 transition p-1"
+                        className="p-1 text-blue-600 transition hover:text-blue-800"
                       >
                         <Pencil size={15} />
                       </button>
                       <button
                         onClick={() => setConfirm(j)}
-                        className="text-red-400 hover:text-red-300 transition p-1"
+                        className="p-1 text-red-500 transition hover:text-red-700"
                       >
                         <Trash2 size={15} />
                       </button>
@@ -699,31 +698,28 @@ const JobsSection = () => {
           {slice.map((j) => (
             <article
               key={j._id}
-              className="rounded-3xl border p-5 shadow-md" style={{
-                borderColor: "var(--border)",
-                backgroundColor: "var(--bg-alt)"
-              }}
+              className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm shadow-slate-200/60"
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">
+                    <p className="text-sm font-semibold uppercase tracking-[0.16em] text-blue-600">
                       {j.department || "General"}
                     </p>
                     <Badge status={j.isActive ? "open" : "closed"} />
                   </div>
-                  <h3 className="mt-3 text-lg font-black text-white">
+                  <h3 className="mt-3 text-lg font-black text-slate-950">
                     {j.title}
                   </h3>
-                  <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">
-                    Skills: {(j.requirements || []).join(", ") || "—"}
+                  <p className="mt-3 max-w-xl text-sm leading-6 text-slate-500">
+                    Skills: {(j.requirements || []).join(", ") || "-"}
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-2 text-xs text-gray-400">
-                  <span className="rounded-full border border-gray-700 bg-gray-800/80 px-3 py-1">
+                <div className="flex flex-wrap gap-2 text-xs text-slate-500">
+                  <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1">
                     {j.location}
                   </span>
-                  <span className="rounded-full border border-gray-700 bg-gray-800/80 px-3 py-1">
+                  <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1">
                     {j.type}
                   </span>
                 </div>
@@ -732,13 +728,13 @@ const JobsSection = () => {
               <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
                 <button
                   onClick={() => setModal(j)}
-                  className="rounded-full bg-cyan-500/15 px-4 py-2 text-cyan-200 transition hover:bg-cyan-500/25"
+                  className="rounded-lg bg-blue-50 px-4 py-2 font-semibold text-blue-700 transition hover:bg-blue-100"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => setConfirm(j)}
-                  className="rounded-full bg-red-500/15 px-4 py-2 text-red-300 transition hover:bg-red-500/25"
+                  className="rounded-lg bg-red-50 px-4 py-2 font-semibold text-red-700 transition hover:bg-red-100"
                 >
                   Delete
                 </button>
@@ -748,7 +744,7 @@ const JobsSection = () => {
         </div>
 
         {!jobs.length && (
-          <p className="text-center text-gray-500 py-8 text-sm">
+          <p className="py-8 text-center text-sm text-slate-500">
             No jobs posted yet.
           </p>
         )}
@@ -794,63 +790,63 @@ const ApplicationsSection = () => {
     setApps((prev) => prev.map((a) => (a._id === id ? { ...a, status } : a)));
   };
 
-  if (loading) return <p className="text-gray-500 text-sm">Loading…</p>;
+  if (loading) return <p className="text-sm text-slate-500">Loading...</p>;
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-white mb-5">
+      <h2 className="mb-5 text-lg font-semibold text-slate-950">
         Applications{" "}
-        <span className="text-gray-500 text-sm font-normal">
+        <span className="text-sm font-normal text-slate-500">
           ({apps.length})
         </span>
       </h2>
-      <div className="rounded-xl border border-gray-700 overflow-x-auto">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
         <table className="w-full text-sm table-fixed min-w-[700px]">
-          <thead className="bg-gray-800 border-b border-gray-700">
+          <thead className="border-b border-slate-200 bg-slate-50">
             <tr>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[15%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[15%]">
                 Name
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[20%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[20%]">
                 Email
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[18%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[18%]">
                 Job
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[13%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[13%]">
                 Phone
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[12%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[12%]">
                 Status
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[12%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[12%]">
                 Applied
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[10%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[10%]">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700/50">
+          <tbody className="divide-y divide-slate-100">
             {slice.map((a) => (
               <tr
                 key={a._id}
-                className="bg-gray-800/50 hover:bg-gray-800 transition"
+                className="bg-white transition hover:bg-blue-50/40"
               >
-                <td className="px-3 py-3 text-white font-medium truncate">
+                <td className="px-3 py-3 font-semibold text-slate-950 truncate">
                   {a.name}
                 </td>
-                <td className="px-3 py-3 text-gray-400 truncate">{a.email}</td>
-                <td className="px-3 py-3 text-gray-300 truncate">
-                  {a.jobTitle || "—"}
+                <td className="px-3 py-3 text-slate-500 truncate">{a.email}</td>
+                <td className="px-3 py-3 text-slate-700 truncate">
+                  {a.jobTitle || "-"}
                 </td>
-                <td className="px-3 py-3 text-gray-400 truncate">
-                  {a.phone || "—"}
+                <td className="px-3 py-3 text-slate-500 truncate">
+                  {a.phone || "-"}
                 </td>
                 <td className="px-3 py-3">
                   <Badge status={a.status} />
                 </td>
-                <td className="px-3 py-3 text-gray-500 text-xs">
+                <td className="px-3 py-3 text-slate-500 text-xs">
                   {new Date(a.createdAt).toLocaleDateString()}
                 </td>
                 <td className="px-3 py-3">
@@ -865,7 +861,7 @@ const ApplicationsSection = () => {
           </tbody>
         </table>
         {!apps.length && (
-          <p className="text-center text-gray-500 py-8 text-sm">
+          <p className="py-8 text-center text-sm text-slate-500">
             No applications yet.
           </p>
         )}
@@ -914,67 +910,66 @@ const ContactsSection = () => {
     );
   };
 
-  if (loading) return <p className="text-gray-500 text-sm">Loading…</p>;
+  if (loading) return <p className="text-sm text-slate-500">Loading...</p>;
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-white mb-5">
+      <h2 className="mb-5 text-lg font-semibold text-slate-950">
         Contact Submissions{" "}
-        <span className="text-gray-500 text-sm font-normal">
+        <span className="text-sm font-normal text-slate-500">
           ({contacts.length})
         </span>
       </h2>
-      <div className="rounded-xl border border-gray-700 overflow-x-auto">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
         <table className="w-full text-sm table-fixed min-w-[700px]">
-          <thead className="bg-gray-800 border-b border-gray-700">
+          <thead className="border-b border-slate-200 bg-slate-50">
             <tr>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[16%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[16%]">
                 Name
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[20%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[20%]">
                 Email
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[15%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[15%]">
                 Company
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[15%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[15%]">
                 Service
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[12%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[12%]">
                 Status
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[12%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[12%]">
                 Date
               </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-400 w-[10%]">
+              <th className="px-3 py-3 text-left text-xs font-semibold text-slate-500 w-[10%]">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-700/50">
+          <tbody className="divide-y divide-slate-100">
             {slice.map((c) => (
-              <>
+              <Fragment key={c._id}>
                 <tr
-                  key={c._id}
-                  className="bg-gray-800/50 hover:bg-gray-800 transition cursor-pointer"
+                  className="cursor-pointer bg-white transition hover:bg-blue-50/40"
                   onClick={() => setExpanded(expanded === c._id ? null : c._id)}
                 >
-                  <td className="px-3 py-3 text-white font-medium truncate">
+                  <td className="px-3 py-3 font-semibold text-slate-950 truncate">
                     {c.firstName} {c.lastName}
                   </td>
-                  <td className="px-3 py-3 text-gray-400 truncate">
+                  <td className="px-3 py-3 text-slate-500 truncate">
                     {c.email}
                   </td>
-                  <td className="px-3 py-3 text-gray-400 truncate">
-                    {c.company || "—"}
+                  <td className="px-3 py-3 text-slate-500 truncate">
+                    {c.company || "-"}
                   </td>
-                  <td className="px-3 py-3 text-gray-400 truncate">
-                    {c.service || "—"}
+                  <td className="px-3 py-3 text-slate-500 truncate">
+                    {c.service || "-"}
                   </td>
                   <td className="px-3 py-3">
                     <Badge status={c.status} />
                   </td>
-                  <td className="px-3 py-3 text-gray-500 text-xs">
+                  <td className="px-3 py-3 text-slate-500 text-xs">
                     {new Date(c.createdAt).toLocaleDateString()}
                   </td>
                   <td
@@ -989,21 +984,21 @@ const ContactsSection = () => {
                   </td>
                 </tr>
                 {expanded === c._id && (
-                  <tr key={`${c._id}-msg`} className="bg-gray-900">
+                  <tr key={`${c._id}-msg`} className="bg-blue-50/50">
                     <td
                       colSpan={7}
-                      className="px-6 py-3 text-gray-300 text-xs italic border-b border-gray-700"
+                      className="border-b border-blue-100 px-6 py-3 text-xs italic text-slate-600"
                     >
                       {c.message}
                     </td>
                   </tr>
                 )}
-              </>
+              </Fragment>
             ))}
           </tbody>
         </table>
         {!contacts.length && (
-          <p className="text-center text-gray-500 py-8 text-sm">
+          <p className="py-8 text-center text-sm text-slate-500">
             No contact submissions.
           </p>
         )}
@@ -1071,24 +1066,24 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex">
+    <div className="flex min-h-screen bg-slate-50 text-slate-900">
       {/* Sidebar overlay (mobile) */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/60 md:hidden"
+          className="fixed inset-0 z-30 bg-slate-950/30 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:static z-40 top-0 left-0 h-full w-60 bg-gray-900 border-r border-gray-800 flex flex-col transition-transform duration-200 ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
+        className={`fixed md:static z-40 top-0 left-0 flex h-full w-64 flex-col border-r border-slate-200 bg-white shadow-xl shadow-slate-200/60 transition-transform duration-200 md:shadow-none ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
-        <div className="px-5 py-5 border-b border-gray-800">
-          <p className="text-lg font-bold bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+        <div className="border-b border-slate-200 px-5 py-5">
+          <p className="text-xl font-black text-blue-600">
             Zenvora
           </p>
-          <p className="text-xs text-gray-500 mt-0.5">Admin Panel</p>
+          <p className="mt-0.5 text-xs font-medium text-slate-500">Admin Panel</p>
         </div>
 
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
@@ -1098,8 +1093,8 @@ const AdminDashboard = () => {
               onClick={() => changeTab(id)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-left ${
                 tab === id
-                  ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20"
-                  : "text-gray-400 hover:text-white hover:bg-gray-800"
+                  ? "border border-blue-200 bg-blue-50 text-blue-700 shadow-sm"
+                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-950"
               }`}
             >
               <Icon size={16} />
@@ -1108,11 +1103,11 @@ const AdminDashboard = () => {
           ))}
         </nav>
 
-        <div className="px-3 py-4 border-t border-gray-800 space-y-2">
-          <p className="px-3 text-xs text-gray-500 truncate">{user.name}</p>
+        <div className="space-y-2 border-t border-slate-200 px-3 py-4">
+          <p className="px-3 text-xs font-medium text-slate-500 truncate">{user.name}</p>
           <button
             onClick={logout}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-red-500/10 transition text-left"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-semibold text-red-600 transition hover:bg-red-50"
           >
             <LogOut size={16} /> Logout
           </button>
@@ -1122,14 +1117,14 @@ const AdminDashboard = () => {
       {/* Main content */}
       <main className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
         {/* Top bar */}
-        <header className="bg-gray-900 border-b border-gray-800 px-5 py-4 flex items-center gap-3 md:hidden">
+        <header className="flex items-center gap-3 border-b border-slate-200 bg-white px-5 py-4 md:hidden">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="text-gray-400 hover:text-white transition"
+            className="text-slate-500 transition hover:text-blue-700"
           >
             <Menu size={20} />
           </button>
-          <p className="text-sm font-semibold text-white capitalize">{tab}</p>
+          <p className="text-sm font-semibold capitalize text-slate-950">{tab}</p>
         </header>
 
         <div className="flex-1 p-5 md:p-8">

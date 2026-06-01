@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 997 700" role="img" aria-labelledby="title desc">
+  <title id="title">Login workspace illustration</title>
+  <desc id="desc">A person seated at a desk using a laptop with a sign up screen, desk lamp, plant, and bin.</desc>
+  <rect width="997" height="700" fill="#ffffff"/>
+  <path d="M264 78c74-61 181-32 214 45 22 51 8 112 32 160 32 65 124 59 174 111 58 60 15 157-56 173-90 20-169-41-254-28-89 13-155 82-246 44-86-36-102-143-34-200 45-38 103-47 123-105 23-69-15-151 47-200z" fill="#e9eefc"/>
+  <path d="M218 633h641" stroke="#d1d5e8" stroke-width="4" stroke-linecap="round"/>
+  <path d="M269 658h135M437 658h96" stroke="#d1d5e8" stroke-width="4" stroke-linecap="round"/>
+
+  <g transform="translate(236 74)">
+    <rect x="0" y="17" width="103" height="57" rx="8" fill="#9fd2f7"/>
+    <path d="M12 30h28M50 30h40M13 45h75M12 59h31M50 59h39" stroke="#e9f6ff" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(481 72)">
+    <rect width="204" height="148" rx="11" fill="#3b74bd"/>
+    <rect x="8" y="25" width="188" height="114" rx="5" fill="#ffffff"/>
+    <circle cx="15" cy="12" r="3" fill="#b9d4f3"/>
+    <circle cx="27" cy="12" r="3" fill="#b9d4f3"/>
+    <circle cx="39" cy="12" r="3" fill="#b9d4f3"/>
+    <rect x="146" y="8" width="44" height="4" rx="2" fill="#d9ecff"/>
+    <circle cx="100" cy="74" r="27" fill="#5aa6ef"/>
+    <circle cx="100" cy="63" r="10" fill="#ffffff"/>
+    <path d="M81 91c6-12 32-12 38 0" fill="#ffffff"/>
+    <rect x="59" y="104" width="74" height="7" rx="3.5" fill="#a9d4f7"/>
+    <rect x="59" y="121" width="74" height="7" rx="3.5" fill="#a9d4f7"/>
+    <rect x="137" y="104" width="14" height="7" rx="3" fill="#a9d4f7"/>
+    <rect x="137" y="121" width="14" height="7" rx="3" fill="#a9d4f7"/>
+    <rect x="81" y="138" width="40" height="10" rx="5" fill="#5aa6ef"/>
+    <text x="101" y="146" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="#ffffff">Sign Up</text>
+  </g>
+
+  <g transform="translate(649 111)">
+    <rect width="102" height="54" rx="8" fill="#9fd2f7"/>
+    <path d="M12 15h29M52 15h37M12 30h70M12 43h29M52 43h36" stroke="#e9f6ff" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(145 337)">
+    <path d="M76 239c-9-73 16-133-10-199" stroke="#165b9a" stroke-width="3" fill="none"/>
+    <path d="M106 238c0-71 22-128 14-202" stroke="#165b9a" stroke-width="3" fill="none"/>
+    <path d="M145 238c-13-68-7-117 38-173" stroke="#165b9a" stroke-width="3" fill="none"/>
+    <path d="M47 33c35 8 57 44 50 79-32-1-61-30-50-79z" fill="#2d78b8"/>
+    <path d="M8 115c31-20 77-11 98 20-23 21-69 26-98-20z" fill="#165b9a"/>
+    <path d="M131 123c35-21 80-1 95 37-34 14-78 4-95-37z" fill="#165b9a"/>
+    <path d="M87 97c21-49 69-67 107-47-10 40-50 72-107 47z" fill="#3e8ece"/>
+    <path d="M71 47c6 18 15 39 26 60M36 134c24 0 45 3 64 11M152 144c28 5 50 13 69 24M117 89c27-5 49-14 65-29" stroke="#c6e5ff" stroke-width="2" fill="none" opacity=".9"/>
+    <path d="M73 242h86l-8 50H82z" fill="#df4256"/>
+    <rect x="66" y="235" width="101" height="13" rx="6" fill="#f15a67"/>
+  </g>
+
+  <g transform="translate(302 204)">
+    <path d="M62 240v188M135 240v188" stroke="#d4d7e8" stroke-width="6" stroke-linecap="round"/>
+    <rect x="0" y="218" width="141" height="26" rx="3" fill="#4aa3f0"/>
+    <rect x="0" y="129" width="24" height="117" rx="3" fill="#4aa3f0"/>
+
+    <path d="M52 242c23 29 74 31 127 31 68 0 96 43 96 120h-80c-9-54-34-83-76-90-73-10-96-22-102-62z" fill="#383d52"/>
+    <path d="M76 292c33 9 71 10 110 14 37 5 58 39 59 87h-75c-7-34-21-53-44-58-53-11-90-16-110-41z" fill="#2f3448"/>
+    <path d="M141 392l-14 40 62 29h77c3-19-10-29-39-32l-48-36z" fill="#fff0ee"/>
+    <path d="M125 431c17 13 39 24 64 30h76c5-12-3-21-22-27l-54-3-48-25z" fill="#373b50"/>
+    <path d="M220 392l-7 39 79 16h64c2-18-11-29-39-33l-42-22z" fill="#fff0ee"/>
+    <path d="M211 430c25 9 52 15 82 18h63c4-12-4-21-24-27l-52-1-55-24z" fill="#373b50"/>
+
+    <path d="M66 115c9-32 31-55 63-58 47-4 73 27 74 88l2 105H31c-2-61 1-105 35-135z" fill="#d93952"/>
+    <path d="M64 146c-12 35-15 69-8 100 34 14 88 11 149 3l-2-54c-58-6-98-23-139-49z" fill="#c83049"/>
+    <path d="M82 114c20-24 46-33 73-28 31 6 48 34 48 84l-2 36c-46 4-91-12-145-58 2-14 10-25 26-34z" fill="#d93952"/>
+
+    <path d="M125 106c22 55 58 84 111 91l-6 42c-60-5-111-28-154-85 4-24 19-41 49-48z" fill="#ea697d"/>
+    <path d="M211 181c42 9 82 18 120 32l-7 24c-42-2-79-8-117-20z" fill="#ea697d"/>
+    <path d="M309 215c20 5 35 10 48 18 6 4 8 11 4 16-5 7-18 6-31 2l-33-10z" fill="#ffb0ac"/>
+
+    <path d="M97 23c11-11 27-10 42-4 16 7 35-4 40 16 5 19-12 33-31 31-23-2-45-14-51-43z" fill="#071334"/>
+    <path d="M90 48c-5 25 9 50 32 52 21 2 38-16 39-42l-6-20c-20 2-39-6-54-18z" fill="#ffb0ac"/>
+    <path d="M115 90l37 4-3 35-46-14z" fill="#ffb0ac"/>
+    <path d="M102 53c-7-6-16-4-18 4-2 10 6 20 18 22z" fill="#ffb0ac"/>
+    <path d="M96 23c-19 6-30 25-28 43 2 17 15 30 32 35-7-20-5-37 7-51 14 8 29 10 46 7l-3-31c-17 3-35 1-54-3z" fill="#071334"/>
+  </g>
+
+  <g transform="translate(488 252)">
+    <rect x="0" y="82" width="278" height="16" rx="1" fill="#4aa3f0"/>
+    <path d="M126 98v280M226 98v280" stroke="#d4d7e8" stroke-width="5"/>
+    <path d="M77 77h97l-6-50H87z" fill="#2f3650"/>
+    <path d="M79 77h86" stroke="#111827" stroke-width="5" stroke-linecap="round"/>
+    <path d="M151 71l11-70" stroke="#2f3650" stroke-width="14"/>
+  </g>
+
+  <g transform="translate(633 194)">
+    <path d="M34 20l45 33M79 53l-21 28M84 56l76 72M156 132l-43 4" stroke="#35394e" stroke-width="4" stroke-linecap="round"/>
+    <rect x="0" y="4" width="41" height="28" rx="8" transform="rotate(39 0 4)" fill="#df4256"/>
+    <circle cx="157" cy="132" r="7" fill="#35394e"/>
+    <path d="M113 136h88" stroke="#35394e" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(679 516)">
+    <path d="M0 0h108l-13 109H13z" fill="none" stroke="#1f6ea7" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M12 14h84M20 33h73M23 54h66M28 75h56M35 94h42M24 11v95M52 11v101M81 11v96" stroke="#1f6ea7" stroke-width="3"/>
+    <path d="M12 14l18 19-18 21 20 21-17 31M39 14l19 19-20 21 20 21-20 32M67 14l18 19-20 21 21 21-22 34M96 14L78 33l18 21-20 21 17 31" stroke="#1f6ea7" stroke-width="3" fill="none"/>
+  </g>
+</svg>

@@ -9,7 +9,6 @@ import {
   Phone,
   Sparkles,
   User,
-  ShieldCheck,
   X,
 } from "lucide-react";
 import { api } from "../api";
@@ -463,20 +462,20 @@ const Register = () => {
           </div>
 
           <div className="relative hidden flex-col items-center justify-center lg:flex">
-            <div className="relative h-full max-h-[780px] w-full overflow-hidden rounded-2xl shadow-2xl">
-              <img
-                src="/auth-campus.jpg"
-                alt="Blue education campus illustration"
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
-              <div className="absolute inset-0 bg-linear-to-r from-black/40 via-transparent to-transparent" />
-              <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
-                <h2 className="mb-3 text-4xl font-black leading-tight">Elevate Your Career</h2>
-                <p className="mb-4 text-lg font-light leading-relaxed text-slate-200">
+            <div className="relative flex h-full max-h-[780px] w-full flex-col overflow-hidden rounded-2xl border bg-white shadow-2xl shadow-slate-200/50" style={{ borderColor: "var(--border)" }}>
+              <div className="flex min-h-0 flex-1 items-center justify-center p-8">
+                <img
+                  src="/register-growth-illustration.svg"
+                  alt="Create account education illustration"
+                  className="h-full max-h-[640px] w-full object-contain"
+                />
+              </div>
+              <div className="border-t p-8" style={{ borderColor: "var(--border)", backgroundColor: "var(--surface)" }}>
+                <h2 className="mb-3 text-4xl font-black leading-tight" style={{ color: "var(--text)" }}>Elevate Your Career</h2>
+                <p className="mb-4 text-lg font-light leading-relaxed" style={{ color: "var(--text-secondary)" }}>
                   Join Zenvora to unlock opportunities, access exclusive academic resources, and consult industry experts.
                 </p>
-                <div className="flex flex-wrap items-center gap-3 text-sm">
+                <div className="flex flex-wrap items-center gap-3 text-sm" style={{ color: "var(--text)" }}>
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-cyan-400" />
                     <span>Free Expert Guidance</span>
