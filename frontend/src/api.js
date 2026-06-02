@@ -89,6 +89,20 @@ const resetPassword = async (formData) => {
   return res.data;
 };
 
+// Activity Overview (admin)
+const getActivityOverview = async (range = "week") => {
+  const res = await axiosInstance.get(`/admin/activity?range=${range}`);
+
+  return res.data;
+};
+
+// Recent Activities (admin)
+const getRecentActivities = async () => {
+  const res = await axiosInstance.get("/admin/activities");
+
+  return res.data;
+};
+
 // Google Token Login
 const googleLogin = async (idToken) => {
   const res = await axiosInstance.post("/auth/google", { token: idToken });
@@ -320,6 +334,8 @@ export const api = {
   // Admin
   getDashboard,
   getUsers,
+  getActivityOverview,
+  getRecentActivities,
   deleteUser,
   updateUser,
   getAdmins,

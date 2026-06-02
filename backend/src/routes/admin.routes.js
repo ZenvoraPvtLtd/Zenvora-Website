@@ -8,6 +8,8 @@ const {
   createAdmin,
   updateAdmin,
   deleteAdmin,
+  getActivity,
+  getRecentActivities,
 } = require("../controllers/admin.controller");
 
 const { protect, adminOnly } = require("../middleware/auth.middleware");
@@ -19,6 +21,8 @@ router.use(protect, adminOnly);
 
 // Routes
 router.get("/dashboard", getDashboard);
+router.get("/activity", getActivity);
+router.get("/activities", getRecentActivities);
 
 router.get("/users", getUsers);
 

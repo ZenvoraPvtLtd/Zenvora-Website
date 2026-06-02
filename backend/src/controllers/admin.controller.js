@@ -6,10 +6,39 @@ const Application = require("../models/Application.model");
 // Dashboard
 const getDashboard = async (req, res) => {
   try {
-    const totalUsers = await User.countDocuments();
-    const totalContacts = await Contact.countDocuments();
-    const totalJobs = await Job.countDocuments();
-    const totalApplications = await Application.countDocuments();
+    const [
+      totalUsers,
+      totalContacts,
+      totalJobs,
+      totalApplications,
+      applicationStatusGroups,
+    ] = await Promise.all([
+      User.countDocuments(),
+      Contact.countDocuments(),
+      Job.countDocuments(),
+      Application.countDocuments(),
+      Application.aggregate([
+        {
+          $group: {
+            _id: "$status",
+            count: { $sum: 1 },
+          },
+        },
+      ]),
+    ]);
+
+    const applicationStatusCounts = {
+      pending: 0,
+      reviewed: 0,
+      accepted: 0,
+      rejected: 0,
+    };
+
+    applicationStatusGroups.forEach(({ _id, count }) => {
+      if (_id && Object.prototype.hasOwnProperty.call(applicationStatusCounts, _id)) {
+        applicationStatusCounts[_id] = count;
+      }
+    });
 
     res.json({
       success: true,
@@ -18,6 +47,7 @@ const getDashboard = async (req, res) => {
         totalContacts,
         totalJobs,
         totalApplications,
+        applicationStatusCounts,
       },
     });
   } catch (error) {
@@ -25,6 +55,107 @@ const getDashboard = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+const buildIntervals = (range) => {
+  const now = new Date();
+  const intervals = [];
+  const labels = [];
+
+  if (range === "year") {
+    for (let i = 11; i >= 0; i--) {
+      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const start = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
+      const end = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
+      intervals.push({ start, end });
+      labels.push(date.toLocaleString("en-US", { month: "short" }));
+    }
+  } else if (range === "month") {
+    for (let i = 3; i >= 0; i--) {
+      const end = new Date(now);
+      end.setDate(end.getDate() - i * 7);
+      end.setHours(23, 59, 59, 999);
+      const start = new Date(end);
+      start.setDate(start.getDate() - 6);
+      start.setHours(0, 0, 0, 0);
+      intervals.push({ start, end });
+      labels.push(`${start.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${end.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`);
+    }
+  } else {
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
+      const end = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
+      intervals.push({ start, end });
+      labels.push(d.toLocaleDateString("en-US", { weekday: "short" }));
+    }
+  }
+
+  return { labels, intervals };
+};
+
+// Get Activity Overview
+const getActivity = async (req, res) => {
+  try {
+    const range = req.query.range || "week";
+    const { labels, intervals } = buildIntervals(range);
+
+    const countByInterval = async (Model) => {
+      return Promise.all(
+        intervals.map(({ start, end }) =>
+          Model.countDocuments({ createdAt: { $gte: start, $lte: end } }),
+        ),
+      );
+    };
+
+    const [users, jobs, applications, contacts] = await Promise.all([
+      countByInterval(User),
+      countByInterval(Job),
+      countByInterval(Application),
+      countByInterval(Contact),
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        labels,
+        users,
+        jobs,
+        applications,
+        contacts,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Get recent activities (mixed list)
+const getRecentActivities = async (req, res) => {
+  try {
+    const limit = 10;
+
+    const [recentUsers, recentJobs, recentApps, recentContacts] = await Promise.all([
+      User.find().sort({ createdAt: -1 }).limit(limit).select("name createdAt"),
+      Job.find().sort({ createdAt: -1 }).limit(limit).select("title createdAt"),
+      Application.find().sort({ createdAt: -1 }).limit(limit).select("name jobTitle createdAt"),
+      Contact.find().sort({ createdAt: -1 }).limit(limit).select("firstName lastName service createdAt"),
+    ]);
+
+    const activities = [];
+
+    recentUsers.forEach((u) => activities.push({ type: "user", text: `${u.name} registered`, createdAt: u.createdAt }));
+    recentJobs.forEach((j) => activities.push({ type: "job", text: `Job posted: ${j.title}`, createdAt: j.createdAt }));
+    recentApps.forEach((a) => activities.push({ type: "application", text: `${a.name} applied for ${a.jobTitle || "a role"}`, createdAt: a.createdAt }));
+    recentContacts.forEach((c) => activities.push({ type: "contact", text: `${c.firstName} ${c.lastName} contacted about ${c.service || "general"}`, createdAt: c.createdAt }));
+
+    activities.sort((a, b) => b.createdAt - a.createdAt);
+
+    res.json({ success: true, data: activities.slice(0, limit) });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -280,4 +411,6 @@ module.exports = {
   createAdmin,
   updateAdmin,
   deleteAdmin,
+  getActivity,
+  getRecentActivities,
 };

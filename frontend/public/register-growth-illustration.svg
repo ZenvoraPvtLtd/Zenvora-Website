@@ -1,88 +1,183 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 997 760" role="img" aria-labelledby="title desc">
-  <title id="title">Create account growth illustration</title>
-  <desc id="desc">A light themed illustration of a student profile, checklist, laptop, and learning resources for account creation.</desc>
-  <rect width="997" height="760" fill="#ffffff"/>
-  <path d="M184 150c70-88 194-109 287-55 55 32 83 90 132 126 62 46 154 37 207 94 75 80 41 215-55 262-91 44-178 4-272 22-104 20-183 86-281 38-112-55-129-208-47-292 57-58 76-128 29-195z" fill="#edf6ff"/>
-  <path d="M157 640h690" stroke="#d7deef" stroke-width="5" stroke-linecap="round"/>
-  <path d="M242 676h178M472 676h120" stroke="#d7deef" stroke-width="5" stroke-linecap="round"/>
-
-  <g transform="translate(128 206)">
-    <rect x="0" y="0" width="188" height="232" rx="18" fill="#ffffff" stroke="#d8e8f8" stroke-width="4"/>
-    <rect x="24" y="24" width="73" height="11" rx="5.5" fill="#62b8f6"/>
-    <rect x="24" y="49" width="134" height="9" rx="4.5" fill="#c9e5fb"/>
-    <rect x="24" y="74" width="112" height="9" rx="4.5" fill="#c9e5fb"/>
-    <circle cx="55" cy="128" r="28" fill="#eaf4ff"/>
-    <circle cx="55" cy="117" r="11" fill="#4aa3f0"/>
-    <path d="M33 147c8-17 36-17 44 0" fill="#4aa3f0"/>
-    <path d="M111 116h51M111 141h40M24 188h140" stroke="#a7d8f9" stroke-width="8" stroke-linecap="round"/>
-    <circle cx="31" cy="188" r="10" fill="#18b8a6"/>
-    <path d="M26 188l4 4 8-9" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e0f2fe;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0f9ff;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="personGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="laptopGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e5e7eb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d1d5db;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+    
+    <filter id="deepShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bgGradient)"/>
+  
+  <!-- Large circle background element -->
+  <circle cx="150" cy="100" r="120" fill="#dbeafe" opacity="0.4"/>
+  
+  <!-- Browser Window Top Left -->
+  <g filter="url(#softShadow)" transform="translate(60, 80)">
+    <rect width="140" height="120" rx="8" fill="white" stroke="#e5e7eb" stroke-width="1"/>
+    <!-- Browser bar -->
+    <rect width="140" height="28" rx="8" fill="#3b82f6"/>
+    <circle cx="75" cy="14" r="1.5" fill="white"/>
+    <circle cx="82" cy="14" r="1.5" fill="white"/>
+    <circle cx="89" cy="14" r="1.5" fill="white"/>
+    <!-- Content -->
+    <line x1="10" y1="42" x2="50" y2="42" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+    <line x1="10" y1="52" x2="130" y2="52" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+    <line x1="10" y1="60" x2="130" y2="60" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+    <line x1="10" y1="68" x2="100" y2="68" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+    <!-- User icon -->
+    <circle cx="15" cy="85" r="6" fill="#0ea5e9"/>
   </g>
-
-  <g transform="translate(316 118)">
-    <rect x="0" y="0" width="302" height="204" rx="20" fill="#ffffff" stroke="#d8e8f8" stroke-width="4"/>
-    <rect x="0" y="0" width="302" height="42" rx="20" fill="#2f7fd1"/>
-    <path d="M0 24c0 10 8 18 18 18h266c10 0 18-8 18-18v18H0z" fill="#2f7fd1"/>
-    <circle cx="22" cy="21" r="4" fill="#d7efff"/>
-    <circle cx="38" cy="21" r="4" fill="#d7efff"/>
-    <circle cx="54" cy="21" r="4" fill="#d7efff"/>
-    <circle cx="89" cy="104" r="34" fill="#5bb2f5"/>
-    <circle cx="89" cy="91" r="13" fill="#ffffff"/>
-    <path d="M63 126c9-20 43-20 52 0" fill="#ffffff"/>
-    <rect x="145" y="76" width="116" height="11" rx="5.5" fill="#bde1fb"/>
-    <rect x="145" y="104" width="92" height="11" rx="5.5" fill="#bde1fb"/>
-    <rect x="145" y="132" width="132" height="11" rx="5.5" fill="#bde1fb"/>
-    <rect x="62" y="164" width="178" height="16" rx="8" fill="#e4f3ff"/>
+  
+  <!-- Main Browser Window Center -->
+  <g filter="url(#deepShadow)" transform="translate(140, 90)">
+    <rect width="200" height="160" rx="10" fill="white" stroke="#e5e7eb" stroke-width="1"/>
+    <!-- Browser bar -->
+    <rect width="200" height="32" rx="10" fill="#3b82f6"/>
+    <circle cx="105" cy="16" r="2" fill="white"/>
+    <circle cx="115" cy="16" r="2" fill="white"/>
+    <circle cx="125" cy="16" r="2" fill="white"/>
+    <!-- Content -->
+    <!-- User profile icon -->
+    <circle cx="170" cy="60" r="12" fill="#0ea5e9" opacity="0.2"/>
+    <circle cx="170" cy="60" r="9" fill="#0ea5e9"/>
+    <!-- Text lines -->
+    <line x1="20" y1="58" x2="145" y2="58" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+    <line x1="20" y1="72" x2="180" y2="72" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+    <line x1="20" y1="82" x2="180" y2="82" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+    <line x1="20" y1="92" x2="160" y2="92" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+    <!-- Checkmark -->
+    <circle cx="170" cy="125" r="10" fill="#10b981"/>
+    <path d="M 166 125 L 169 128 L 174 123" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-
-  <g transform="translate(646 195)">
-    <rect width="198" height="250" rx="22" fill="#ffffff" stroke="#d8e8f8" stroke-width="4"/>
-    <path d="M38 59h121M38 104h121M38 149h121M38 194h88" stroke="#c7e5fb" stroke-width="12" stroke-linecap="round"/>
-    <circle cx="39" cy="59" r="17" fill="#18b8a6"/>
-    <circle cx="39" cy="104" r="17" fill="#4aa3f0"/>
-    <circle cx="39" cy="149" r="17" fill="#18b8a6"/>
-    <circle cx="39" cy="194" r="17" fill="#4aa3f0"/>
-    <path d="M31 59l6 6 13-16M31 149l6 6 13-16" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M33 99l12 12M45 99l-12 12M33 189l12 12M45 189l-12 12" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Status cards right side -->
+  <g filter="url(#softShadow)" transform="translate(480, 100)">
+    <rect width="130" height="110" rx="8" fill="white" stroke="#e5e7eb" stroke-width="1"/>
+    <!-- Checkmarks and X marks -->
+    <line x1="15" y1="20" x2="45" y2="20" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+    <!-- Row 1 -->
+    <circle cx="22" cy="40" r="6" fill="#10b981"/>
+    <path d="M 19 40 L 21 42 L 26 37" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="35" y1="38" x2="115" y2="38" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+    
+    <!-- Row 2 -->
+    <circle cx="22" cy="58" r="6" fill="#ef4444"/>
+    <line x1="18" y1="54" x2="26" y2="62" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="26" y1="54" x2="18" y2="62" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="35" y1="56" x2="115" y2="56" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+    
+    <!-- Row 3 -->
+    <circle cx="22" cy="76" r="6" fill="#10b981"/>
+    <path d="M 19 76 L 21 78 L 26 73" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="35" y1="74" x2="115" y2="74" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+    
+    <!-- Row 4 -->
+    <circle cx="22" cy="94" r="6" fill="#ef4444"/>
+    <line x1="18" y1="90" x2="26" y2="98" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="26" y1="90" x2="18" y2="98" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="35" y1="92" x2="115" y2="92" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
   </g>
-
-  <g transform="translate(300 360)">
-    <path d="M100 209v91M309 209v91" stroke="#d7deef" stroke-width="7" stroke-linecap="round"/>
-    <rect x="0" y="188" width="430" height="28" rx="3" fill="#4aa3f0"/>
-    <path d="M105 183h173l-12-76H123z" fill="#2f3448"/>
-    <path d="M121 183h133" stroke="#111827" stroke-width="7" stroke-linecap="round"/>
-    <path d="M260 169l18-101" stroke="#2f3448" stroke-width="15" stroke-linecap="round"/>
-    <rect x="295" y="88" width="94" height="76" rx="10" fill="#ffffff" stroke="#d8e8f8" stroke-width="4"/>
-    <rect x="315" y="111" width="54" height="8" rx="4" fill="#a8d8fa"/>
-    <rect x="315" y="132" width="42" height="8" rx="4" fill="#a8d8fa"/>
+  
+  <!-- Laptop with person -->
+  <g filter="url(#deepShadow)" transform="translate(200, 280)">
+    <!-- Laptop screen -->
+    <rect width="180" height="110" rx="4" fill="#0ea5e9" stroke="#d1d5db" stroke-width="2"/>
+    <!-- Screen content -->
+    <rect x="8" y="8" width="164" height="20" fill="white" rx="2" opacity="0.9"/>
+    <line x1="12" y1="35" x2="160" y2="35" stroke="white" stroke-width="1.5" opacity="0.7" stroke-linecap="round"/>
+    <line x1="12" y1="48" x2="160" y2="48" stroke="white" stroke-width="1.5" opacity="0.7" stroke-linecap="round"/>
+    <line x1="12" y1="61" x2="140" y2="61" stroke="white" stroke-width="1.5" opacity="0.7" stroke-linecap="round"/>
+    <line x1="12" y1="75" x2="160" y2="75" stroke="white" stroke-width="1.2" opacity="0.6" stroke-linecap="round"/>
+    <line x1="12" y1="87" x2="145" y2="87" stroke="white" stroke-width="1.2" opacity="0.6" stroke-linecap="round"/>
+    
+    <!-- Laptop keyboard -->
+    <rect x="0" y="110" width="180" height="35" rx="2" fill="url(#laptopGradient)" stroke="#9ca3af" stroke-width="1"/>
+    <!-- Keyboard detail -->
+    <rect x="4" y="115" width="172" height="6" fill="#9ca3af" opacity="0.5" rx="1"/>
+    <rect x="4" y="128" width="172" height="12" fill="#d1d5db" rx="1" opacity="0.6"/>
   </g>
-
-  <g transform="translate(241 292)">
-    <path d="M45 177c-15 32-9 68 21 91h105c16-58-3-107-58-147z" fill="#2f3448"/>
-    <path d="M89 251l-12 45 73 28h57c3-17-10-27-37-29l-43-43z" fill="#fff0ee"/>
-    <path d="M76 296c22 13 49 22 75 28h56c4-10-4-19-22-24l-49-3-47-26z" fill="#373b50"/>
-    <path d="M110 54c37-2 67 23 77 73l10 68H30l2-70c1-40 34-69 78-71z" fill="#0ea5e9"/>
-    <path d="M44 105c-21 34-28 67-20 98 39 16 99 14 173-7l-10-54c-53 4-96-8-143-37z" fill="#2563eb"/>
-    <path d="M123 82c25 46 60 72 105 78l-4 37c-55-4-100-22-138-65 2-26 14-43 37-50z" fill="#74c0f8"/>
-    <path d="M203 151c36 6 70 13 102 24l-6 22c-37-1-70-5-103-15z" fill="#74c0f8"/>
-    <path d="M286 176c18 4 31 8 42 15 5 3 7 10 3 15-4 6-15 5-27 2l-29-9z" fill="#ffb0ac"/>
-    <path d="M94 0c12-8 26-2 39 2 14 5 33-2 37 16 3 17-12 31-30 30-22-1-42-15-46-48z" fill="#071334"/>
-    <path d="M86 25c-6 24 7 51 31 53 20 2 38-16 39-40l-6-20c-20 2-38-5-52-18z" fill="#ffb0ac"/>
-    <path d="M111 67l35 5-4 33-43-14z" fill="#ffb0ac"/>
-    <path d="M95 26c-8-6-16-4-18 4-2 9 6 19 17 21z" fill="#ffb0ac"/>
+  
+  <!-- Person sitting -->
+  <g transform="translate(150, 300)">
+    <!-- Head -->
+    <circle cx="50" cy="35" r="18" fill="#d4a574"/>
+    
+    <!-- Hair -->
+    <ellipse cx="50" cy="25" rx="20" ry="16" fill="#1f2937"/>
+    
+    <!-- Body - shirt -->
+    <path d="M 35 50 Q 35 80 40 100 L 60 100 Q 65 80 65 50 Q 65 45 50 45 Q 35 45 35 50" fill="url(#personGradient)"/>
+    
+    <!-- Left arm -->
+    <ellipse cx="20" cy="70" rx="12" ry="45" fill="#3b82f6" transform="rotate(-35 20 70)"/>
+    
+    <!-- Right arm reaching to laptop -->
+    <path d="M 65 55 Q 120 50 150 65" stroke="#3b82f6" stroke-width="14" fill="none" stroke-linecap="round"/>
+    
+    <!-- Legs -->
+    <rect x="38" y="100" width="10" height="50" fill="#1f2937" rx="5"/>
+    <rect x="52" y="100" width="10" height="50" fill="#1f2937" rx="5"/>
+    
+    <!-- Shoes -->
+    <ellipse cx="43" cy="155" rx="10" ry="8" fill="#0f172a"/>
+    <ellipse cx="57" cy="155" rx="10" ry="8" fill="#0f172a"/>
   </g>
-
-  <g transform="translate(706 514)">
-    <path d="M48 104c-3-43 9-74 34-98 30 31 30 67 6 108z" fill="#18b8a6"/>
-    <path d="M45 112c-31-36-39-72-24-108 37 14 54 49 45 113z" fill="#62b8f6"/>
-    <path d="M79 113c19-38 47-60 84-63 3 43-30 74-84 78z" fill="#4aa3f0"/>
-    <path d="M64 127c-10-47-3-85 20-121M66 128C42 83 28 45 20 4M74 128c26-39 56-65 89-78" stroke="#1677b8" stroke-width="3" fill="none"/>
-    <path d="M37 128h83l-9 54H46z" fill="#f05b6a"/>
-    <rect x="28" y="121" width="101" height="13" rx="6.5" fill="#ff7380"/>
+  
+  <!-- Plant pot -->
+  <g transform="translate(600, 320)">
+    <!-- Pot -->
+    <path d="M 15 40 L 10 70 Q 10 75 15 75 L 35 75 Q 40 75 40 70 L 35 40 Z" fill="#ef4444" stroke="#dc2626" stroke-width="1.5"/>
+    <!-- Pot rim -->
+    <ellipse cx="25" cy="40" rx="12" ry="4" fill="#f87171"/>
+    
+    <!-- Soil -->
+    <ellipse cx="25" cy="68" rx="14" ry="3" fill="#92400e" opacity="0.6"/>
+    
+    <!-- Plant leaves - left -->
+    <path d="M 18 65 Q 8 45 5 20 Q 4 10 8 12 Q 15 30 22 60" fill="#10b981" stroke="#059669" stroke-width="1"/>
+    
+    <!-- Plant leaves - right -->
+    <path d="M 32 65 Q 42 45 45 20 Q 46 10 42 12 Q 35 30 28 60" fill="#06b6d4" stroke="#0891b2" stroke-width="1"/>
+    
+    <!-- Plant leaf center -->
+    <path d="M 25 65 Q 25 40 25 15" stroke="#047857" stroke-width="1.5" fill="none"/>
   </g>
-
-  <g transform="translate(184 532)">
-    <rect width="92" height="64" rx="12" fill="#e7f5ff"/>
-    <path d="M19 23h54M19 42h36" stroke="#62b8f6" stroke-width="8" stroke-linecap="round"/>
-  </g>
+  
+  <!-- Decorative elements - dots and lines -->
+  <circle cx="80" cy="450" r="3" fill="#3b82f6" opacity="0.3"/>
+  <circle cx="680" cy="480" r="2" fill="#0ea5e9" opacity="0.3"/>
+  <line x1="100" y1="500" x2="150" y2="500" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+  <line x1="600" y1="520" x2="680" y2="520" stroke="#cbd5e1" stroke-width="1" stroke-linecap="round"/>
+  
+  <!-- Text section below -->
+  <text x="400" y="560" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="900" fill="#1e293b" text-anchor="middle">
+    Elevate Your Career
+  </text>
+  
+  <text x="400" y="585" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#64748b" text-anchor="middle">
+    Join Zenvora to unlock opportunities, access exclusive academic
+  </text>
+  
+  <text x="400" y="602" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#64748b" text-anchor="middle">
+    resources, and consult industry experts.
+  </text>
 </svg>

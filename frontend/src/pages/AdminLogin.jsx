@@ -252,29 +252,7 @@ const AdminLogin = () => {
 
           <div className="relative hidden flex-col items-center justify-center lg:flex">
             <div className="relative h-full max-h-screen w-full overflow-hidden rounded-2xl shadow-2xl" style={{ boxShadow: "var(--shadow)" }}>
-              <img src="/login-illustration.jpg" alt="Admin portal illustration" className="h-full w-full object-cover" />
-              <div className="absolute inset-0" style={{
-                background: "linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent)"
-              }} />
-              <div className="absolute inset-0" style={{
-                background: "linear-gradient(to right, rgba(0, 0, 0, 0.4), transparent)"
-              }} />
-              <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
-                <h2 className="mb-3 text-4xl font-black leading-tight">Admin Access</h2>
-                <p className="mb-4 text-lg font-light leading-relaxed text-slate-200">
-                  Secure access to manage users, applications, and platform operations.
-                </p>
-                <div className="flex flex-wrap items-center gap-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-cyan-400" />
-                    <span>Full Control Panel</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-cyan-400" />
-                    <span>Real-time Analytics</span>
-                  </div>
-                </div>
-              </div>
+              <img src="/admin-access-light.svg" alt="Admin portal illustration" className="h-full w-full object-cover" />
             </div>
           </div>
         </div>
