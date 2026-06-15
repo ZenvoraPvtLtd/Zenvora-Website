@@ -203,6 +203,17 @@ const applyJob = async (formData) => {
   return res.data;
 };
 
+// Parse Resume
+const parseResume = async (formData) => {
+  const res = await axiosInstance.post("/resume/parse", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return res.data;
+};
+
 // ================= ADMIN =================
 
 // Dashboard
@@ -330,6 +341,7 @@ export const api = {
   getJobs,
   getJobById,
   applyJob,
+  parseResume,
 
   // Admin
   getDashboard,

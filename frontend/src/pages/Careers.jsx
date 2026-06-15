@@ -163,12 +163,13 @@ const Careers = () => {
   const [isApplyOpen, setIsApplyOpen] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState(null);
   const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
+    name: "",
+    email: "",
     phone: "",
     portfolio: "",
     skills: "",
     track: "",
+    resumeUrl: "",
   });
   const [submitStatus, setSubmitStatus] = useState({ loading: false, error: "", success: "" });
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -183,7 +184,7 @@ const Careers = () => {
       return;
     }
     setSelectedTrack(track);
-    setFormData({ name: user?.name || "", email: user?.email || "", phone: "", portfolio: "", skills: "", track: track.title });
+    setFormData({ name: "", email: "", phone: "", portfolio: "", skills: "", track: track.title, resumeUrl: "" });
     setSubmitStatus({ loading: false, error: "", success: "" });
     setShowSuccessModal(false);
     setShowTermsModal(false);
@@ -204,7 +205,7 @@ const Careers = () => {
   const submitApplication = async () => {
     setSubmitStatus({ ...submitStatus, loading: true, error: "", success: "" });
     try {
-      await api.applyJob({ name: formData.name, email: formData.email, phone: formData.phone, portfolio: formData.portfolio, skills: formData.skills, track: formData.track });
+      await api.applyJob({ name: formData.name, email: formData.email, phone: formData.phone, portfolio: formData.portfolio, skills: formData.skills, track: formData.track, resumeUrl: formData.resumeUrl });
       setSubmitStatus({ loading: false, error: "", success: "Application submitted!" });
       setShowTermsModal(false);
       setIsApplyOpen(false);
@@ -490,6 +491,7 @@ const Careers = () => {
         <ApplyModal
           selectedTrack={selectedTrack}
           formData={formData}
+          setFormData={setFormData}
           submitStatus={submitStatus}
           onChange={handleFormChange}
           onSubmit={handleApplySubmit}
@@ -715,7 +717,47 @@ function StepCard({ icon: Icon, num, title, desc, color, bg }) {
 }
 
 /* ── Apply Modal ── */
-function ApplyModal({ selectedTrack, formData, submitStatus, onChange, onSubmit, onClose }) {
+function ApplyModal({ selectedTrack, formData, setFormData, submitStatus, onChange, onSubmit, onClose }) {
+  const [parsing, setParsing] = useState(false);
+  const [parseError, setParseError] = useState("");
+  const [selectedFileName, setSelectedFileName] = useState("");
+
+  const handleResumeUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type !== "application/pdf") {
+      setParseError("Please upload a PDF file.");
+      return;
+    }
+
+    const uploadData = new FormData();
+    uploadData.append("resume", file);
+
+    setParsing(true);
+    setParseError("");
+    setSelectedFileName(file.name);
+
+    try {
+      const response = await api.parseResume(uploadData);
+      if (response.success && response.data) {
+        setFormData(prev => ({
+          ...prev,
+          name: response.data.name || prev.name,
+          email: response.data.email || prev.email,
+          phone: response.data.phone || prev.phone,
+          skills: response.data.skills || prev.skills,
+          resumeUrl: response.data.resumeUrl || prev.resumeUrl,
+        }));
+      }
+    } catch (err) {
+      setParseError(err.response?.data?.message || err.message || "Failed to parse resume.");
+      setSelectedFileName(""); // Clear file name on error
+    } finally {
+      setParsing(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8" style={{ backgroundColor: "rgba(15,23,42,0.6)" }}>
       <div
@@ -728,6 +770,28 @@ function ApplyModal({ selectedTrack, formData, submitStatus, onChange, onSubmit,
         <p className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: "#2563eb" }}>Application Form</p>
         <h2 className="mt-2 text-3xl font-black" style={{ color: "#0f172a" }}>Apply for {selectedTrack?.title}</h2>
         <p className="mb-6 mt-3 text-sm" style={{ color: "#64748b" }}>Fill out the form below to submit your internship application.</p>
+
+        <div className="mb-6 rounded-lg p-4" style={{ backgroundColor: "#eff6ff", border: "1px dashed #bfdbfe" }}>
+          <p className="text-sm font-semibold" style={{ color: "#1e40af" }}>Autofill from Resume</p>
+          <p className="mt-1 mb-3 text-xs" style={{ color: "#3b82f6" }}>Upload your PDF resume to automatically fill in your details.</p>
+          <input
+            type="file"
+            accept="application/pdf"
+            onChange={handleResumeUpload}
+            disabled={parsing}
+            className="block w-full text-sm text-slate-500
+              file:mr-4 file:py-2 file:px-4
+              file:rounded-full file:border-0
+              file:text-sm file:font-semibold
+              file:bg-blue-50 file:text-blue-700
+              hover:file:bg-blue-100 disabled:opacity-50"
+          />
+          {selectedFileName && !parsing && !parseError && (
+            <p className="mt-2 text-xs" style={{ color: "#16a34a" }}>✅ Uploaded: {selectedFileName}</p>
+          )}
+          {parsing && <p className="mt-2 text-xs" style={{ color: "#2563eb" }}>Parsing your resume... Please wait.</p>}
+          {parseError && <p className="mt-2 text-xs text-red-500">{parseError}</p>}
+        </div>
 
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

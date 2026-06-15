@@ -477,13 +477,19 @@ const resetPassword = async (req, res) => {
     }
 
     // Hash the token
-    const resetTokenHash = crypto.createHash("sha256").update(token).digest("hex");
+    const cleanToken = token.trim();
+    const resetTokenHash = crypto.createHash("sha256").update(cleanToken).digest("hex");
+
+    console.log("DEBUG: Received token:", cleanToken);
+    console.log("DEBUG: Computed hash:", resetTokenHash);
 
     // Find user with valid reset token
     const user = await User.findOne({
       resetToken: resetTokenHash,
       resetTokenExpiry: { $gt: new Date() },
     }).select("+resetToken +resetTokenExpiry");
+
+    console.log("DEBUG: Found user:", user ? user.email : "null");
 
     if (!user) {
       return res.status(400).json({

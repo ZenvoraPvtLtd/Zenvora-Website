@@ -16,6 +16,7 @@ const authRoutes = require("./routes/auth.routes");
 const contactRoutes = require("./routes/contact.routes");
 const careerRoutes = require("./routes/career.routes");
 const adminRoutes = require("./routes/admin.routes");
+const resumeRoutes = require("./routes/resume.routes");
 
 const app = express();
 
@@ -45,11 +46,15 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 
+// Serve uploaded files
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/careers", careerRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/resume", resumeRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
