@@ -21,7 +21,7 @@ const resumeRoutes = require("./routes/resume.routes");
 const app = express();
 
 // Verify Email Configuration
-// verifyEmailConfig();
+verifyEmailConfig();
 
 const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000").split(",");
 

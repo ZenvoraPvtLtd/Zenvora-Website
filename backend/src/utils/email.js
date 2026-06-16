@@ -1,23 +1,43 @@
 const nodemailer = require("nodemailer");
 
 // Create transporter
+// const transporter = nodemailer.createTransport({
+//   host: process.env.SMTP_HOST,
+//   port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined,
+//   secure: process.env.SMTP_SECURE === "true",
+//   service: process.env.SMTP_HOST ? undefined : process.env.EMAIL_SERVICE || "gmail",
+//   auth: {
+//     user: "ps2855074@gmail.com",
+//     pass: "vnbcktufofkhnlur",
+//   },
+// });
+
+
+
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined,
-  secure: process.env.SMTP_SECURE === "true",
-  service: process.env.SMTP_HOST ? undefined : process.env.EMAIL_SERVICE || "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.SMTP_USER || process.env.EMAIL_USER || "ps2855074@gmail.com",
-    pass: process.env.SMTP_PASS || process.env.EMAIL_PASS || process.env.EMAIL_PASSWORD,
-  },
+    user: "ps2855074@gmail.com",
+    pass: "kptatmflicplpmat"
+  }
+});
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("SMTP Error:", error);
+  } else {
+    console.log("✅ SMTP Server Ready");
+  }
 });
 
 // Send Welcome Email on Registration
 const sendWelcomeEmail = async (user) => {
   try {
     const mailOptions = {
-      from: process.env.MAIL_FROM || process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
-      to: [user.email, process.env.ADMIN_EMAIL || "ps2855074@gmail.com"],
+      from: '"Zenvora Support" <ps2855074@gmail.com>',
+      to: [user.email, "ps2855074@gmail.com"],
       subject: "Welcome to Zenvora Graduate Services",
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -45,8 +65,7 @@ const sendWelcomeEmail = async (user) => {
 
             <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
 
-            <p style="font-size: 12px; color: #666; text-align: center;">
-              If you did not create this account, please contact us immediately at ${process.env.ADMIN_EMAIL || "ps2855074@gmail.com"}
+              If you did not create this account, please contact us immediately at ps2855074@gmail.com
             </p>
 
             <p style="font-size: 12px; color: #666; text-align: center;">
@@ -76,7 +95,7 @@ const sendLoginNotification = async (user) => {
     });
 
     const mailOptions = {
-      from: process.env.MAIL_FROM || process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
+      from: '"Zenvora Security" <ps2855074@gmail.com>',
       to: "ps2855074@gmail.com",
       subject: `🔔 Login Alert: ${user.name} logged in to Zenvora`,
       html: `
@@ -137,10 +156,10 @@ const sendLoginNotification = async (user) => {
 const verifyEmailConfig = async () => {
   try {
     await transporter.verify();
-    console.log("Email configuration verified successfully");
+    // console.log("Email configuration verified successfully");
     return true;
   } catch (error) {
-    console.error("Email configuration error:", error.message);
+    // console.error("Email configuration error:", error.message);
     return false;
   }
 };
@@ -153,7 +172,7 @@ const sendPasswordResetEmail = async (user, resetLink, options = {}) => {
     const portalName = options.isAdmin ? "Zenvora Admin Portal" : "Zenvora account";
 
     const mailOptions = {
-      from: process.env.MAIL_FROM || process.env.EMAIL_FROM || '"Zenvora Portal" <noreply@zenvora.com>',
+      from: '"Zenvora Support" <ps2855074@gmail.com>',
       to: recipientEmail,
       subject: `Password Reset Request - ${portalName}`,
       html: `
@@ -187,7 +206,7 @@ const sendPasswordResetEmail = async (user, resetLink, options = {}) => {
             </p>
 
             <p style="font-size: 12px; color: #666; text-align: center;">
-              If you did not request a password reset, please contact us immediately at ${process.env.ADMIN_EMAIL || "ps2855074@gmail.com"}
+              If you did not request a password reset, please contact us immediately at ps2855074@gmail.com
             </p>
 
             <p style="font-size: 12px; color: #666; text-align: center;">

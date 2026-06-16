@@ -114,7 +114,7 @@ const deleteJob = async (req, res) => {
 // Apply Job
 const applyForJob = async (req, res) => {
   try {
-    const { jobId, track } = req.body;
+    const { jobId, role } = req.body;
     let jobTitle = req.body.jobTitle;
 
     if (jobId) {
@@ -133,7 +133,7 @@ const applyForJob = async (req, res) => {
     const application = await Application.create({
       ...req.body,
       email: req.body.email.trim().toLowerCase(),
-      jobTitle: jobTitle || track,
+      jobTitle: jobTitle || role,
     });
 
     res.status(201).json({

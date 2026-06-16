@@ -29,8 +29,8 @@ router.post(
     body("name").trim().notEmpty(),
     body("email").trim().isEmail(),
     body().custom((value) => {
-      if (value.jobId || value.track) return true;
-      throw new Error("jobId or track is required");
+      if (value.jobId || value.role) return true;
+      throw new Error("jobId or role is required");
     }),
   ],
   validate,

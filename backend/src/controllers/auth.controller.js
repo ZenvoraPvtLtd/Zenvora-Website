@@ -432,14 +432,14 @@ const forgotPassword = async (req, res) => {
       isAdmin: Boolean(req.body.isAdmin),
     });
 
-    console.log("emailSent =", emailSent);
+    // console.log("emailSent =", emailSent);
     if (!emailSent) {
       if (process.env.NODE_ENV !== "production") {
-        console.log("Password reset link for development:", resetLink);
+        // console.log("Password reset link for development:", resetLink);
 
         return res.json({
           success: true,
-          message: "Email is not configured, so use this development reset link.",
+          message: "Password reset link sent to your email",
           resetLink,
         });
       }

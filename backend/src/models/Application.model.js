@@ -11,7 +11,7 @@ const applicationSchema = new mongoose.Schema(
       type: String,
     },
 
-    track: {
+    role: {
       type: String,
       trim: true,
     },
@@ -39,7 +39,12 @@ const applicationSchema = new mongoose.Schema(
       trim: true,
     },
 
-    skills: {
+    technicalSkills: {
+      type: String,
+      trim: true,
+    },
+
+    softSkills: {
       type: String,
       trim: true,
     },

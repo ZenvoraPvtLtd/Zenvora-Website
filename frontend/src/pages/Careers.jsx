@@ -167,8 +167,9 @@ const Careers = () => {
     email: "",
     phone: "",
     portfolio: "",
-    skills: "",
-    track: "",
+    technicalSkills: "",
+    softSkills: "",
+    role: "",
     resumeUrl: "",
   });
   const [submitStatus, setSubmitStatus] = useState({ loading: false, error: "", success: "" });
@@ -184,7 +185,7 @@ const Careers = () => {
       return;
     }
     setSelectedTrack(track);
-    setFormData({ name: "", email: "", phone: "", portfolio: "", skills: "", track: track.title, resumeUrl: "" });
+    setFormData({ name: "", email: "", phone: "", portfolio: "", technicalSkills: "", softSkills: "", role: track.title, resumeUrl: "" });
     setSubmitStatus({ loading: false, error: "", success: "" });
     setShowSuccessModal(false);
     setShowTermsModal(false);
@@ -205,7 +206,7 @@ const Careers = () => {
   const submitApplication = async () => {
     setSubmitStatus({ ...submitStatus, loading: true, error: "", success: "" });
     try {
-      await api.applyJob({ name: formData.name, email: formData.email, phone: formData.phone, portfolio: formData.portfolio, skills: formData.skills, track: formData.track, resumeUrl: formData.resumeUrl });
+      await api.applyJob({ name: formData.name, email: formData.email, phone: formData.phone, portfolio: formData.portfolio, technicalSkills: formData.technicalSkills, softSkills: formData.softSkills, role: formData.role, resumeUrl: formData.resumeUrl });
       setSubmitStatus({ loading: false, error: "", success: "Application submitted!" });
       setShowTermsModal(false);
       setIsApplyOpen(false);
@@ -746,7 +747,7 @@ function ApplyModal({ selectedTrack, formData, setFormData, submitStatus, onChan
           name: response.data.name || prev.name,
           email: response.data.email || prev.email,
           phone: response.data.phone || prev.phone,
-          skills: response.data.skills || prev.skills,
+          technicalSkills: response.data.skills || prev.technicalSkills,
           resumeUrl: response.data.resumeUrl || prev.resumeUrl,
         }));
       }
@@ -803,13 +804,26 @@ function ApplyModal({ selectedTrack, formData, setFormData, submitStatus, onChan
             <ModalInput label="Portfolio / LinkedIn URL" type="url" name="portfolio" value={formData.portfolio} onChange={onChange} placeholder="https://..." />
           </div>
           <label className="block">
-            <span className="text-sm font-semibold" style={{ color: "#374151" }}>Your Skills *</span>
+            <span className="text-sm font-semibold" style={{ color: "#374151" }}>Your Technical Skills *</span>
             <textarea
-              name="skills"
-              value={formData.skills}
+              name="technicalSkills"
+              value={formData.technicalSkills}
               onChange={onChange}
               placeholder="e.g., React, Node.js, MongoDB, Git..."
-              rows={3}
+              rows={2}
+              required
+              className="mt-1.5 w-full resize-none rounded-lg border px-4 py-3 text-sm outline-none transition"
+              style={{ borderColor: "#e2e8f0", backgroundColor: "#f8fafc", color: "#0f172a" }}
+            />
+          </label>
+          <label className="block">
+            <span className="text-sm font-semibold" style={{ color: "#374151" }}>Your Soft Skills *</span>
+            <textarea
+              name="softSkills"
+              value={formData.softSkills}
+              onChange={onChange}
+              placeholder="e.g., Communication, Teamwork, Problem-solving..."
+              rows={2}
               required
               className="mt-1.5 w-full resize-none rounded-lg border px-4 py-3 text-sm outline-none transition"
               style={{ borderColor: "#e2e8f0", backgroundColor: "#f8fafc", color: "#0f172a" }}
