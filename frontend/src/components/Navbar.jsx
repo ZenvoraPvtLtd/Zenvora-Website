@@ -104,17 +104,6 @@ const Navbar = () => {
                     {user.name?.split(" ")[0]}
                   </span>
                 </span>
-                <Link
-                  to={user?.role === "admin" ? "/admin" : "/dashboard"}
-                  className="rounded-lg px-4 py-1.5 text-sm font-semibold border transition-all"
-                  style={{
-                    borderColor: "var(--primary)",
-                    color: "var(--primary)",
-                    backgroundColor: "#eff6ff",
-                  }}
-                >
-                  Dashboard
-                </Link>
                 <button
                   type="button"
                   onClick={logout}
@@ -183,14 +172,6 @@ const Navbar = () => {
                     </strong>
                   </span>
                   <div className="flex gap-2">
-                    <Link
-                      to={user?.role === "admin" ? "/admin" : "/dashboard"}
-                      onClick={() => setIsOpen(false)}
-                      className="rounded-lg px-3 py-1.5 text-sm font-semibold"
-                      style={{ color: "var(--primary)" }}
-                    >
-                      Dashboard
-                    </Link>
                     <button
                       type="button"
                       onClick={() => { setIsOpen(false); logout(); }}

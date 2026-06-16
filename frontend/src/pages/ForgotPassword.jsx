@@ -106,27 +106,6 @@ const ForgotPassword = () => {
               </div>
             </div>
 
-            <div
-              className={`mb-6 rounded-lg px-4 py-3 text-xs font-semibold transition-all duration-300`}
-              style={{
-                borderColor: apiStatus === "connected" ? "rgba(16, 185, 129, 0.3)" : apiStatus === "offline" ? "rgba(251, 146, 60, 0.3)" : "rgba(148, 163, 184, 0.3)",
-                backgroundColor: apiStatus === "connected" ? "rgba(16, 185, 129, 0.1)" : apiStatus === "offline" ? "rgba(251, 146, 60, 0.1)" : "rgba(148, 163, 184, 0.1)",
-                color: apiStatus === "connected" ? "#10b981" : apiStatus === "offline" ? "#fb923c" : "#94a3b8",
-                border: "1px solid"
-              }}
-            >
-              <span className="flex items-center gap-2">
-                <span
-                  className={`h-2 w-2 rounded-full ${
-                    apiStatus === "connected" ? "animate-pulse bg-emerald-400" : "bg-slate-500"
-                  }`}
-                />
-                {apiStatus === "connected" && "Backend connected"}
-                {apiStatus === "offline" && `Backend offline: ${api.baseUrl}`}
-                {apiStatus === "checking" && "Checking connection..."}
-              </span>
-            </div>
-
             {error && (
               <div className="mb-6 rounded-lg border px-4 py-3 text-sm animate-slideDown" style={{
                 borderColor: "rgba(239, 68, 68, 0.3)",

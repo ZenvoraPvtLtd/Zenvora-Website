@@ -140,7 +140,7 @@ const Login = () => {
       localStorage.removeItem("rememberedEmail");
     }
 
-    navigate(data.user?.role === "admin" ? "/admin" : redirectTo);
+    navigate("/");
   };
 
   const getLoginErrorMessage = (err) =>
