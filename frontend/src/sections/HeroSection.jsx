@@ -19,7 +19,7 @@ const HeroSection = () => {
       style={{ minHeight: "600px" }}
     >
       {/* ── Background Video ── */}
-      <video
+      {/* <video
         autoPlay
         muted
         loop
@@ -28,8 +28,18 @@ const HeroSection = () => {
         style={{ objectFit: "cover", objectPosition: "center" }}
       >
         <source src="/vv.mp4" type="video/mp4" />
+      </video> */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full"
+        style={{ objectFit: "cover", objectPosition: "center" }}
+      >
+        <source src="/vv.mp4" type="video/mp4" />
       </video>
-
       {/* ── Dark blue overlay for readability ── */}
       <div
         className="absolute inset-0"
