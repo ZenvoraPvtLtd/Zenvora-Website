@@ -29,17 +29,19 @@ const HeroSection = () => {
       >
         <source src="/vv.mp4" type="video/mp4" />
       </video> */}
+
       <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        className="absolute inset-0 w-full h-full"
-        style={{ objectFit: "cover", objectPosition: "center" }}
-      >
-        <source src="/vv.mp4" type="video/mp4" />
-      </video>
+  autoPlay
+  muted
+  loop
+  playsInline
+  preload="auto"
+  className="absolute inset-0 w-full h-full"
+  style={{ objectFit: "cover", objectPosition: "center" }}
+>
+  <source src="/vv_compressed.mp4" type="video/mp4" />
+</video>
+
       {/* ── Dark blue overlay for readability ── */}
       <div
         className="absolute inset-0"
