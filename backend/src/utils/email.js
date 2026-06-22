@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
   secure: false,
   auth: {
     user: "ps2855074@gmail.com",
-    pass: "kptatmflicplpmat"
+    pass: "vnbcktufofkhnlur"
   }
 });
 
@@ -226,10 +226,48 @@ const sendPasswordResetEmail = async (user, resetLink, options = {}) => {
   }
 };
 
+// Send Application Confirmation Email
+const sendApplicationEmail = async (application) => {
+  try {
+    const mailOptions = {
+      from: '"Zenvora Careers" <ps2855074@gmail.com>',
+      to: application.email,
+      subject: `Application Received: ${application.jobTitle || "Career Opportunity"}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+          <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+            <h1 style="color: #0891b2; text-align: center;">Application Received</h1>
+
+            <p>Dear <strong>${application.name}</strong>,</p>
+
+            <p>Thank you for applying for the <strong>${application.jobTitle || "Career Opportunity"}</strong> position at Zenvora.</p>
+
+            <p>We have successfully received your application. Our team will review your profile and get back to you soon.</p>
+
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+
+            <p style="font-size: 12px; color: #666; text-align: center;">
+              © 2026 Zenvora Infotech. All rights reserved.
+            </p>
+          </div>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`Application email sent to ${application.email}`);
+    return true;
+  } catch (error) {
+    console.error("Application email error:", error);
+    return false;
+  }
+};
+
 module.exports = {
   transporter,
   sendWelcomeEmail,
   sendLoginNotification,
   sendPasswordResetEmail,
+  sendApplicationEmail,
   verifyEmailConfig,
 };

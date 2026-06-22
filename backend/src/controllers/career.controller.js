@@ -1,5 +1,6 @@
 const Job = require("../models/Job.model");
 const Application = require("../models/Application.model");
+const { sendApplicationEmail } = require("../utils/email");
 
 // Get All Jobs
 const getJobs = async (req, res) => {
@@ -135,6 +136,9 @@ const applyForJob = async (req, res) => {
       email: req.body.email.trim().toLowerCase(),
       jobTitle: jobTitle || role,
     });
+
+    // Send confirmation email
+    await sendApplicationEmail(application);
 
     res.status(201).json({
       success: true,
