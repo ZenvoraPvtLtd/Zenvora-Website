@@ -9,7 +9,7 @@ const navItems = [
   { label: "Services", href: "/services" },
   { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/contact" },
-  { label: "Partnership", href: "/partnership" },
+  // { label: "Partnership", href: "/partnership" },
 ];
 
 const Navbar = () => {
@@ -36,15 +36,46 @@ const Navbar = () => {
     return location.pathname.startsWith(href);
   };
 
-  return (
-    <nav
-      className="sticky top-0 z-50 border-b"
-      style={{
+  const isHome = location.pathname === "/" || location.pathname === "/about" || location.pathname === "/experts" || location.pathname === "/services" || location.pathname === "/careers" || location.pathname === "/contact" || location.pathname === "/login";
+
+  const navStyle = isHome
+    ? {
+        backgroundColor: "rgba(0, 0, 0, 0.2)",
+        borderColor: "rgba(255,255,255,0.1)",
+        backdropFilter: "blur(12px)",
+        boxShadow: "none",
+      }
+    : {
         backgroundColor: "rgba(255,255,255,0.97)",
         borderColor: "#e2e8f0",
         backdropFilter: "blur(20px)",
         boxShadow: "0 1px 0 #e2e8f0, 0 4px 24px rgba(15,23,42,0.06)",
-      }}
+      };
+
+  const getLinkStyle = (href) => {
+    const active = isActive(href);
+    if (isHome) {
+      return {
+        color: active ? "#ffffff" : "rgba(255,255,255,0.75)",
+        backgroundColor: active ? "rgba(255,255,255,0.1)" : "transparent",
+        textTransform: "uppercase",
+        letterSpacing: "0.15em",
+        fontSize: "0.75rem",
+      };
+    }
+    return {
+      color: active ? "var(--primary)" : "#475569",
+      backgroundColor: active ? "#eff6ff" : "transparent",
+      textTransform: "none",
+      letterSpacing: "normal",
+      fontSize: "0.875rem",
+    };
+  };
+
+  return (
+    <nav
+      className="sticky top-0 z-50 border-b transition-all duration-300"
+      style={navStyle}
     >
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <div className="flex h-[68px] items-center justify-between">
@@ -54,7 +85,8 @@ const Navbar = () => {
             <img
               src="/logo.png"
               alt="Zenvora Logo"
-              className="h-[48px] w-auto object-contain"
+              className="h-[48px] w-auto object-contain transition-all duration-300"
+              style={isHome ? { filter: "drop-shadow(0 0 8px rgba(14,165,233,0.8)) brightness(1.1)" } : {}}
             />
           </Link>
 
@@ -65,26 +97,32 @@ const Navbar = () => {
                 key={item.href}
                 to={item.href}
                 onClick={() => setIsOpen(false)}
-                className="relative px-3 py-2 text-sm font-semibold rounded-md transition-all duration-150"
-                style={{
-                  color: isActive(item.href) ? "var(--primary)" : "#475569",
-                  backgroundColor: isActive(item.href) ? "#eff6ff" : "transparent",
-                }}
+                className="relative px-3 py-2 font-semibold rounded-md transition-all duration-300"
+                style={getLinkStyle(item.href)}
                 onMouseEnter={(e) => {
                   if (!isActive(item.href)) {
-                    e.currentTarget.style.color = "var(--primary)";
-                    e.currentTarget.style.backgroundColor = "#f0f9ff";
+                    if (isHome) {
+                      e.currentTarget.style.color = "#ffffff";
+                    } else {
+                      e.currentTarget.style.color = "var(--primary)";
+                      e.currentTarget.style.backgroundColor = "#f0f9ff";
+                    }
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive(item.href)) {
-                    e.currentTarget.style.color = "#475569";
-                    e.currentTarget.style.backgroundColor = "transparent";
+                    if (isHome) {
+                      e.currentTarget.style.color = "rgba(255,255,255,0.75)";
+                      e.currentTarget.style.backgroundColor = "transparent";
+                    } else {
+                      e.currentTarget.style.color = "#475569";
+                      e.currentTarget.style.backgroundColor = "transparent";
+                    }
                   }
                 }}
               >
                 {item.label}
-                {isActive(item.href) && (
+                {isActive(item.href) && !isHome && (
                   <span
                     className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full"
                     style={{ backgroundColor: "var(--primary)" }}
@@ -98,17 +136,23 @@ const Navbar = () => {
           <div className="hidden items-center gap-3 md:flex">
             {isLoggedIn ? (
               <div className="flex items-center gap-3">
-                <span className="text-sm font-medium" style={{ color: "#64748b" }}>
+                <span className="font-medium" style={{ color: isHome ? "rgba(255,255,255,0.8)" : "#64748b", fontSize: isHome ? "0.75rem" : "0.875rem", textTransform: isHome ? "uppercase" : "none", letterSpacing: isHome ? "0.1em" : "normal" }}>
                   Hi,{" "}
-                  <span style={{ color: "var(--primary)", fontWeight: 600 }}>
+                  <span style={{ color: isHome ? "#ffffff" : "var(--primary)", fontWeight: 600 }}>
                     {user.name?.split(" ")[0]}
                   </span>
                 </span>
                 <button
                   type="button"
                   onClick={logout}
-                  className="rounded-lg px-4 py-1.5 text-sm font-semibold border transition-all"
-                  style={{ borderColor: "#e2e8f0", color: "#64748b", backgroundColor: "transparent" }}
+                  className="rounded-full px-5 py-2 font-semibold border transition-all duration-300 hover:scale-105"
+                  style={isHome ? {
+                    borderColor: "rgba(255,255,255,0.4)", color: "#ffffff", backgroundColor: "transparent",
+                    textTransform: "uppercase", letterSpacing: "0.15em", fontSize: "0.75rem"
+                  } : {
+                    borderColor: "#e2e8f0", color: "#64748b", backgroundColor: "transparent",
+                    fontSize: "0.875rem", borderRadius: "0.5rem"
+                  }}
                 >
                   Logout
                 </button>
@@ -116,8 +160,14 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="inline-flex h-9 items-center rounded-lg px-5 text-sm font-semibold text-white shadow-sm transition-all"
-                style={{ backgroundColor: "var(--primary)" }}
+                className="inline-flex items-center justify-center rounded-full px-6 py-2 font-semibold shadow-sm transition-all duration-300 hover:scale-105"
+                style={isHome ? {
+                  backgroundColor: "transparent", border: "1px solid rgba(255,255,255,0.5)", color: "#ffffff",
+                  textTransform: "uppercase", letterSpacing: "0.15em", fontSize: "0.75rem"
+                } : {
+                  backgroundColor: "var(--primary)", color: "#ffffff", border: "none",
+                  fontSize: "0.875rem", borderRadius: "0.5rem"
+                }}
               >
                 Sign In
               </Link>
@@ -129,7 +179,7 @@ const Navbar = () => {
             type="button"
             onClick={() => setIsOpen(!isOpen)}
             className="flex h-9 w-9 items-center justify-center rounded-lg border md:hidden"
-            style={{ borderColor: "#e2e8f0", color: "#475569" }}
+            style={isHome ? { borderColor: "rgba(255,255,255,0.3)", color: "#ffffff" } : { borderColor: "#e2e8f0", color: "#475569" }}
             aria-label="Toggle menu"
           >
             {isOpen ? <X size={18} /> : <Menu size={18} />}

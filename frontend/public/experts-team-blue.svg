@@ -19,8 +19,8 @@
       <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#075985" flood-opacity=".25"/>
     </filter>
   </defs>
-  <rect width="1200" height="675" fill="url(#bg)"/>
-  <text x="600" y="92" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="800" fill="#082f49">Creative Team Work</text>
+  <rect width="1200" height="675" fill="transparent"/>
+  <text x="600" y="92" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="800" fill="#ffffff">Creative Team Work</text>
   <rect y="406" width="1200" height="269" fill="url(#band)" opacity=".42"/>
 
   <g filter="url(#shadow)">
@@ -71,19 +71,19 @@
   <g font-family="Inter, Arial, sans-serif" text-anchor="middle">
     <g transform="translate(218 548)">
       <text font-size="25" font-weight="800" fill="#ecfeff">Team Work</text>
-      <text y="38" font-size="15" fill="#082f49">Discovery and product strategy</text>
+      <text y="38" font-size="15" fill="#e2e8f0">Discovery and product strategy</text>
     </g>
     <g transform="translate(473 548)">
       <text font-size="25" font-weight="800" fill="#ecfeff">Team Work</text>
-      <text y="38" font-size="15" fill="#082f49">Engineering and delivery</text>
+      <text y="38" font-size="15" fill="#e2e8f0">Engineering and delivery</text>
     </g>
     <g transform="translate(728 548)">
       <text font-size="25" font-weight="800" fill="#ecfeff">Team Work</text>
-      <text y="38" font-size="15" fill="#082f49">Design and planning</text>
+      <text y="38" font-size="15" fill="#e2e8f0">Design and planning</text>
     </g>
     <g transform="translate(983 548)">
       <text font-size="25" font-weight="800" fill="#ecfeff">Team Work</text>
-      <text y="38" font-size="15" fill="#082f49">Research and innovation</text>
+      <text y="38" font-size="15" fill="#e2e8f0">Research and innovation</text>
     </g>
   </g>
 </svg>

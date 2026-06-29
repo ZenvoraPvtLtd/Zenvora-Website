@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   ArrowRight,
   Rocket,
@@ -16,10 +17,10 @@ import {
 } from "lucide-react";
 
 const stats = [
-  { number: "50+", label: "Happy Clients" },
-  { number: "100+", label: "Projects Delivered" },
-  { number: "98%", label: "Satisfaction Rate" },
-  { number: "5+", label: "Years of Excellence" },
+  { number: "50+", label: "HAPPY CLIENTS", desc: "Delivering exceptional software solutions and building trust globally." },
+  { number: "100+", label: "PROJECTS DELIVERED", desc: "From custom mobile apps to complex enterprise cloud systems." },
+  { number: "98%", label: "SATISFACTION RATE", desc: "Our commitment to quality ensures long-term client success." },
+  { number: "5+", label: "YEARS OF EXCELLENCE", desc: "A proven track record of technological innovation and growth." },
 ];
 
 const values = [
@@ -161,7 +162,7 @@ const AboutSection = ({ isPage = false, showCTA = true }) => {
       {/* ── STORY HERO ── */}
       <section
         className="relative overflow-hidden py-24"
-        style={{ backgroundColor: "#ffffff", borderBottom: "1px solid #e2e8f0" }}
+        style={{ backgroundColor: "transparent" }}
       >
         <div
           className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
@@ -173,12 +174,12 @@ const AboutSection = ({ isPage = false, showCTA = true }) => {
           <Badge>Our Story</Badge>
           <h2
             className="text-4xl md:text-5xl font-black leading-tight mb-6 max-w-3xl"
-            style={{ color: "#0f172a" }}
+            style={{ color: "#e2e8f0" }}
           >
             We Engineer the{" "}
             <span
               style={{
-                background: "linear-gradient(135deg, #2563eb, #0ea5e9)",
+                background: "linear-gradient(135deg, #60a5fa, #38bdf8)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -188,7 +189,7 @@ const AboutSection = ({ isPage = false, showCTA = true }) => {
             </span>{" "}
             for India
           </h2>
-          <p className="text-lg leading-relaxed max-w-2xl" style={{ color: "#64748b" }}>
+          <p className="text-lg leading-relaxed max-w-2xl" style={{ color: "#94a3b8" }}>
             Zenvora Infotech Pvt. Ltd. is a next-generation IT solutions company delivering
             transformative technology services to businesses across India and beyond.
           </p>
@@ -196,59 +197,56 @@ const AboutSection = ({ isPage = false, showCTA = true }) => {
       </section>
 
       {/* ── STATS ── */}
-      <section className="py-14" style={{ backgroundColor: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+      <section className="py-14">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {stats.map((stat, idx) => (
-              <div
+              <motion.div
                 key={idx}
-                className="rounded-2xl p-6 text-center transition-all duration-300"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="rounded-xl p-8 text-left transition-transform duration-300 hover:-translate-y-1"
                 style={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #e2e8f0",
-                  boxShadow: "0 2px 12px rgba(15,23,42,0.06)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "#2563eb";
-                  e.currentTarget.style.boxShadow = "0 6px 24px rgba(37,99,235,0.12)";
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "#e2e8f0";
-                  e.currentTarget.style.boxShadow = "0 2px 12px rgba(15,23,42,0.06)";
-                  e.currentTarget.style.transform = "translateY(0)";
+                  backgroundColor: "rgba(17, 24, 39, 0.6)", backdropFilter: "blur(12px)", /* Dark sleek background */
+                  boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
+                  border: "1px solid rgba(255,255,255,0.05)"
                 }}
               >
-                <p className="text-4xl font-black" style={{ color: "#2563eb" }}>
+                <p className="text-5xl font-bold mb-5" style={{ color: "#e2e8f0" }}>
                   {stat.number}
                 </p>
-                <p className="text-sm mt-2 font-medium" style={{ color: "#64748b" }}>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] mb-4" style={{ color: "#fbbf24" }}>
                   {stat.label}
                 </p>
-              </div>
+                <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
+                  {stat.desc}
+                </p>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── WHO WE ARE ── */}
-      <section className="py-24" style={{ backgroundColor: "#ffffff" }}>
+      <section className="py-24" style={{ backgroundColor: "transparent" }}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left */}
             <div>
               <Badge>Who We Are</Badge>
-              <h2 className="text-3xl md:text-4xl font-black mb-6 leading-snug" style={{ color: "#0f172a" }}>
+              <h2 className="text-3xl md:text-4xl font-black mb-6 leading-snug" style={{ color: "#e2e8f0" }}>
                 A Team of Builders,
                 <br />
                 Thinkers &amp; Innovators
               </h2>
-              <p className="leading-relaxed mb-5" style={{ color: "#64748b" }}>
+              <p className="leading-relaxed mb-5" style={{ color: "#94a3b8" }}>
                 Founded with a clear purpose — to bridge the gap between great ideas and great
                 software — Zenvora has grown into a trusted technology partner for startups,
                 enterprises, and government bodies alike.
               </p>
-              <p className="leading-relaxed mb-8" style={{ color: "#64748b" }}>
+              <p className="leading-relaxed mb-8" style={{ color: "#94a3b8" }}>
                 From our base in Indore, we operate with global standards, delivering cloud
                 infrastructure, AI systems, secure applications, and digital transformation
                 strategies that move businesses forward.
@@ -272,44 +270,54 @@ const AboutSection = ({ isPage = false, showCTA = true }) => {
 
             {/* Right — Mission / Vision */}
             <div className="grid gap-5">
-              <div
-                className="rounded-2xl p-7"
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1"
                 style={{
-                  background: "linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%)",
-                  border: "1px solid #bfdbfe",
+                  backgroundColor: "rgba(17, 24, 39, 0.6)", backdropFilter: "blur(12px)",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                  boxShadow: "0 10px 40px rgba(0,0,0,0.3)"
                 }}
               >
                 <div
                   className="mb-4 h-12 w-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: "#dbeafe" }}
+                  style={{ backgroundColor: "rgba(37, 99, 235, 0.2)" }}
                 >
-                  <Target size={22} style={{ color: "#1d4ed8" }} />
+                  <Target size={22} style={{ color: "#3b82f6" }} />
                 </div>
-                <h3 className="text-xl font-bold mb-3" style={{ color: "#1e40af" }}>Our Mission</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#475569" }}>
+                <h3 className="text-xl font-bold mb-3" style={{ color: "#e2e8f0" }}>Our Mission</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
                   To empower businesses with cutting-edge technology solutions that drive growth,
                   innovation, and lasting success in the digital era.
                 </p>
-              </div>
-              <div
-                className="rounded-2xl p-7"
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1"
                 style={{
-                  background: "linear-gradient(135deg, #f5f3ff 0%, #faf5ff 100%)",
-                  border: "1px solid #ddd6fe",
+                  backgroundColor: "rgba(17, 24, 39, 0.6)", backdropFilter: "blur(12px)",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                  boxShadow: "0 10px 40px rgba(0,0,0,0.3)"
                 }}
               >
                 <div
                   className="mb-4 h-12 w-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: "#ede9fe" }}
+                  style={{ backgroundColor: "rgba(139, 92, 246, 0.2)" }}
                 >
-                  <Sparkles size={22} style={{ color: "#7c3aed" }} />
+                  <Sparkles size={22} style={{ color: "#a78bfa" }} />
                 </div>
-                <h3 className="text-xl font-bold mb-3" style={{ color: "#6d28d9" }}>Our Vision</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#475569" }}>
+                <h3 className="text-xl font-bold mb-3" style={{ color: "#e2e8f0" }}>Our Vision</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
                   To be the most trusted technology partner for forward-thinking businesses —
                   where every solution we deliver creates a measurable, lasting impact.
                 </p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -318,100 +326,107 @@ const AboutSection = ({ isPage = false, showCTA = true }) => {
       {/* ── CORE VALUES ── */}
       <section
         className="py-24"
-        style={{ backgroundColor: "#f8fafc", borderTop: "1px solid #e2e8f0", borderBottom: "1px solid #e2e8f0" }}
+        style={{ backgroundColor: "transparent" }}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           <div className="text-center mb-14">
             <Badge>What Drives Us</Badge>
-            <h2 className="text-3xl md:text-4xl font-black mb-4" style={{ color: "#0f172a" }}>
+            <h2 className="text-3xl md:text-4xl font-black mb-4" style={{ color: "#e2e8f0" }}>
               Our Core Values
             </h2>
-            <p className="max-w-xl mx-auto" style={{ color: "#64748b" }}>
+            <p className="max-w-xl mx-auto" style={{ color: "#94a3b8" }}>
               The principles behind every decision, every line of code, and every client relationship.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {values.map((v, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
                 className="rounded-2xl p-7 transition-all duration-300"
                 style={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #e2e8f0",
-                  boxShadow: "0 2px 12px rgba(15,23,42,0.05)",
+                  backgroundColor: "rgba(17, 24, 39, 0.6)", backdropFilter: "blur(12px)",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                  boxShadow: "0 10px 40px rgba(0,0,0,0.3)",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = v.color;
-                  e.currentTarget.style.boxShadow = "0 8px 28px rgba(37,99,235,0.10)";
+                  e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,0.6)";
                   e.currentTarget.style.transform = "translateY(-3px)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "#e2e8f0";
-                  e.currentTarget.style.boxShadow = "0 2px 12px rgba(15,23,42,0.05)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)";
+                  e.currentTarget.style.boxShadow = "0 10px 40px rgba(0,0,0,0.3)";
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
                 <div
                   className="mb-4 h-12 w-12 rounded-xl flex items-center justify-center"
-                  style={{ backgroundColor: v.bg }}
+                  style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
                 >
                   <v.Icon size={22} style={{ color: v.color }} />
                 </div>
-                <h3 className="text-lg font-bold mb-2" style={{ color: "#0f172a" }}>{v.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#64748b" }}>{v.desc}</p>
-              </div>
+                <h3 className="text-lg font-bold mb-2" style={{ color: "#e2e8f0" }}>{v.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>{v.desc}</p>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── TEAM ── */}
-      <section className="py-24" style={{ backgroundColor: "#ffffff", borderBottom: "1px solid #e2e8f0" }}>
+      <section className="py-24" style={{ backgroundColor: "transparent" }}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           <div className="text-center mb-14">
             <Badge>The People</Badge>
-            <h2 className="text-3xl md:text-4xl font-black mb-4" style={{ color: "#0f172a" }}>
+            <h2 className="text-3xl md:text-4xl font-black mb-4" style={{ color: "#e2e8f0" }}>
               Built by a World-Class Team
             </h2>
-            <p className="max-w-lg mx-auto" style={{ color: "#64748b" }}>
+            <p className="max-w-lg mx-auto" style={{ color: "#94a3b8" }}>
               Diverse talents united by a shared obsession — building software that genuinely matters.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {team.map((member, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
                 className="rounded-2xl p-6 text-center transition-all duration-300"
                 style={{
-                  backgroundColor: "#f8fafc",
-                  border: "1px solid #e2e8f0",
+                  backgroundColor: "rgba(17, 24, 39, 0.6)", backdropFilter: "blur(12px)",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                  boxShadow: "0 10px 40px rgba(0,0,0,0.3)"
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = member.color;
-                  e.currentTarget.style.backgroundColor = member.bg;
                   e.currentTarget.style.transform = "translateY(-3px)";
-                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(37,99,235,0.10)";
+                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.6)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "#e2e8f0";
-                  e.currentTarget.style.backgroundColor = "#f8fafc";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)";
                   e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
+                  e.currentTarget.style.boxShadow = "0 10px 40px rgba(0,0,0,0.3)";
                 }}
               >
                 <div
                   className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
-                  style={{ backgroundColor: member.bg }}
+                  style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
                 >
                   <member.Icon size={24} style={{ color: member.color }} />
                 </div>
-                <h3 className="text-base font-bold mb-2" style={{ color: member.color }}>
+                <h3 className="text-base font-bold mb-2" style={{ color: "#e2e8f0" }}>
                   {member.role}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#64748b" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
                   {member.desc}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

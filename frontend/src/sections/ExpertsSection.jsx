@@ -322,7 +322,7 @@ const ExpertsSection = ({ isPage = false }) => {
               <a href="#experts-grid" className="rounded-full bg-cyan-400 px-6 py-3 text-sm font-bold text-black transition hover:bg-cyan-300">
                 Explore experts
               </a>
-              <Link to="/contact" className={`rounded-full border px-6 py-3 text-sm font-bold transition ${lightMode ? "border-slate-300 hover:border-cyan-400" : "border-white/15 hover:border-cyan-300"}`}>
+              <Link to="/contact" className="rounded-full bg-cyan-400 px-6 py-3 text-sm font-bold text-black transition hover:bg-cyan-300">
                 Book consultation
               </Link>
               <button

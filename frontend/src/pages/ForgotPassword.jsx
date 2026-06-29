@@ -123,15 +123,6 @@ const ForgotPassword = () => {
                 color: "#10b981"
               }}>
                 <p>{successMessage}</p>
-                {resetLink && (
-                  <a
-                    href={resetLink}
-                    className="mt-3 block break-all font-bold underline"
-                    style={{ color: "#06b6d4" }}
-                  >
-                    Open reset link
-                  </a>
-                )}
               </div>
             )}
 

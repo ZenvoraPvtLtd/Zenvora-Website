@@ -15,7 +15,7 @@ const Experts       = lazy(() => import("./pages/Experts"));
 const Services      = lazy(() => import("./pages/Services"));
 const Careers       = lazy(() => import("./pages/Careers"));
 const Contact       = lazy(() => import("./pages/Contact"));
-const Partnership   = lazy(() => import("./pages/Partnership"));
+// const Partnership   = lazy(() => import("./pages/Partnership"));
 const Login         = lazy(() => import("./pages/Login"));
 const Register      = lazy(() => import("./pages/Register"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
@@ -63,42 +63,44 @@ const App = () => {
         <Navbar />
         <ErrorBoundary>
           <Suspense fallback={<div style={{ background: "var(--bg)", minHeight: "100vh" }} />}>
-            <Routes>
-            <Route path="/"             element={<Home />} />
-            <Route path="/about"        element={<About />} />
-            <Route path="/experts"      element={<Experts />} />
-            <Route path="/services"     element={<Services />} />
-            <Route path="/careers"      element={<Careers />} />
-            <Route path="/contact"      element={<Contact />} />
-            <Route path="/partnership"  element={<Partnership />} />
-            <Route path="/login"        element={<Login />} />
-            <Route path="/register"     element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-            <Route path="/admin-login"  element={<AdminLogin />} />
-            <Route path="/admin/login"  element={<AdminLogin />} />
-            <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
-            <Route path="/admin/reset-password" element={<AdminResetPassword />} />
-            <Route path="/admin/reset-password/:token" element={<AdminResetPassword />} />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute requiredRole="admin">
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/auth/callback" element={<OAuthCallback />} />
-            </Routes>
+            <main className="flex-1 flex flex-col w-full">
+              <Routes>
+              <Route path="/"             element={<Home />} />
+              <Route path="/about"        element={<About />} />
+              <Route path="/experts"      element={<Experts />} />
+              <Route path="/services"     element={<Services />} />
+              <Route path="/careers"      element={<Careers />} />
+              <Route path="/contact"      element={<Contact />} />
+              {/* <Route path="/partnership"  element={<Partnership />} /> */}
+              <Route path="/login"        element={<Login />} />
+              <Route path="/register"     element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
+              <Route path="/admin-login"  element={<AdminLogin />} />
+              <Route path="/admin/login"  element={<AdminLogin />} />
+              <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
+              <Route path="/admin/reset-password" element={<AdminResetPassword />} />
+              <Route path="/admin/reset-password/:token" element={<AdminResetPassword />} />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/auth/callback" element={<OAuthCallback />} />
+              </Routes>
+            </main>
           </Suspense>
         </ErrorBoundary>
         <Chatbot />

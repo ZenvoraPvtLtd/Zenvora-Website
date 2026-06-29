@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   ArrowRight,
   BarChart3,
@@ -128,14 +129,14 @@ const Badge = ({ children }) => (
 
 const ServicesSection = ({ isPage = false, showCTA = true }) => {
   return (
-    <div id="services" className="w-full" style={{ backgroundColor: "var(--bg)" }}>
+    <div id="services" className="w-full" style={{ backgroundColor: "transparent" }}>
 
       {/* ΓöÇΓöÇ BREADCRUMB ΓöÇΓöÇ */}
       {isPage && (
         <section
           className="relative overflow-hidden py-24"
           style={{
-            background: "linear-gradient(135deg, #f0f7ff 0%, #fafbff 60%, #f0f4ff 100%)",
+            backgroundColor: "transparent",
             borderBottom: "1px solid #e2e8f0",
           }}
         >
@@ -153,7 +154,7 @@ const ServicesSection = ({ isPage = false, showCTA = true }) => {
             >
               What We Offer
             </span>
-            <h1 className="text-5xl md:text-6xl font-black mb-5" style={{ color: "#0f172a" }}>
+            <h1 className="text-5xl md:text-6xl font-black mb-5" style={{ color: "rgba(255,255,255,0.1)" }}>
               Our{" "}
               <span
                 style={{
@@ -171,20 +172,20 @@ const ServicesSection = ({ isPage = false, showCTA = true }) => {
                 Home
               </Link>
               <span style={{ color: "#94a3b8" }}>/</span>
-              <span style={{ color: "#64748b" }}>Services</span>
+              <span style={{ color: "#94a3b8" }}>Services</span>
             </div>
           </div>
         </section>
       )}
 
       {/* ΓöÇΓöÇ STATS BAR ΓöÇΓöÇ */}
-      <div style={{ backgroundColor: "#ffffff", borderBottom: "1px solid #e2e8f0" }}>
+      <div style={{ backgroundColor: "transparent" }}>
         <div className="max-w-7xl mx-auto px-6 sm:px-8 py-5">
           <div className="flex flex-wrap justify-center gap-8 md:gap-16">
             {stats.map(({ icon: Icon, text, color }) => (
               <div key={text} className="flex items-center gap-2.5">
                 <Icon size={18} style={{ color }} />
-                <span className="text-sm font-semibold" style={{ color: "#334155" }}>{text}</span>
+                <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.1)" }}>{text}</span>
               </div>
             ))}
           </div>
@@ -192,35 +193,35 @@ const ServicesSection = ({ isPage = false, showCTA = true }) => {
       </div>
 
       {/* ΓöÇΓöÇ SERVICES GRID ΓöÇΓöÇ */}
-      <section className="py-20" style={{ backgroundColor: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+      <section className="py-20" style={{ backgroundColor: "transparent" }}>
         <div className="mx-auto max-w-7xl px-6 sm:px-8">
           <div className="text-center mb-14">
             <Badge>What We Do</Badge>
-            <h2 className="text-3xl sm:text-4xl font-black" style={{ color: "#0f172a" }}>
+            <h2 className="text-3xl sm:text-4xl font-black" style={{ color: "rgba(255,255,255,0.1)" }}>
               Core Capabilities
             </h2>
-            <p className="mt-3 mx-auto max-w-2xl text-base" style={{ color: "#64748b" }}>
+            <p className="mt-3 mx-auto max-w-2xl text-base" style={{ color: "#94a3b8" }}>
               Deep expertise across every layer of the modern technology stack.
             </p>
           </div>
 
           <div className="mx-auto mt-10 grid max-w-[1060px] gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {servicesList.map((service) => (
-              <ServiceCard key={service.title} {...service} />
+            {servicesList.map((service, index) => (
+              <ServiceCard key={service.title} {...service} index={index} />
             ))}
           </div>
         </div>
       </section>
 
       {/* ΓöÇΓöÇ PROCESS ΓöÇΓöÇ */}
-      <section className="py-20" style={{ backgroundColor: "#ffffff", borderBottom: "1px solid #e2e8f0" }}>
+      <section className="py-20" style={{ backgroundColor: "transparent" }}>
         <div className="mx-auto max-w-7xl px-6 sm:px-8">
           <div className="text-center mb-14">
             <Badge>Our Process</Badge>
-            <h2 className="text-3xl sm:text-4xl font-black" style={{ color: "#0f172a" }}>
+            <h2 className="text-3xl sm:text-4xl font-black" style={{ color: "rgba(255,255,255,0.1)" }}>
               How We Work
             </h2>
-            <p className="mt-3 mx-auto max-w-2xl text-base" style={{ color: "#64748b" }}>
+            <p className="mt-3 mx-auto max-w-2xl text-base" style={{ color: "#94a3b8" }}>
               A proven delivery framework that turns ideas into reliable, scalable products.
             </p>
           </div>
@@ -230,6 +231,7 @@ const ServicesSection = ({ isPage = false, showCTA = true }) => {
               <ProcessCard
                 key={item.title}
                 item={item}
+                index={index}
                 showArrow={index < processSteps.length - 1}
               />
             ))}
@@ -242,7 +244,7 @@ const ServicesSection = ({ isPage = false, showCTA = true }) => {
         <section
           className="relative overflow-hidden px-6 py-20 text-center sm:px-8"
           style={{
-            background: "linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #0ea5e9 100%)",
+            backgroundColor: "rgba(17, 24, 39, 0.6)", backdropFilter: "blur(12px)",
           }}
         >
           <div
@@ -283,13 +285,20 @@ const ServicesSection = ({ isPage = false, showCTA = true }) => {
   );
 };
 
-function ServiceCard({ icon: Icon, title, description, tags, iconBg, accentColor }) {
+function ServiceCard({ icon: Icon, title, description, tags, iconBg, accentColor, index = 0 }) {
+  const col = index % 3;
+  const initialX = col === 0 ? -50 : col === 2 ? 50 : 0;
+  const initialY = col === 1 ? 50 : 20;
+
   return (
-    <article
+    <motion.article
+      initial={{ opacity: 0, x: initialX, y: initialY }}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5 }}
       className="group relative overflow-hidden rounded-xl p-6 transition-all duration-300"
       style={{
-        backgroundColor: "#ffffff",
-        border: "1px solid #e2e8f0",
+        backgroundColor: "rgba(17, 24, 39, 0.6)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.05)",
         boxShadow: "0 2px 12px rgba(15,23,42,0.06)",
       }}
       onMouseEnter={(e) => {
@@ -298,7 +307,7 @@ function ServiceCard({ icon: Icon, title, description, tags, iconBg, accentColor
         e.currentTarget.style.transform = "translateY(-3px)";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "#e2e8f0";
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)";
         e.currentTarget.style.boxShadow = "0 2px 12px rgba(15,23,42,0.06)";
         e.currentTarget.style.transform = "translateY(0)";
       }}
@@ -322,17 +331,15 @@ function ServiceCard({ icon: Icon, title, description, tags, iconBg, accentColor
           <Icon size={24} style={{ color: "#ffffff" }} />
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-bold" style={{ color: "#0f172a" }}>{title}</h3>
-          <p className="mt-3 text-sm leading-relaxed" style={{ color: "#64748b" }}>{description}</p>
+          <h3 className="text-lg font-bold" style={{ color: "rgba(255,255,255,0.1)" }}>{title}</h3>
+          <p className="mt-3 text-sm leading-relaxed" style={{ color: "#94a3b8" }}>{description}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {tags.map((tag) => (
               <span
                 key={tag}
                 className="rounded-md px-2.5 py-1 text-xs font-semibold"
                 style={{
-                  backgroundColor: "#f1f5f9",
-                  color: "#475569",
-                  border: "1px solid #e2e8f0",
+                  backgroundColor: "rgba(255,255,255,0.05)", color: "#94a3b8", border: "1px solid transparent",
                 }}
               >
                 {tag}
@@ -341,26 +348,32 @@ function ServiceCard({ icon: Icon, title, description, tags, iconBg, accentColor
           </div>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
-function ProcessCard({ item, showArrow }) {
+function ProcessCard({ item, showArrow, index = 0 }) {
   const Icon = item.icon;
+  const initialX = index % 2 === 0 ? -40 : 40;
 
   return (
-    <div className="relative">
+    <motion.div
+      initial={{ opacity: 0, x: initialX, y: 30 }}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5 }}
+      className="relative"
+    >
       <article
         className="rounded-xl p-5 transition-all duration-300"
         style={{
-          backgroundColor: "#ffffff",
-          border: "1px solid #e2e8f0",
+          backgroundColor: "rgba(17, 24, 39, 0.6)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.05)",
           boxShadow: "0 2px 10px rgba(15,23,42,0.05)",
         }}
       >
         <span
           className="absolute left-5 top-4 text-2xl font-black"
-          style={{ color: "#e2e8f0" }}
+          style={{ color: "rgba(255,255,255,0.1)" }}
         >
           {item.step}
         </span>
@@ -372,8 +385,8 @@ function ProcessCard({ item, showArrow }) {
             <Icon size={22} style={{ color: item.color }} />
           </div>
           <div>
-            <h3 className="text-base font-bold" style={{ color: "#0f172a" }}>{item.title}</h3>
-            <p className="mt-1.5 text-xs leading-5" style={{ color: "#64748b" }}>{item.desc}</p>
+            <h3 className="text-base font-bold" style={{ color: "rgba(255,255,255,0.1)" }}>{item.title}</h3>
+            <p className="mt-1.5 text-xs leading-5" style={{ color: "#94a3b8" }}>{item.desc}</p>
           </div>
         </div>
       </article>
@@ -387,7 +400,7 @@ function ProcessCard({ item, showArrow }) {
           <ArrowRight size={18} strokeWidth={2.5} />
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 

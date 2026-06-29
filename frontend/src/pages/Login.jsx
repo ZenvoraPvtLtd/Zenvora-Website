@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { api } from "../api";
 import { GoogleLogin } from "@react-oauth/google";
+import { motion } from "framer-motion";
 
 const getOAuthUserFromParams = (searchParams) => ({
   id: searchParams.get("id"),
@@ -166,9 +167,93 @@ const Login = () => {
     }
   };
 
+  const [videoScale, setVideoScale] = useState(1);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const newScale = 1 + scrollY * 0.0005;
+      setVideoScale(newScale);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[var(--bg-alt)]">
-      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-blue-50/30 via-[var(--bg)] to-cyan-50/20" />
+    <main className="home-page-container relative min-h-screen overflow-hidden text-[var(--text)]">
+      {/* ── Fixed Background Video for Entire Login Page ── */}
+      <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+        <motion.video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full"
+          style={{ objectFit: "cover", objectPosition: "center", scale: videoScale }}
+        >
+          <source src="https://res.cloudinary.com/drynl8beg/video/upload/v1782719184/Login_page_sp3asy.mp4" type="video/mp4" />
+        </motion.video>
+
+        {/* ── Dark overlay for readability across the page ── */}
+        <div
+          className="absolute inset-0 bg-black/40"
+          style={{ backdropFilter: "brightness(0.9)" }}
+        />
+      </div>
+
+      <style>{`
+        /* Completely transparent sections to let the video shine */
+        .home-page-container,
+        .home-page-container section {
+           background: transparent !important;
+           background-color: transparent !important;
+           backdrop-filter: none !important;
+           border-color: rgba(255,255,255,0.1) !important;
+        }
+
+        /* Force all text to white with a soft shadow for readability */
+        .home-page-container h1, 
+        .home-page-container h2, 
+        .home-page-container p,
+        .home-page-container span,
+        .home-page-container label {
+           color: #ffffff !important;
+           text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+           -webkit-text-fill-color: #ffffff !important;
+        }
+
+        /* Give cards a dark frosted glass look */
+        .home-page-container .bg-\\[var\\(--surface\\)\\]\\/80,
+        .home-page-container .bg-\\[var\\(--surface\\)\\] {
+           background-color: rgba(0, 0, 0, 0.4) !important;
+           backdrop-filter: blur(10px) !important;
+           border: 1px solid rgba(255,255,255,0.1) !important;
+           box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+           color: #ffffff !important;
+        }
+
+        .home-page-container input::placeholder {
+           color: rgba(255, 255, 255, 0.5) !important;
+        }
+        
+        .home-page-container input {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.6s ease-out; }
+        .animate-slideDown { animation: slideDown 0.3s ease-out; }
+      `}</style>
 
       <section className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-8">
         <div className="grid w-full gap-8 lg:grid-cols-2 lg:gap-0">
@@ -348,7 +433,7 @@ const Login = () => {
               />
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
               <div className="absolute inset-0 bg-linear-to-r from-black/30 via-transparent to-transparent" />
-              <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
+              {/* <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
                 <h2 className="mb-3 text-4xl font-black leading-tight">Secure Access</h2>
                 <p className="mb-4 text-lg font-light leading-relaxed text-slate-100">
                   Access your Zenvora Graduate Services account with enhanced security and seamless authentication.
@@ -363,24 +448,12 @@ const Login = () => {
                     <span>Real-time Sync</span>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       </section>
 
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn { animation: fadeIn 0.6s ease-out; }
-        .animate-slideDown { animation: slideDown 0.3s ease-out; }
-      `}</style>
     </main>
   );
 };
