@@ -11,3 +11,5 @@ chatbot-backend/rag_index/
 # Large video files (tracked via Git LFS instead)
 *.mov
 *.avi
+
+*.mp4
