@@ -1,5 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
+const upload = require("../middleware/upload");
+
 
 const {
   getJobs,
@@ -23,8 +25,25 @@ router.get("/jobs", optionalAuth, getJobs);
 
 router.get("/jobs/:id", getJobById);
 
+// router.post(
+//   "/apply",
+//   [
+//     body("name").trim().notEmpty(),
+//     body("email").trim().isEmail(),
+//     body().custom((value) => {
+//       if (value.jobId || value.role) return true;
+//       throw new Error("jobId or role is required");
+//     }),
+//   ],
+//   validate,
+//   applyForJob,
+// );
+
+
+
 router.post(
   "/apply",
+  upload.single("resume"),
   [
     body("name").trim().notEmpty(),
     body("email").trim().isEmail(),
@@ -36,6 +55,9 @@ router.post(
   validate,
   applyForJob,
 );
+
+
+
 
 // Admin Routes
 router.post("/jobs", protect, adminOnly, createJob);

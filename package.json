@@ -9,6 +9,9 @@
     "install:all": "cd frontend && npm install && cd ../backend && npm install"
   },
   "dependencies": {
-    "google-auth-library": "^10.6.2"
+    "cloudinary": "^2.10.0",
+    "google-auth-library": "^10.6.2",
+    "multer": "^2.2.0",
+    "streamifier": "^0.1.1"
   }
 }

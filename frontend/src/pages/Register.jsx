@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { api } from "../api";
 import { GoogleLogin } from "@react-oauth/google";
+import { motion } from "framer-motion";
 
 const getPasswordStrength = (password) => {
   let score = 0;
@@ -133,10 +134,102 @@ const Register = () => {
     }
   };
 
+  const [videoScale, setVideoScale] = useState(1);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const newScale = 1 + scrollY * 0.0005;
+      setVideoScale(newScale);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <main className="relative min-h-screen overflow-hidden" style={{ backgroundColor: "var(--bg)" }}>
-      <section className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-8">
-        <div className="grid w-full gap-8 lg:grid-cols-2 lg:gap-0">
+    <main className="home-page-container relative min-h-screen overflow-hidden text-[var(--text)]">
+      {/* ── Fixed Background Video for Entire Register Page ── */}
+      <div className="fixed inset-0 w-full h-full z-0 pointer-events-none">
+        <motion.video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full"
+          style={{ objectFit: "cover", objectPosition: "center", scale: videoScale }}
+        >
+          <source src="https://res.cloudinary.com/drynl8beg/video/upload/v1782723037/Registration_oyajex.mp4" type="video/mp4" />
+        </motion.video>
+
+        {/* ── Dark overlay for readability across the page ── */}
+        <div
+          className="absolute inset-0 bg-black/40"
+          style={{ backdropFilter: "brightness(0.9)" }}
+        />
+      </div>
+
+      <style>{`
+        /* Completely transparent sections to let the video shine */
+        .home-page-container,
+        .home-page-container section {
+           background: transparent !important;
+           background-color: transparent !important;
+           backdrop-filter: none !important;
+           border-color: rgba(255,255,255,0.1) !important;
+        }
+
+        /* Force all text to white with a soft shadow for readability */
+        .home-page-container h1, 
+        .home-page-container h2, 
+        .home-page-container p,
+        .home-page-container span,
+        .home-page-container label {
+           color: #ffffff !important;
+           text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+           -webkit-text-fill-color: #ffffff !important;
+        }
+
+        /* Give cards a dark frosted glass look */
+        .home-page-container .bg-\\[var\\(--surface\\)\\]\\/80,
+        .home-page-container .bg-\\[var\\(--surface\\)\\],
+        .home-page-container .border.p-8.shadow-lg {
+           background-color: rgba(0, 0, 0, 0.4) !important;
+           backdrop-filter: blur(10px) !important;
+           border: 1px solid rgba(255,255,255,0.1) !important;
+           box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+           color: #ffffff !important;
+        }
+
+        .home-page-container .bg-\\[var\\(--bg-alt\\)\\] {
+           background-color: rgba(0, 0, 0, 0.4) !important;
+           color: #ffffff !important;
+        }
+
+        .home-page-container input::placeholder {
+           color: rgba(255, 255, 255, 0.5) !important;
+        }
+        
+        .home-page-container input {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.6s ease-out; }
+        .animate-slideDown { animation: slideDown 0.3s ease-out; }
+      `}</style>
+
+      <section className="relative z-10 mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-4 py-8">
+        <div className="w-full">
           <div className="flex flex-col justify-center">
             <div className="relative rounded-2xl border p-8 shadow-lg transition-all duration-500 hover:shadow-xl sm:p-12" style={{
               backgroundColor: "var(--surface)",
@@ -194,14 +287,7 @@ const Register = () => {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="Enter name"
-                        className="w-full rounded-lg border py-3 pl-12 pr-4 outline-none transition-all duration-300 focus:ring-2"
-                        style={{
-                          borderColor: "var(--border)",
-                          backgroundColor: "var(--surface)",
-                          color: "var(--text)",
-                          focusRing: "2px",
-                          focusRingColor: "rgba(37, 99, 235, 0.2)"
-                        }}
+                        className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-3 pl-12 pr-4 text-[var(--text)] outline-none transition-all duration-300 hover:border-[var(--border-strong)] focus:border-[var(--primary)] focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--primary)]/20"
                         aria-invalid={Boolean(fieldErrors.name)}
                       />
                     </div>
@@ -220,12 +306,7 @@ const Register = () => {
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="+91 98765 43210"
-                        className="w-full rounded-lg border py-3 pl-12 pr-4 outline-none transition-all duration-300 focus:ring-2"
-                        style={{
-                          borderColor: "var(--border)",
-                          backgroundColor: "var(--surface)",
-                          color: "var(--text)"
-                        }}
+                        className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-3 pl-12 pr-4 text-[var(--text)] outline-none transition-all duration-300 hover:border-[var(--border-strong)] focus:border-[var(--primary)] focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--primary)]/20"
                         aria-invalid={Boolean(fieldErrors.phone)}
                       />
                     </div>
@@ -245,12 +326,7 @@ const Register = () => {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="your@email.com"
-                      className="w-full rounded-lg border py-3 pl-12 pr-4 outline-none transition-all duration-300 focus:ring-2"
-                      style={{
-                        borderColor: "var(--border)",
-                        backgroundColor: "var(--surface)",
-                        color: "var(--text)"
-                      }}
+                      className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-3 pl-12 pr-4 text-[var(--text)] outline-none transition-all duration-300 hover:border-[var(--border-strong)] focus:border-[var(--primary)] focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--primary)]/20"
                       aria-invalid={Boolean(fieldErrors.email)}
                     />
                   </div>
@@ -270,12 +346,7 @@ const Register = () => {
                         value={formData.password}
                         onChange={handleChange}
                         placeholder="Create password"
-                        className="w-full rounded-lg border py-3 pl-12 pr-12 outline-none transition-all duration-300 focus:ring-2"
-                        style={{
-                          borderColor: "var(--border)",
-                          backgroundColor: "var(--surface)",
-                          color: "var(--text)"
-                        }}
+                        className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-3 pl-12 pr-12 text-[var(--text)] outline-none transition-all duration-300 hover:border-[var(--border-strong)] focus:border-[var(--primary)] focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--primary)]/20"
                         aria-invalid={Boolean(fieldErrors.password)}
                       />
                       <button
@@ -303,12 +374,7 @@ const Register = () => {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         placeholder="Repeat password"
-                        className="w-full rounded-lg border py-3 pl-12 pr-12 outline-none transition-all duration-300 focus:ring-2"
-                        style={{
-                          borderColor: "var(--border)",
-                          backgroundColor: "var(--surface)",
-                          color: "var(--text)"
-                        }}
+                        className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface)] py-3 pl-12 pr-12 text-[var(--text)] outline-none transition-all duration-300 hover:border-[var(--border-strong)] focus:border-[var(--primary)] focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--primary)]/20"
                         aria-invalid={Boolean(fieldErrors.confirmPassword)}
                       />
                       <button
@@ -432,7 +498,7 @@ const Register = () => {
                     backgroundColor: "var(--bg-alt)",
                     borderColor: "var(--border)"
                   }}>
-                    <div className="w-full flex justify-center [&>div]:w-full">
+                    <div className="w-full flex justify-center [&>div]:w-full overflow-hidden rounded-lg">
                       <GoogleLogin
                         onSuccess={(credentialResponse) => {
                           console.log("SIGNUP SUCCESS", credentialResponse);
@@ -445,7 +511,6 @@ const Register = () => {
                         theme="filled_blue"
                         shape="rectangular"
                         size="large"
-                        width="500"
                       />
                     </div>
                   </div>
@@ -461,6 +526,7 @@ const Register = () => {
             </div>
           </div>
 
+          {/* 
           <div className="relative hidden flex-col items-center justify-center lg:flex">
             <div className="relative flex h-full max-h-[780px] w-full flex-col overflow-hidden rounded-2xl border bg-white shadow-2xl shadow-slate-200/50" style={{ borderColor: "var(--border)" }}>
               <div className="flex min-h-0 flex-1 items-center justify-center p-8">
@@ -488,21 +554,10 @@ const Register = () => {
               </div>
             </div>
           </div>
+          */}
         </div>
       </section>
 
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn { animation: fadeIn 0.6s ease-out; }
-        .animate-slideDown { animation: slideDown 0.3s ease-out; }
-      `}</style>
     </main>
   );
 };

@@ -234,6 +234,11 @@ const Login = () => {
            color: #ffffff !important;
         }
 
+        .home-page-container .bg-\\[var\\(--bg-alt\\)\\] {
+           background-color: rgba(0, 0, 0, 0.4) !important;
+           color: #ffffff !important;
+        }
+
         .home-page-container input::placeholder {
            color: rgba(255, 255, 255, 0.5) !important;
         }
@@ -255,8 +260,9 @@ const Login = () => {
         .animate-slideDown { animation: slideDown 0.3s ease-out; }
       `}</style>
 
-      <section className="relative z-10 mx-auto flex min-h-screen max-w-7xl items-center justify-center px-4 py-8">
-        <div className="grid w-full gap-8 lg:grid-cols-2 lg:gap-0">
+      <section className="relative z-10 mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-4 py-8">
+        {/* <div className="grid w-full gap-8 lg:grid-cols-2 lg:gap-0"> */}
+        <div className="w-full">
           <div className="flex flex-col justify-center">
             <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)]/80 p-8 shadow-2xl shadow-slate-200/50 backdrop-blur-xl transition-all duration-500 hover:border-slate-300/80 sm:p-12">
               <div className="mb-8 flex items-center gap-3 animate-fadeIn">
@@ -395,7 +401,7 @@ const Login = () => {
 
                 <div className="flex flex-col gap-4">
                   <div className="w-full flex justify-center">
-                    <div className="w-full flex justify-center [&>div]:w-full">
+                    <div className="w-full flex justify-center [&>div]:w-full overflow-hidden rounded-lg">
                       <GoogleLogin
                         onSuccess={(credentialResponse) => {
                           console.log("LOGIN SUCCESS", credentialResponse);
@@ -408,7 +414,6 @@ const Login = () => {
                         theme="filled_blue"
                         shape="rectangular"
                         size="large"
-                        width="500"
                       />
                     </div>
                   </div>
@@ -424,6 +429,7 @@ const Login = () => {
             </div>
           </div>
 
+          {/* 
           <div className="relative hidden flex-col items-center justify-center lg:flex">
             <div className="relative h-full max-h-screen w-full overflow-hidden rounded-2xl shadow-2xl shadow-slate-200/50 transition-all duration-500">
               <img 
@@ -448,9 +454,10 @@ const Login = () => {
                     <span>Real-time Sync</span>
                   </div>
                 </div>
-              </div> */}
+              </div> * /}
             </div>
           </div>
+          */}
         </div>
       </section>
 

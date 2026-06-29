@@ -196,9 +196,12 @@ const getJobById = async (id) => {
   return res.data;
 };
 
-// Apply Job
 const applyJob = async (formData) => {
-  const res = await axiosInstance.post("/careers/apply", formData);
+  const res = await axiosInstance.post("/careers/apply", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return res.data;
 };

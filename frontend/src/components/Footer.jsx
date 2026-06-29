@@ -2,8 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import { FaFacebook, FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
 import { MdEmail, MdLocationOn } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
-
 const Footer = () => {
+  const location = useLocation();
+  if (location.pathname === "/login" || location.pathname === "/register") return null;
+
   const footerStyle = { backgroundColor: "rgba(0, 0, 0, 0.8)", backdropFilter: "blur(12px)", borderTop: "1px solid rgba(255,255,255,0.1)", position: "relative", zIndex: 10 };
   const headingStyle = { color: "#ffffff", letterSpacing: "0.1em" };
   const textStyle = { color: "#d1d5db" };

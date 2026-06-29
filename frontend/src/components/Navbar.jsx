@@ -17,6 +17,8 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  if (location.pathname === "/login" || location.pathname === "/register") return null;
+
   const user = (() => {
     try { return JSON.parse(localStorage.getItem("user")); } catch { return null; }
   })();

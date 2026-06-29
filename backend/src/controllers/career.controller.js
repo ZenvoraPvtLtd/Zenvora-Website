@@ -2,6 +2,10 @@ const Job = require("../models/Job.model");
 const Application = require("../models/Application.model");
 const { sendApplicationEmail } = require("../utils/email");
 
+
+const cloudinary = require("../config/cloudinary");
+const streamifier = require("streamifier");
+
 // Get All Jobs
 const getJobs = async (req, res) => {
   try {
@@ -115,6 +119,13 @@ const deleteJob = async (req, res) => {
 // Apply Job
 const applyForJob = async (req, res) => {
   try {
+
+console.log("==========================");
+    console.log("BODY =>", req.body);
+    console.log("FILE =>", req.file);
+
+
+
     const { jobId, role } = req.body;
     let jobTitle = req.body.jobTitle;
 
@@ -131,11 +142,74 @@ const applyForJob = async (req, res) => {
       jobTitle = job.title;
     }
 
-    const application = await Application.create({
-      ...req.body,
-      email: req.body.email.trim().toLowerCase(),
-      jobTitle: jobTitle || role,
-    });
+
+
+
+
+
+
+
+
+
+
+
+let resumeUrl = "";
+
+if (req.file) {
+  const result = await new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "resumes",
+        resource_type: "raw",
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+
+    streamifier.createReadStream(req.file.buffer).pipe(stream);
+  });
+
+  resumeUrl = result.secure_url;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // const application = await Application.create({
+    //   ...req.body,
+    //   email: req.body.email.trim().toLowerCase(),
+    //   jobTitle: jobTitle || role,
+    // });
+
+
+const application = await Application.create({
+  ...req.body,
+  email: req.body.email.trim().toLowerCase(),
+  jobTitle: jobTitle || role,
+  resumeUrl,
+});
+
+
+
+
 
     // Send confirmation email
     await sendApplicationEmail(application);

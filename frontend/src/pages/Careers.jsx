@@ -198,7 +198,7 @@ const Careers = () => {
       return;
     }
     setSelectedTrack(track);
-    setFormData({ name: "", email: "", phone: "", portfolio: "", technicalSkills: "", softSkills: "", role: track.title, resumeUrl: "" });
+    setFormData({ name: "", email: "", phone: "", portfolio: "", technicalSkills: "", softSkills: "", role: track.title, resumeFile: null });
     setSubmitStatus({ loading: false, error: "", success: "" });
     setShowSuccessModal(false);
     setShowTermsModal(false);
@@ -219,7 +219,20 @@ const Careers = () => {
   const submitApplication = async () => {
     setSubmitStatus({ ...submitStatus, loading: true, error: "", success: "" });
     try {
-      await api.applyJob({ name: formData.name, email: formData.email, phone: formData.phone, portfolio: formData.portfolio, technicalSkills: formData.technicalSkills, softSkills: formData.softSkills, role: formData.role, resumeUrl: formData.resumeUrl });
+      const uploadData = new FormData();
+      uploadData.append("name", formData.name);
+      uploadData.append("email", formData.email);
+      uploadData.append("phone", formData.phone);
+      uploadData.append("portfolio", formData.portfolio);
+      uploadData.append("technicalSkills", formData.technicalSkills);
+      uploadData.append("softSkills", formData.softSkills);
+      uploadData.append("role", formData.role);
+      
+      if (formData.resumeFile) {
+        uploadData.append("resume", formData.resumeFile);
+      }
+
+      await api.applyJob(uploadData);
       setSubmitStatus({ loading: false, error: "", success: "Application submitted!" });
       setShowTermsModal(false);
       setIsApplyOpen(false);
@@ -836,18 +849,11 @@ function ApplyModal({ selectedTrack, formData, setFormData, submitStatus, onChan
     setSelectedFileName(file.name);
 
     try {
-      // 1. Upload to Cloudinary
-      const cloudinaryData = new FormData();
-      cloudinaryData.append("file", file);
-      cloudinaryData.append("upload_preset", "resume");
-      cloudinaryData.append("api_key", "839936453459116");
-
-      const cloudRes = await fetch("https://api.cloudinary.com/v1_1/drynl8beg/auto/upload", {
-        method: "POST",
-        body: cloudinaryData
-      });
-      const cloudJson = await cloudRes.json();
-      const cloudinaryUrl = cloudJson.secure_url;
+      // 1. Store the file in formData so submitApplication can send it to backend
+      setFormData(prev => ({
+        ...prev,
+        resumeFile: file
+      }));
 
       // 2. Parse resume using backend
       const response = await api.parseResume(uploadData);
@@ -858,7 +864,6 @@ function ApplyModal({ selectedTrack, formData, setFormData, submitStatus, onChan
           email: response.data.email || prev.email,
           phone: response.data.phone || prev.phone,
           technicalSkills: response.data.skills || prev.technicalSkills,
-          resumeUrl: cloudinaryUrl || response.data.resumeUrl || prev.resumeUrl,
         }));
       }
     } catch (err) {
