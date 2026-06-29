@@ -878,32 +878,30 @@ function ApplyModal({ selectedTrack, formData, setFormData, submitStatus, onChan
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8" style={{ backgroundColor: "rgba(15,23,42,0.6)" }}>
       <div
         className="relative w-full max-w-2xl rounded-2xl p-8 shadow-2xl"
-        style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+        style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
       >
-        <button onClick={onClose} className="absolute right-4 top-4 transition" style={{ color: "#94a3b8" }} aria-label="Close">
+        <button onClick={onClose} className="absolute right-4 top-4 transition hover:text-white" style={{ color: "#94a3b8" }} aria-label="Close">
           <X size={22} />
         </button>
-        <p className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: "#2563eb" }}>Application Form</p>
-        <h2 className="mt-2 text-3xl font-black" style={{ color: "#0f172a" }}>Apply for {selectedTrack?.title}</h2>
-        <p className="mb-6 mt-3 text-sm" style={{ color: "#64748b" }}>Fill out the form below to submit your internship application.</p>
+        <p className="text-sm font-black uppercase tracking-[0.14em]" style={{ color: "#60a5fa" }}>Application Form</p>
+        <h2 className="mt-2 text-3xl font-black" style={{ color: "#f8fafc" }}>Apply for {selectedTrack?.title}</h2>
+        <p className="mb-6 mt-3 text-sm" style={{ color: "#94a3b8" }}>Fill out the form below to submit your internship application.</p>
 
-        <div className="mb-6 rounded-lg p-4" style={{ backgroundColor: "#eff6ff", border: "1px dashed #bfdbfe" }}>
-          <p className="text-sm font-semibold" style={{ color: "#1e40af" }}>Autofill from Resume</p>
-          <p className="mt-1 mb-3 text-xs" style={{ color: "#3b82f6" }}>Upload your PDF resume to automatically fill in your details.</p>
+        <div className="mb-6 rounded-lg p-4" style={{ backgroundColor: "#0f172a", border: "1px dashed #334155" }}>
           <input
             type="file"
             accept="application/pdf"
             onChange={handleResumeUpload}
             disabled={parsing}
-            className="block w-full text-sm text-slate-500
+            className="block w-full text-sm text-slate-400
               file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0
               file:text-sm file:font-semibold
-              file:bg-blue-50 file:text-blue-700
-              hover:file:bg-blue-100 disabled:opacity-50"
+              file:bg-blue-600 file:text-white
+              hover:file:bg-blue-500 disabled:opacity-50"
           />
           {selectedFileName && !parsing && !parseError && (
-            <p className="mt-2 text-xs" style={{ color: "#16a34a" }}>✅ Uploaded: {selectedFileName}</p>
+            <p className="mt-1 text-xs" style={{ color: "#86efac" }}>✅ Uploaded: {selectedFileName}</p>
           )}
           {parsing && <p className="mt-2 text-xs" style={{ color: "#2563eb" }}>Parsing your resume... Please wait.</p>}
           {parseError && <p className="mt-2 text-xs text-red-500">{parseError}</p>}
@@ -919,7 +917,7 @@ function ApplyModal({ selectedTrack, formData, setFormData, submitStatus, onChan
             <ModalInput label="Portfolio / LinkedIn URL" type="url" name="portfolio" value={formData.portfolio} onChange={onChange} placeholder="https://..." />
           </div>
           <label className="block">
-            <span className="text-sm font-semibold" style={{ color: "#374151" }}>Your Technical Skills *</span>
+            <span className="text-sm font-semibold text-slate-200">Your Technical Skills *</span>
             <textarea
               name="technicalSkills"
               value={formData.technicalSkills}
@@ -927,12 +925,11 @@ function ApplyModal({ selectedTrack, formData, setFormData, submitStatus, onChan
               placeholder="e.g., React, Node.js, MongoDB, Git..."
               rows={2}
               required
-              className="mt-1.5 w-full resize-none rounded-lg border px-4 py-3 text-sm outline-none transition"
-              style={{ borderColor: "#e2e8f0", backgroundColor: "#f8fafc", color: "#0f172a" }}
+              className="mt-1.5 w-full resize-none rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white placeholder-slate-400 outline-none transition focus:border-blue-500"
             />
           </label>
           <label className="block">
-            <span className="text-sm font-semibold" style={{ color: "#374151" }}>Your Soft Skills *</span>
+            <span className="text-sm font-semibold text-slate-200">Your Soft Skills *</span>
             <textarea
               name="softSkills"
               value={formData.softSkills}
@@ -940,8 +937,7 @@ function ApplyModal({ selectedTrack, formData, setFormData, submitStatus, onChan
               placeholder="e.g., Communication, Teamwork, Problem-solving..."
               rows={2}
               required
-              className="mt-1.5 w-full resize-none rounded-lg border px-4 py-3 text-sm outline-none transition"
-              style={{ borderColor: "#e2e8f0", backgroundColor: "#f8fafc", color: "#0f172a" }}
+              className="mt-1.5 w-full resize-none rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white placeholder-slate-400 outline-none transition focus:border-blue-500"
             />
           </label>
           {submitStatus.error && (
@@ -966,11 +962,10 @@ function ApplyModal({ selectedTrack, formData, setFormData, submitStatus, onChan
 function ModalInput({ label, type = "text", ...props }) {
   return (
     <label className="block">
-      <span className="text-sm font-semibold" style={{ color: "#374151" }}>{label}</span>
+      <span className="text-sm font-semibold text-slate-200">{label}</span>
       <input
         type={type}
-        className="mt-1.5 w-full rounded-lg border px-4 py-3 text-sm outline-none transition"
-        style={{ borderColor: "#e2e8f0", backgroundColor: "#f8fafc", color: "#0f172a" }}
+        className="mt-1.5 w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white placeholder-slate-400 outline-none transition focus:border-blue-500"
         {...props}
       />
     </label>
@@ -983,15 +978,15 @@ function TermsModal({ loading, error, onBack, onAgree }) {
     <div className="fixed inset-0 z-[60] flex items-center justify-center px-4 py-8" style={{ backgroundColor: "rgba(15,23,42,0.6)" }}>
       <div
         className="w-full max-w-xl rounded-2xl p-7 shadow-2xl"
-        style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+        style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
       >
-        <p className="text-sm font-semibold uppercase tracking-[0.18em]" style={{ color: "#2563eb" }}>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em]" style={{ color: "#60a5fa" }}>
           Terms & Conditions
         </p>
-        <h2 className="mt-2 text-2xl font-bold" style={{ color: "#0f172a" }}>Please review before submitting</h2>
+        <h2 className="mt-2 text-2xl font-bold" style={{ color: "#f8fafc" }}>Please review before submitting</h2>
         <div
           className="mt-5 max-h-[45vh] space-y-4 overflow-y-auto rounded-xl p-5 text-sm leading-7"
-          style={{ border: "1px solid #e2e8f0", backgroundColor: "#f8fafc", color: "#475569" }}
+          style={{ border: "1px solid #334155", backgroundColor: "#0f172a", color: "#cbd5e1" }}
         >
           <p>By submitting this application, you confirm that all details provided by you are accurate and complete.</p>
           <p>Zenvora Infotech may contact you by email or phone for assessment, interview, and application updates.</p>
@@ -1008,8 +1003,8 @@ function TermsModal({ loading, error, onBack, onAgree }) {
             type="button"
             onClick={onBack}
             disabled={loading}
-            className="flex-1 rounded-lg px-5 py-3 font-semibold transition disabled:opacity-60"
-            style={{ border: "1px solid #e2e8f0", color: "#475569", backgroundColor: "#f8fafc" }}
+            className="flex-1 rounded-lg px-5 py-3 font-semibold transition hover:bg-[#334155] disabled:opacity-60"
+            style={{ border: "1px solid #334155", color: "#cbd5e1", backgroundColor: "transparent" }}
           >
             Back
           </button>
@@ -1034,25 +1029,25 @@ function SuccessModal({ selectedTrack, email, onClose }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ backgroundColor: "rgba(15,23,42,0.6)" }}>
       <div
         className="w-full max-w-md rounded-2xl p-8 text-center shadow-2xl"
-        style={{ backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}
+        style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
       >
         <div className="mb-6 flex justify-center">
           <div
             className="flex h-16 w-16 items-center justify-center rounded-full"
-            style={{ backgroundColor: "#f0fdf4", border: "2px solid #22c55e" }}
+            style={{ backgroundColor: "rgba(34,197,94,0.1)", border: "2px solid #22c55e" }}
           >
-            <CheckCircle2 className="h-8 w-8" style={{ color: "#16a34a" }} />
+            <CheckCircle2 className="h-8 w-8" style={{ color: "#4ade80" }} />
           </div>
         </div>
-        <h2 className="mb-3 text-2xl font-bold" style={{ color: "#0f172a" }}>Application Submitted!</h2>
+        <h2 className="mb-3 text-2xl font-bold" style={{ color: "#f8fafc" }}>Application Submitted!</h2>
         <div
           className="mb-6 rounded-xl p-4"
-          style={{ border: "1px solid #bbf7d0", backgroundColor: "#f0fdf4" }}
+          style={{ border: "1px solid rgba(74,222,128,0.3)", backgroundColor: "rgba(74,222,128,0.1)" }}
         >
-          <p className="mb-2 text-sm font-semibold" style={{ color: "#15803d" }}>
+          <p className="mb-2 text-sm font-semibold" style={{ color: "#4ade80" }}>
             Track: {selectedTrack?.title}
           </p>
-          <p className="text-sm" style={{ color: "#64748b" }}>
+          <p className="text-sm" style={{ color: "#94a3b8" }}>
             We've received your application. Our team will review it and get back to you soon!
           </p>
         </div>

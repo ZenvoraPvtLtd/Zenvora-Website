@@ -197,24 +197,28 @@ const getJobById = async (id) => {
 };
 
 const applyJob = async (formData) => {
-  const res = await axiosInstance.post("/careers/apply", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/careers/apply`, {
+    method: "POST",
+    headers: token ? { "Authorization": `Bearer ${token}` } : {},
+    body: formData
   });
-
-  return res.data;
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to apply");
+  return data;
 };
 
 // Parse Resume
 const parseResume = async (formData) => {
-  const res = await axiosInstance.post("/resume/parse", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/resume/parse`, {
+    method: "POST",
+    headers: token ? { "Authorization": `Bearer ${token}` } : {},
+    body: formData
   });
-
-  return res.data;
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to parse resume");
+  return data;
 };
 
 // ================= ADMIN =================

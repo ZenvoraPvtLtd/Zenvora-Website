@@ -29,7 +29,7 @@ const Services = () => {
           className="absolute inset-0 w-full h-full"
           style={{ objectFit: "cover", objectPosition: "center", scale: videoScale }}
         >
-          <source src="/Service.mp4" type="video/mp4" />
+          <source src="https://res.cloudinary.com/drynl8beg/video/upload/v1782734985/service_e6qyv0.mp4" type="video/mp4" />
         </motion.video>
 
         {/* ── Dark overlay for readability across the page ── */}

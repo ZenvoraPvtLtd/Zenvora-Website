@@ -157,10 +157,12 @@ let resumeUrl = "";
 
 if (req.file) {
   const result = await new Promise((resolve, reject) => {
+    const originalName = req.file.originalname ? req.file.originalname.replace(/[^a-zA-Z0-9.]/g, '_') : 'resume.pdf';
     const stream = cloudinary.uploader.upload_stream(
       {
         folder: "resumes",
-        resource_type: "raw",
+        resource_type: "raw", 
+        public_id: `${Date.now()}_${originalName}`
       },
       (error, result) => {
         if (error) return reject(error);
