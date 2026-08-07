@@ -34,7 +34,7 @@ export const experts = [
   {
     id: 1,
     name: "Prince sharma",
-    role: "Principal MERN Architect",
+    role: "co-founder",
     department: "Engineering",
     experience: 9,
     availability: "Available",
@@ -50,8 +50,8 @@ export const experts = [
   },
   {
     id: 2,
-    name: "pramod Karpenter",
-    role: "AI Product Specialist",
+    name: "palak sharma",
+    role: "director",
     department: "AI",
     experience: 7,
     availability: "Booking",
@@ -68,7 +68,7 @@ export const experts = [
   {
     id: 3,
     name: "Hitesh Sharma",
-    role: "Cloud & DevOps Lead",
+    role: "director",
     department: "Cloud",
     experience: 10,
     availability: "Available",
